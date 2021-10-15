@@ -17,7 +17,7 @@ function HomeScreen({ route, navigation }) {
                 style={styles.background}
             />
             <Image
-                source={require('../images/logo.png')}
+                source={require('../images/logo2.png')}
                 style={{ width: '100%', height: '30%', marginTop: 90 }}
             />
             <Text
@@ -25,19 +25,20 @@ function HomeScreen({ route, navigation }) {
                     textAlign: 'center',
                     marginTop: 0,
                     color: '#FFFFFF',
-                    fontSize: 20
+                    fontSize: 20,
                 }}>
                 Welcome to One Queue
             </Text>
-            
+            <TouchableOpacity onPress={() => navigation.navigate('VendorScreen')}><Text style={styles.Txt}>Become a vendor</Text></TouchableOpacity>
                 <View style={[styles.emailBtn, styles.elevation]}>
-                    <Text>Continue with email</Text>
+                    <Text onPress={() => navigation.navigate('LoginScreen')}>Continue with email</Text>
                 </View>
                 <Text style={styles.bottomTxt}> or connect with</Text>
                 <View style={styles.bottomView}>
                 <Icon name='google' style={styles.icons}/> 
-                <ion-icon name="logo-apple"></ion-icon>
+                
             </View>
+            
         </View>
     );
 }
@@ -78,6 +79,13 @@ const styles = StyleSheet.create({
        margin:10,
        alignSelf:'center'
 
+    },
+    Txt:{
+        color:'#FFFFFF',
+        margin:10,
+        alignSelf:'center',
+        textDecorationLine:'underline',
+        opacity:0.6
     },
     icons:{
         backgroundColor:'white',

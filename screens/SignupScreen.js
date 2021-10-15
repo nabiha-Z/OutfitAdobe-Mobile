@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 const FIREBASE_API_ENDPOINT =
   'https://marketing-bcbe8-default-rtdb.firebaseio.com/';
@@ -44,14 +44,14 @@ function SignupScreen({ route, navigation }) {
   };
 
   return (
-    <View style={{ backgroundColor: 'white', height: '100%' }}>
-      {/* <Image
-        source={require('../images/img1.png')}
+    <View style={styles.container}>
+      <Image
+        source={require('../images/img4.png')}
         style={{ width: '100%', height: '40%' }}
-      /> */}
+      />
       <Text
-        style={{ fontSize: 30,  alignSelf: 'center', }}>
-        Social Media Marketing
+        style={{ fontSize: 20,  alignSelf: 'center', textAlign:'center' }}>
+        Create a new Account
       </Text>
       <Text
         style={{
@@ -63,78 +63,20 @@ function SignupScreen({ route, navigation }) {
         Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
         sint. Velit officia consequat duis enim velit mollit.
       </Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: 45,
-          borderWidth: 2,
-          marginTop: 50,
-          paddingHorizontal: 10,
-          borderColor: '#00716F',
-          borderRadius: 23,
-          paddingVertical: 4,
-        }}>
-        <Icon name="mail" color="#00716F" size={24} />
-        <TextInput
-          style={{ paddingHorizontal: 20 }}
-          placeholder="Email"
-          placeholderTextColor="#00716F"
-          value={getEmail}
-          onChangeText={(text) => setEmail(text)}
-        />
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: 45,
-          borderWidth: 2,
-          marginTop: 15,
-          paddingHorizontal: 10,
-          borderColor: '#00716F',
-          borderRadius: 23,
-          paddingVertical: 4,
-        }}>
-        <Icon name="lock" color="#00716F" size={24} />
-        <TextInput
-          secureTextEntry
-          placeholder="Password"
-          placeholderTextColor="#00716F"
-          style={{ paddingHorizontal: 20 }}
-          value={getPassword}
-          onChangeText={(text) => setPassword(text)}
-        />
-      </View>
-      <View
-        style={{
-          marginHorizontal: 50,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 30,
-          backgroundColor: '#00716F',
-          paddingVertical: 10,
-          borderRadius: 23,
-        }}>
-        <TouchableOpacity
-          style={{
-            color: 'white',
-          }}
-          onPress={authenticateUser}>
-          <Text style={{ color: 'white' }}>Sign in</Text>
-        </TouchableOpacity>
-      </View>
-      <Text
-        onPress={() => navigation.navigate('Register')}
-        style={{
-          alignSelf: 'center',
-          color: '#00716F',
-          paddingVertical: 20,
-        }}>
-        New User?
-      </Text>
+      
     </View>
   );
 }
 
+const styles = StyleSheet.create({
+  container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#FFFFFF',
+      width:'100%'
+  },
+  
+
+});
 export default SignupScreen;

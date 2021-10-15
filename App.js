@@ -7,6 +7,8 @@ import { EvilIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import HomeScreen from './screens/HomeScreen';
 import SignupScreen from './screens/SignupScreen';
+import VendorScreen from './screens/VendorScreen';
+import LoginScreen from './screens/LoginScreen';
 
 
 
@@ -25,8 +27,25 @@ function App() {
           },
           })}
           />
-          
-        <Stack.Screen name="SignupScreen" component={SignupScreen} 
+          <Stack.Screen name="LoginScreen" component={LoginScreen} 
+       options={({ navigation, route }) => ({
+         title:'Login',
+          headerStyle: {
+           backgroundColor:'white',
+            height:100 
+          },
+          })}
+          />
+        <Stack.Screen name="VendorScreen" component={VendorScreen} 
+       options={({ navigation, route }) => ({
+         title:'Vendor',
+          headerStyle: {
+           backgroundColor:'white',
+            height:100 
+          },
+          })}
+          />
+          <Stack.Screen name="SignupScreen" component={SignupScreen} 
        options={({ navigation, route }) => ({
          title:'SignUp',
           headerStyle: {
