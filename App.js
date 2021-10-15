@@ -7,8 +7,11 @@ import { EvilIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import HomeScreen from './screens/HomeScreen';
 import SignupScreen from './screens/SignupScreen';
-import VendorScreen from './screens/VendorScreen';
+import VendorLogin from './screens/VendorLogin';
 import LoginScreen from './screens/LoginScreen';
+import VendorSignup from './screens/VendorSignup';
+import SignupLocation from './screens/SignupLocation';
+import WorkingHours from './screens/Workinghours';
 
 
 
@@ -36,7 +39,7 @@ function App() {
           },
           })}
           />
-        <Stack.Screen name="VendorScreen" component={VendorScreen} 
+        <Stack.Screen name="VendorLogin" component={VendorLogin} 
        options={({ navigation, route }) => ({
          title:'Vendor',
           headerStyle: {
@@ -48,6 +51,33 @@ function App() {
           <Stack.Screen name="SignupScreen" component={SignupScreen} 
        options={({ navigation, route }) => ({
          title:'SignUp',
+          headerStyle: {
+           backgroundColor:'white',
+            height:100 
+          },
+          })}
+          />
+          <Stack.Screen name="VendorSignup" component={VendorSignup} 
+       options={({ navigation, route }) => ({
+         title:'Business Information',
+          headerStyle: {
+           backgroundColor:'white',
+            height:100 
+          },
+          })}
+          />
+           <Stack.Screen name="SignupLocation" component={SignupLocation} 
+       options={({ navigation, route }) => ({
+         title:'Set your location',
+          headerStyle: {
+           backgroundColor:'white',
+            height:100 
+          },
+          })}
+          />
+          <Stack.Screen name="WorkingHours" component={WorkingHours} 
+       options={({ navigation, route }) => ({
+         title:'Set your location',
           headerStyle: {
            backgroundColor:'white',
             height:100 

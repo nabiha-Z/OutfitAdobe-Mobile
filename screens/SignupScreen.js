@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 const FIREBASE_API_ENDPOINT =
-  'https://marketing-bcbe8-default-rtdb.firebaseio.com/';
+  'https://onequeue-7e7f9-default-rtdb.firebaseio.com/';
 
 function SignupScreen({ route, navigation }) {
   const [getEmail, setEmail] = useState(null);
   const [getPassword, setPassword] = useState(null);
+  const [feature, setfeature] = useState([]);
 
   const [users, setUsers] = useState([]);
   const getData = async () => {
@@ -63,7 +64,114 @@ function SignupScreen({ route, navigation }) {
         Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
         sint. Velit officia consequat duis enim velit mollit.
       </Text>
-      
+      <View
+        style={{
+          marginTop: 30,
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginHorizontal: 45,
+          borderWidth: 2,
+          paddingHorizontal: 10,
+          borderColor: '#00716F',
+          borderRadius: 23,
+          paddingVertical: 4,
+        }}>
+        <Icon name="user" color="#00716F" size={24} />
+        <TextInput
+          placeholder="Username"
+          placeholderTextColor="#00716F"
+          value={getUsername}
+          onChangeText={(text) => setUsername(text)}
+          style={{ paddingHorizontal: 10 }}
+        />
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginHorizontal: 45,
+          borderWidth: 2,
+          marginTop: 15,
+          paddingHorizontal: 10,
+          borderColor: '#00716F',
+          borderRadius: 23,
+          paddingVertical: 4,
+        }}>
+        <Icon name="mail" color="#00716F" size={24} />
+        <TextInput
+          style={{ paddingHorizontal: 10 }}
+          placeholder="Email"
+          placeholderTextColor="#00716F"
+          value={getEmail}
+          onChangeText={(text) => setEmail(text)}
+        />
+      </View>
+
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginHorizontal: 45,
+          borderWidth: 2,
+          marginTop: 15,
+          paddingHorizontal: 10,
+          borderColor: '#00716F',
+          borderRadius: 23,
+          paddingVertical: 4,
+        }}>
+        <Icon name="phone" color="#00716F" size={24} />
+        <TextInput
+          keyboardType="numeric"
+          maxLength={11}
+          placeholder="Contact"
+          placeholderTextColor="#00716F"
+          value={getContact}
+          onChangeText={(text) => setContact(text)}
+          style={{ paddingHorizontal: 10 }}
+        />
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginHorizontal: 45,
+          borderWidth: 2,
+          marginTop: 15,
+          paddingHorizontal: 10,
+          borderColor: '#00716F',
+          borderRadius: 23,
+          paddingVertical: 4,
+        }}>
+        <Icon name="lock" color="#00716F" size={24} />
+        <TextInput
+          secureTextEntry
+          placeholder="Password"
+          placeholderTextColor="#00716F"
+          style={{ paddingHorizontal: 10 }}
+          value={getPassword}
+          onChangeText={(text) => setPassword(text)}
+        />
+      </View>
+      <View
+        style={{
+          marginHorizontal: 45,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: 30,
+          backgroundColor: '#00716F',
+          paddingVertical: 10,
+          borderRadius: 23,
+        }}>
+        <TouchableOpacity onPress={addUser}>
+          <Text
+            style={{
+              color: 'white',
+              fontFamily: 'SemiBold',
+            }}>
+            Register
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

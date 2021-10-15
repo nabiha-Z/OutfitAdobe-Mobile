@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 
-import { message, Button, Space } from 'antd';
-const FIREBASE_API_ENDPOINT ='';
+const FIREBASE_API_ENDPOINT ='https://onequeue-7e7f9-default-rtdb.firebaseio.com/';
 
 function Vendor({ route, navigation }) {
   const [getEmail, setEmail] = useState(null);
@@ -12,6 +11,7 @@ function Vendor({ route, navigation }) {
   const [users, setUsers] = useState([]);
   const getData = async () => {
     const response = await fetch(`${FIREBASE_API_ENDPOINT}/users.json`);
+    
     const data = await response.json();
     if (data == null) {
       setUsers([]);
@@ -30,18 +30,19 @@ function Vendor({ route, navigation }) {
       users.map((item, index) => {
         if (item.email == getEmail) {
           if (item.password == getPassword) {
-            message.sucess('Loged in');
+            alert('Loged in');
             
           } else {
-            message.error('Incorrect Password');
+            alert('Incorrect Password');
           }
         } else {
             alert('Check your Email or Signup now.')
-          message.error('Check your Email or Signup now.');
+          //message.error('Check your Email or Signup now.');
         }
       });
     } else {
-      message.error('Fill the fields');
+      alert("Fill out all fields")
+      //message.error('Fill the fields');
     }
   };
 
@@ -99,7 +100,7 @@ function Vendor({ route, navigation }) {
         </TouchableOpacity>
       </View>
       <Text
-        onPress={() => navigation.navigate('SignupScreen')}
+        onPress={() => navigation.navigate('VendorSignup')}
         style={{
           alignSelf: 'center',
           color: '#3E3737',
