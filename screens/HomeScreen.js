@@ -29,7 +29,7 @@ function HomeScreen({ route, navigation }) {
                 }}>
                 Welcome to One Queue
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('VendorScreen')}><Text style={styles.Txt}>Become a vendor</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('VendorLogin')}><Text style={styles.Txt}>Become a vendor</Text></TouchableOpacity>
                 <View style={[styles.emailBtn, styles.elevation]}>
                     <Text onPress={() => navigation.navigate('LoginScreen')}>Continue with email</Text>
                 </View>

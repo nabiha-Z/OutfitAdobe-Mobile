@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 
-import { message } from 'antd';
+
 const FIREBASE_API_ENDPOINT =
-  '';
+  'https://onequeue-7e7f9-default-rtdb.firebaseio.com/';
 
 function Vendor({ route, navigation }) {
   const [getEmail, setEmail] = useState(null);
@@ -32,18 +32,18 @@ function Vendor({ route, navigation }) {
         if (item.email == getEmail) {
           if (item.password == getPassword) {
             alert('Loged in');
-            
+
           } else {
             alert('Incorrect Password');
           }
         } else {
-            alert('Check your Email or Signup now.');
+          alert('Check your Email or Signup now.');
           //message.success('Check your Email or Signup now.');
         }
       });
     } else {
-        alert('Fill the fields');
-        //message.error('Fill the fields');
+      alert('Fill the fields');
+      //message.error('Fill the fields');
     }
   };
 
@@ -54,7 +54,7 @@ function Vendor({ route, navigation }) {
         style={{ width: '100%', height: '40%' }}
       />
       <Text
-        style={{ fontSize: 20,  alignSelf: 'center', textAlign:'center' }}>
+        style={{ fontSize: 20, alignSelf: 'center', textAlign: 'center' }}>
         Welcome, Log into your account.
       </Text>
       <Text
@@ -79,7 +79,7 @@ function Vendor({ route, navigation }) {
         />
       </View>
       <View
-         style={styles.inputField}>
+        style={styles.inputField}>
         <Icon name="lock" color="#3E3737" size={24} />
         <TextInput
           secureTextEntry
@@ -101,7 +101,7 @@ function Vendor({ route, navigation }) {
         </TouchableOpacity>
       </View>
       <Text
-        
+        onPress={() => navigation.navigate('SignupScreen')}
         style={{
           alignSelf: 'center',
           color: '#3E3737',
@@ -115,33 +115,33 @@ function Vendor({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#FFFFFF',
-      width:'100%'
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    width: '100%'
   },
-  inputField:{
+  inputField: {
     flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: 45,
-          borderWidth: 2,
-          marginTop: 10,
-          paddingHorizontal: 10,
-          borderColor: '#3E3737',
-          borderRadius: 23,
-          paddingVertical: 4,
-          width:'70%'
+    alignItems: 'center',
+    marginHorizontal: 45,
+    borderWidth: 2,
+    marginTop: 10,
+    paddingHorizontal: 10,
+    borderColor: '#3E3737',
+    borderRadius: 23,
+    paddingVertical: 4,
+    width: '70%'
   },
-  signupBtn:{
+  signupBtn: {
     marginHorizontal: 50,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 30,
-          backgroundColor: '#3E3737',
-          paddingVertical: 10,
-          borderRadius: 23,
-          width:'70%'
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 30,
+    backgroundColor: '#3E3737',
+    paddingVertical: 10,
+    borderRadius: 23,
+    width: '70%'
   }
 
 });
