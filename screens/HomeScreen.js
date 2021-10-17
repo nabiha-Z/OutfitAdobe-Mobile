@@ -24,7 +24,8 @@ function HomeScreen({ route, navigation }) {
                     textAlign: 'center',
                     marginTop: 0,
                     color: '#FFFFFF',
-                    fontSize: 20,
+                    fontSize: 25,
+                    fontWeight:'bold'
                 }}>
                 Welcome to One Queue
             </Text>

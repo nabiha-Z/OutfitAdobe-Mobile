@@ -1,52 +1,125 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Switch, Modal, CheckBox } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 import { Feather } from '@expo/vector-icons';
-import { EvilIcons } from '@expo/vector-icons';
 import SwitchToggle from "react-native-switch-toggle";
-import ToggleSwitch from 'toggle-switch-react-native';
-import { Checkbox } from 'react-native-paper';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import moment from 'moment';
+import { DataTable } from 'react-native-paper';
 const FIREBASE_API_ENDPOINT =
     'https://onequeue-912fa-default-rtdb.firebaseio.com/';
 function VendorSignup({ route, navigation }) {
-    
-    const [getEmail, setEmail] = useState(null);
+
+    const [show1, setShow1] = useState(false);
+    const [show2, setShow2] = useState(false);
+
     const [isModalVisible, setModalVisible] = useState(false);
-    const [toggles,setToggles] = useState([
-        { id: 0, day: 'Mon', toggle: false },
-        { id: 1, day: 'Tue', toggle: false },
-        { id: 2, day: 'Wed', toggle: false },
-        { id: 3, day: 'Thur',toggle: false },
-        { id: 4, day: 'Fri', toggle: false },
-        { id: 5, day: 'Sat', toggle: false },
-        { id: 6, day: 'Sun', toggle: false }]);
-    useEffect(() => {
-        
-    }, toggles)
+    const [toggles, setToggles] = useState([
+        { id: 0, day: 'Mon', toggle: false, time1: '9:00', time2: '20:00' },
+        { id: 1, day: 'Tue ', toggle: false, time1: '9:00', time2: '20:00' },
+        { id: 2, day: 'Wed', toggle: false, time1: '9:00', time2: '20:00' },
+        { id: 3, day: 'Thur', toggle: false, time1: '9:00', time2: '20:00' },
+        { id: 4, day: 'Fri   ', toggle: false, time1: '9:00', time2: '20:00' },
+        { id: 5, day: 'Sat  ', toggle: false, time1: '9:00', time2: '20:00' },
+        { id: 6, day: 'Sun ', toggle: false, time1: '9:00', time2: '20:00' }]);
+
     const updateToggle = (item, index) => {
 
-        // toggle[index] = !toggle[index]
-        // console.log(toggle);
-        // setToggle(toggle);
         const newData = toggles.map(newItem => {
 
             if (newItem.id === item.id) {
-                var t = !item.toggle;
-                console.log("t=",t);
-                return{
+                return {
                     ...newItem,
                     toggle: !item.toggle
                 }
             }
-            return{
+            return {
                 ...newItem,
                 toggle: newItem.toggle
             }
         })
+
         console.log(newData);
-        
+
         setToggles(newData);
-        console.log("AFTERR= ",toggles);
+        console.log("AFTERRR = ", toggles)
+
+    }
+
+    const handlePicker1 = (dateTime, item) => {
+        console.log("Selected Value= ", dateTime);
+        var selectedTime = moment(dateTime).format('HH:mm');
+        console.log("formatted time= ", selectedTime);
+        //setTime(selectedTime);
+        setShow1(false);
+        console.log("item id= ", item.id);
+
+
+        const newData = toggles.map(newItem => {
+
+            if (newItem.id === item.id) {
+                console.log("newItem id= ", newItem.id);
+                return {
+                    ...newItem,
+                    time1: selectedTime
+                }
+            }
+            return {
+                ...newItem,
+                time1: newItem.time1
+            }
+        })
+
+        console.log(newData);
+
+        setToggles(newData);
+        console.log("AFTERRR = ", toggles)
+
+        // if(selectedDate != undefined){
+        //     const selectedTime = selectedDate;
+
+        //     setTime(selectedTime);
+        // }
+        // setShow(Platform.OS === 'ios');
+        // console.log("time=", time);
+    };
+
+    const handlePicker2 = (dateTime, item) => {
+        console.log("Selected Value= ", dateTime);
+        console.log("item id= ", item.id);
+        var selectedTime = moment(dateTime).format('HH:mm');
+        console.log("formatted time= ", selectedTime);
+        //setTime(selectedTime);
+        setShow2(false);
+
+
+
+        const newData = toggles.map(newItem => {
+            console.log("newItem id= ", newItem.id);
+            if (newItem.id === item.id) {
+                return {
+                    ...newItem,
+                    time2: selectedTime
+                }
+            }
+            return {
+                ...newItem,
+                time2: newItem.time2
+            }
+        })
+
+        //console.log(newData);
+
+        setToggles(newData);
+        //console.log("AFTERRR = ", toggles)
+
+
+    };
+
+
+    const hidePicker = () => {
+        setShow1(false);
+        setShow2(false);
     }
 
     return (
@@ -58,7 +131,7 @@ function VendorSignup({ route, navigation }) {
                 Business Setup
             </Text>
             <Text
-                style={{ fontSize: 25, marginTop: 5, marginHorizontal: 10 }}>
+                style={{ fontSize: 25, marginTop: 5, marginHorizontal: 10, fontWeight: 'bold', color:'#5B5A59'}}>
                 Add working hours
             </Text>
             <Text
@@ -66,16 +139,47 @@ function VendorSignup({ route, navigation }) {
                 Choose your working hours, so the clients can book your services.
             </Text>
 
-            {toggles.map((item, key) => (
-                <View key={key} style={{ flexDirection: 'row', marginTop: 20, marginHorizontal: 10 }}>
-                    <Text style={{ fontStyle: 'bold', marginTop: 6 }}>{item.day}</Text>
-                    
-                    <CheckBox
-                       disabled={false}
-                        onValueChange={()=>updateToggle(item)}
-                        
-                    />
-                    {/* <SwitchToggle
+            <View style={styles.Records}>
+
+                <DataTable>
+                    <DataTable.Header style={{ fontSize: 20, fontWeight: 'bold'}}>
+
+                        <DataTable.Title  ><Text style={{ fontSize: 15, fontWeight: 'bold' }}>Days</Text></DataTable.Title>
+                        <DataTable.Title  ><Text style={{ fontSize: 15, fontWeight: 'bold' }}>    Open</Text></DataTable.Title>
+                        <DataTable.Title  ><Text style={{ fontSize: 15, fontWeight: 'bold' }}>       Timings</Text></DataTable.Title>
+                        <DataTable.Title >       </DataTable.Title>
+
+                    </DataTable.Header>
+                    {toggles.map((item, key) => (
+                        <View key={key} style={{ flexDirection: 'row', marginTop: 10, marginHorizontal: 15 }}>
+                            <Text style={{ marginTop: 10 }}>{item.day}</Text>
+
+                            <SwitchToggle
+                                switchOn={item.toggle}
+                                onPress={() => updateToggle(item)}
+                                backgroundColorOff="#CFD2D1"
+                                backgroundColorOn="#87BEA6"
+                                circleColorOff="#484B4A"
+                                containerStyle={{
+                                    marginTop: 10,
+                                    marginLeft: 52,
+                                    width: 50,
+                                    height: 23,
+                                    borderRadius: 25,
+                                    padding: 1,
+
+
+                                }}
+                                circleStyle={{
+                                    width: 20,
+                                    height: 20,
+                                    borderRadius: 20,
+
+                                }}
+
+                            />
+
+                            {/* <SwitchToggle
                         switchOn={toggle[item.id]}
                         onPress={() => updateToggle(item.id,toggle[item.id])}
                         containerStyle={{
@@ -93,7 +197,7 @@ function VendorSignup({ route, navigation }) {
 
                         }}
                     /> */}
-                    {/* <ToggleSwitch
+                            {/* <ToggleSwitch
                         key={key}
                         isOn={item.toggle}
                         onColor="green"
@@ -104,9 +208,52 @@ function VendorSignup({ route, navigation }) {
                         onToggle={() => updateToggle(item.id,isOn)}
                     /> */}
 
-                </View>
-            ))}
+                            <View style={styles.timePickerView}>
 
+                                <TouchableOpacity
+                                    style={styles.timePicker}
+                                    onPress={() => setShow1(true)}
+                                >
+                                    <Text>{item.time1}</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={styles.timePicker}
+                                    onPress={() => setShow2(true)}
+                                >
+                                    <Text>{item.time2}</Text>
+                                </TouchableOpacity>
+
+                            </View>
+                            {console.log("item= ", item.id)}
+                            <DateTimePicker
+                                isVisible={show1}
+                                testID="dateTimePicker1"
+                                value={item.time1}
+                                mode="time"
+                                is24Hour={true}
+                                display="default"
+                                onConfirm={(e) => handlePicker1(e, item)}
+                                onCancel={hidePicker}
+                            />
+
+                            <DateTimePicker
+                                isVisible={show2}
+                                testID="dateTimePicker2"
+                                value={item.time2}
+                                mode="time"
+                                is24Hour={true}
+                                display="default"
+                                onConfirm={(e) => handlePicker2(e, item)}
+                                onCancel={hidePicker}
+                            />
+
+
+                        </View>
+                    ))}
+
+                </DataTable>
+            </View>
 
             <View style={styles.footerTab}>
                 <TouchableOpacity
@@ -173,9 +320,9 @@ const styles = StyleSheet.create({
         borderTopColor: '#B6B5B4',
         padding: 0,
         flex: 0.3,
-        marginLeft: 10,
+        marginLeft: 20,
         width: '100%',
-        top: 10,
+        top: 30,
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
@@ -225,6 +372,30 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 20,
         textAlign: 'center'
+    },
+    timePickerView: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+
+        alignItems: 'center',
+        textAlign: 'center',
+        marginLeft: 30,
+        alignContent: 'center'
+    },
+    timePicker: {
+        padding: 10,
+        borderWidth: 1,
+        borderColor: '#DFDEDD',
+        borderRadius: 5,
+        marginRight: 10,
+        alignItems: 'center',
+        textAlign: 'center'
+    },
+    timePickerText: {
+        fontSize: 13,
+        color: '#8E8E8E',
+        textAlign: 'center'
+
     }
 
 });

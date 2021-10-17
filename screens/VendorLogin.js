@@ -59,7 +59,7 @@ function Vendor({ route, navigation }) {
       />
       <Text
         style={{ fontSize: 20,  alignSelf: 'center', textAlign:'center' }}>
-        Welcome, Log into your account.
+        Welcome, Login into your account.
       </Text>
       <Text
         style={{

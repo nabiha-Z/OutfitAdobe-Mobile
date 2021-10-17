@@ -75,20 +75,20 @@ function SignupScreen({ route, navigation }) {
             }),
           };
           fetch(`${FIREBASE_API_ENDPOINT}/users.json`, requestOptions)
-          .then((response) => response.text())
-          .then((result) => console.log(result))
-          .catch((error) => console.log('error', error));
+            .then((response) => response.text())
+            .then((result) => console.log(result))
+            .catch((error) => console.log('error', error));
 
-        setUsername('');
-        setPassword('');
-        setContact('');
-        setEmail('');
-        alert('Account Created');
-        navigation.navigate('LoginScreen');
-        }else{
+          setUsername('');
+          setPassword('');
+          setContact('');
+          setEmail('');
+          alert('Account Created');
+          navigation.navigate('LoginScreen');
+        } else {
           alert("This account already exists")
         }
-        
+
 
       } else {
         setEmailError("Invalid Email")
@@ -102,7 +102,7 @@ function SignupScreen({ route, navigation }) {
     <View style={styles.container}>
       <Image
         source={require('../images/img4.png')}
-        style={{ width: '80%', height: '30%' }}
+        style={{ width: '100%', height: '40%' }}
       />
       <Text
         style={{ fontSize: 20, alignSelf: 'center', textAlign: 'center' }}>
@@ -115,87 +115,98 @@ function SignupScreen({ route, navigation }) {
           marginTop: 5,
           opacity: 0.5,
         }}>
-        Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
+        Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
+        sint. Velit officia consequat duis enim velit mollit.
       </Text>
       <View
-        style={styles.inputField}>
-        <Icon name="user" color="#796565" size={24} />
+        style={{
+          marginTop: 30,
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginHorizontal: 45,
+          borderWidth: 2,
+          paddingHorizontal: 10,
+          borderColor: '#00716F',
+          borderRadius: 23,
+          paddingVertical: 4,
+        }}>
+        <Icon name="user" color="#00716F" size={24} />
         <TextInput
           placeholder="Username"
-<<<<<<< HEAD
-          placeholderTextColor="#796565"
-          value={getUsername}
-=======
           placeholderTextColor="#00716F"
-          // value={getUsername}
->>>>>>> 49b9c2f60e3e451a6afa50bd3bed04fb9fdbfdb0
+          value={getUsername}
           onChangeText={(text) => setUsername(text)}
-          style={{ paddingHorizontal: 10, width: 200 }}
+          style={{ paddingHorizontal: 10 }}
         />
       </View>
       <View
-        style={styles.inputField}>
-        <Icon name="mail" color="#796565" size={24} />
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginHorizontal: 45,
+          borderWidth: 2,
+          marginTop: 15,
+          paddingHorizontal: 10,
+          borderColor: '#00716F',
+          borderRadius: 23,
+          paddingVertical: 4,
+        }}>
+        <Icon name="mail" color="#00716F" size={24} />
         <TextInput
-          style={{ paddingHorizontal: 10, width: 200 }}
+          style={{ paddingHorizontal: 10 }}
           placeholder="Email"
-<<<<<<< HEAD
-          placeholderTextColor="#796565"
-          value={getEmail}
-=======
           placeholderTextColor="#00716F"
-          // value={getEmail}
->>>>>>> 49b9c2f60e3e451a6afa50bd3bed04fb9fdbfdb0
+          value={getEmail}
           onChangeText={(text) => setEmail(text)}
         />
-
       </View>
-      <Text style={{ color: 'red', fontSize: 12 }}>{emailError}</Text>
-      <View
-        style={styles.inputField}>
 
-        <Icon name="phone" color="#796565" size={24} />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginHorizontal: 45,
+          borderWidth: 2,
+          marginTop: 15,
+          paddingHorizontal: 10,
+          borderColor: '#00716F',
+          borderRadius: 23,
+          paddingVertical: 4,
+        }}>
+        <Icon name="phone" color="#00716F" size={24} />
         <TextInput
           keyboardType="numeric"
           maxLength={11}
           placeholder="Contact"
-<<<<<<< HEAD
-          placeholderTextColor="#796565"
-          value={getContact}
-=======
           placeholderTextColor="#00716F"
-          // value={getContact}
->>>>>>> 49b9c2f60e3e451a6afa50bd3bed04fb9fdbfdb0
+          value={getContact}
           onChangeText={(text) => setContact(text)}
-          style={{ paddingHorizontal: 10 , width: 200}}
+          style={{ paddingHorizontal: 10 }}
         />
       </View>
-      <Text style={{ color: 'red', fontSize: 12 }}>{contactError}</Text>
       <View
-        style={styles.inputField}>
-        <Icon name="lock" color="#796565" size={24} />
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginHorizontal: 45,
+          borderWidth: 2,
+          marginTop: 15,
+          paddingHorizontal: 10,
+          borderColor: '#00716F',
+          borderRadius: 23,
+          paddingVertical: 4,
+        }}>
+        <Icon name="lock" color="#00716F" size={24} />
         <TextInput
           secureTextEntry
           placeholder="Password"
-<<<<<<< HEAD
-          placeholderTextColor="#796565"
-          style={{ paddingHorizontal: 10 }}
-=======
           placeholderTextColor="#00716F"
-          style={{ paddingHorizontal: 10 , width: 200}}
->>>>>>> 49b9c2f60e3e451a6afa50bd3bed04fb9fdbfdb0
+          style={{ paddingHorizontal: 10 }}
           value={getPassword}
           onChangeText={(text) => setPassword(text)}
         />
       </View>
       <View
-<<<<<<< HEAD
-        style={styles.loginBtn}>
-        <TouchableOpacity onPress={addUser}>
-          <Text
-            style={{
-              color: 'white',
-=======
         style={{
           marginHorizontal: 45,
           alignItems: 'center',
@@ -205,14 +216,13 @@ function SignupScreen({ route, navigation }) {
           paddingVertical: 10,
           borderRadius: 23,
         }}>
-        <TouchableOpacity >
+        <TouchableOpacity onPress={addUser}>
           <Text
             style={{
               color: 'white',
-               width: 200,textAlign:'center'
->>>>>>> 49b9c2f60e3e451a6afa50bd3bed04fb9fdbfdb0
+              fontFamily: 'SemiBold',
             }}>
-            Create Account
+            Register
           </Text>
         </TouchableOpacity>
       </View>
