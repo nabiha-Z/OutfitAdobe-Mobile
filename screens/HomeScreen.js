@@ -4,8 +4,7 @@ import Icon from '@expo/vector-icons/AntDesign';
 
 import { LinearGradient } from 'expo-linear-gradient';
 const FIREBASE_API_ENDPOINT =
-    '';
-
+    'https://onequeue-912fa-default-rtdb.firebaseio.com/';
 function HomeScreen({ route, navigation }) {
 
 

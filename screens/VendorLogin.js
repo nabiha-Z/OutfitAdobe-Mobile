@@ -1,47 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
-
-const FIREBASE_API_ENDPOINT ='https://onequeue-7e7f9-default-rtdb.firebaseio.com/';
+const FIREBASE_API_ENDPOINT =
+    'https://onequeue-912fa-default-rtdb.firebaseio.com/';
 
 function Vendor({ route, navigation }) {
   const [getEmail, setEmail] = useState(null);
   const [getPassword, setPassword] = useState(null);
 
-  const [users, setUsers] = useState([]);
+  const [vendors, setvendors] = useState([]);
   const getData = async () => {
-    const response = await fetch(`${FIREBASE_API_ENDPOINT}/users.json`);
+    const response = await fetch(`${FIREBASE_API_ENDPOINT}/vendors.json`);
     
     const data = await response.json();
     if (data == null) {
-      setUsers([]);
+      setvendors([]);
     } else {
       let arr = Object.entries(data).map((item) => ({
         ...item[1],
         key: item[0],
       }));
-      setUsers(arr);
+      setvendors(arr);
     }
   };
-  getData();
+
+  useEffect(() => {
+    getData()
+  }, [])
 
   const authenticateUser = () => {
     if (getEmail != null && getPassword != null) {
-      users.map((item, index) => {
+      users.map((item) => {
         if (item.email == getEmail) {
-          if (item.password == getPassword) {
+          if (item.password === getPassword) {
             alert('Loged in');
-            
+            setEmail("");
+            setPassword("");
+
           } else {
             alert('Incorrect Password');
           }
         } else {
-            alert('Check your Email or Signup now.')
-          //message.error('Check your Email or Signup now.');
+          alert('Check your Email or Signup now.');
+          //message.success('Check your Email or Signup now.');
         }
       });
     } else {
-      alert("Fill out all fields")
+      alert('Fill the fields');
       //message.error('Fill the fields');
     }
   };

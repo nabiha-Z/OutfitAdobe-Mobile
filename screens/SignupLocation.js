@@ -5,7 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import { Checkbox } from 'react-native-paper';
 import { EvilIcons } from '@expo/vector-icons';
 const FIREBASE_API_ENDPOINT =
-    'https://onequeue-7e7f9-default-rtdb.firebaseio.com/';
+    'https://onequeue-912fa-default-rtdb.firebaseio.com/';
 import hair from '../images/hair.png';
 import spa from '../images/spa.png';
 import beard from '../images/beard.png';

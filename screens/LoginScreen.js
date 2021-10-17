@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 
 
 const FIREBASE_API_ENDPOINT =
-  'https://onequeue-7e7f9-default-rtdb.firebaseio.com/';
+  'https://onequeue-912fa-default-rtdb.firebaseio.com/';
 
 function Vendor({ route, navigation }) {
   const [getEmail, setEmail] = useState(null);
   const [getPassword, setPassword] = useState(null);
 
   const [users, setUsers] = useState([]);
+
+
   const getData = async () => {
     const response = await fetch(`${FIREBASE_API_ENDPOINT}/users.json`);
     const data = await response.json();
@@ -24,7 +26,9 @@ function Vendor({ route, navigation }) {
       setUsers(arr);
     }
   };
-  getData();
+  useEffect(() => {
+    getData()
+  }, [])
 
   const authenticateUser = () => {
     if (getEmail != null && getPassword != null) {
@@ -32,6 +36,8 @@ function Vendor({ route, navigation }) {
         if (item.email == getEmail) {
           if (item.password == getPassword) {
             alert('Loged in');
+            setEmail("");
+            setPassword("");
 
           } else {
             alert('Incorrect Password');

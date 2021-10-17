@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, CheckBox, ScrollView } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 import { Feather } from '@expo/vector-icons';
 import { Checkbox } from 'react-native-paper';
 const FIREBASE_API_ENDPOINT =
-    'https://onequeue-7e7f9-default-rtdb.firebaseio.com/';
+    'https://onequeue-912fa-default-rtdb.firebaseio.com/';
 import hair from '../images/hair.png';
 import spa from '../images/spa.png';
 import beard from '../images/beard.png';
@@ -54,9 +54,9 @@ function VendorSignup({ route, navigation }) {
 
             <Text
                 style={{ fontSize: 12, marginTop: 10, marginHorizontal: 10 }}>
-                Website
+                Email
             </Text>
-            <TextInput style={styles.businessField} />
+            <TextInput style={styles.businessField} placeholder="abc@gmail.com"/>
 
 
 

@@ -1,25 +1,53 @@
-import React, { useState } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, CheckBox, Modal } from 'react-native';
+import React, { useState, useEffect} from 'react';
+import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Switch, Modal, CheckBox } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 import { Feather } from '@expo/vector-icons';
 import { EvilIcons } from '@expo/vector-icons';
+import SwitchToggle from "react-native-switch-toggle";
+import ToggleSwitch from 'toggle-switch-react-native';
+import { Checkbox } from 'react-native-paper';
 const FIREBASE_API_ENDPOINT =
-    'https://onequeue-7e7f9-default-rtdb.firebaseio.com/';
-
-const days = [
-    { id: 1, day: 'Mon' },
-    { id: 2, day: 'Tue' },
-    { id: 3, day: 'Wed' },
-    { id: 4, day: 'Thur' },
-    { id: 5, day: 'Fri' },
-    { id: 6, day: 'Sat' },
-    { id: 7, day: 'Sun' }]
-
+    'https://onequeue-912fa-default-rtdb.firebaseio.com/';
 function VendorSignup({ route, navigation }) {
+    
     const [getEmail, setEmail] = useState(null);
-    const [getPassword, setPassword] = useState(null);
-    const [isSelected, setSelection] = useState(false);
     const [isModalVisible, setModalVisible] = useState(false);
+    const [toggles,setToggles] = useState([
+        { id: 0, day: 'Mon', toggle: false },
+        { id: 1, day: 'Tue', toggle: false },
+        { id: 2, day: 'Wed', toggle: false },
+        { id: 3, day: 'Thur',toggle: false },
+        { id: 4, day: 'Fri', toggle: false },
+        { id: 5, day: 'Sat', toggle: false },
+        { id: 6, day: 'Sun', toggle: false }]);
+    useEffect(() => {
+        
+    }, toggles)
+    const updateToggle = (item, index) => {
+
+        // toggle[index] = !toggle[index]
+        // console.log(toggle);
+        // setToggle(toggle);
+        const newData = toggles.map(newItem => {
+
+            if (newItem.id === item.id) {
+                var t = !item.toggle;
+                console.log("t=",t);
+                return{
+                    ...newItem,
+                    toggle: !item.toggle
+                }
+            }
+            return{
+                ...newItem,
+                toggle: newItem.toggle
+            }
+        })
+        console.log(newData);
+        
+        setToggles(newData);
+        console.log("AFTERR= ",toggles);
+    }
 
     return (
 
@@ -38,13 +66,44 @@ function VendorSignup({ route, navigation }) {
                 Choose your working hours, so the clients can book your services.
             </Text>
 
-            {days.map((item, key) => (
+            {toggles.map((item, key) => (
                 <View key={key} style={{ flexDirection: 'row', marginTop: 20, marginHorizontal: 10 }}>
-                    <CheckBox
-                        value={isSelected}
-                        onValueChange={setSelection}
-                    />
                     <Text style={{ fontStyle: 'bold', marginTop: 6 }}>{item.day}</Text>
+                    
+                    <CheckBox
+                       disabled={false}
+                        onValueChange={()=>updateToggle(item)}
+                        
+                    />
+                    {/* <SwitchToggle
+                        switchOn={toggle[item.id]}
+                        onPress={() => updateToggle(item.id,toggle[item.id])}
+                        containerStyle={{
+                            marginTop: 16,
+                            width: 50,
+                            height: 20,
+                            borderRadius: 25,
+                            padding: 2,
+
+                        }}
+                        circleStyle={{
+                            width: 20,
+                            height: 20,
+                            borderRadius: 20,
+
+                        }}
+                    /> */}
+                    {/* <ToggleSwitch
+                        key={key}
+                        isOn={item.toggle}
+                        onColor="green"
+                        offColor="grey"
+                        label={item.day}
+                        labelStyle={{ color: "black", fontWeight: "900", marginRight:20}}
+                        size="large"
+                        onToggle={() => updateToggle(item.id,isOn)}
+                    /> */}
+
                 </View>
             ))}
 
@@ -135,12 +194,12 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     centeredView: {
-        borderTopWidth:1,
-        borderColor:'#908D8D'
+        borderTopWidth: 1,
+        borderColor: '#908D8D'
 
-      },
+    },
     modalView: {
-        
+
         backgroundColor: 'rgba(230, 230, 230,0.9)',
         borderRadius: 20,
         padding: 20,
@@ -148,7 +207,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         shadowColor: "#000",
         height: '100%',
-        width:'100%'
+        width: '100%'
 
     },
     ModalBtn: {
