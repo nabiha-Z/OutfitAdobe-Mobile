@@ -3,6 +3,7 @@ import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, CheckBox, S
 import Icon from '@expo/vector-icons/AntDesign';
 import { Feather } from '@expo/vector-icons';
 import { Checkbox } from 'react-native-paper';
+import MapView, { PROVIDER_GOOGLE,Marker } from 'react-native-maps';
 import { EvilIcons } from '@expo/vector-icons';
 const FIREBASE_API_ENDPOINT =
     'https://onequeue-7e7f9-default-rtdb.firebaseio.com/';
@@ -24,6 +25,12 @@ function VendorSignup({ route, navigation }) {
     const [getEmail, setEmail] = useState(null);
     const [getPassword, setPassword] = useState(null);
     const [isSelected, setSelection] = useState(false);
+    const [regionuser, setregionuser] = useState({
+    latitude: 51.5079145,
+    longitude: -0.0899163,
+    latitudeDelta: 0.09,
+    longitudeDelta: 0.09
+  });
 
     return (
 
@@ -41,16 +48,63 @@ function VendorSignup({ route, navigation }) {
                 style={{ fontSize: 13, opacity: 0.7, marginTop: 5, marginHorizontal: 10 }}>
                 Add your business location
             </Text>
-
+    
             <Text
                 style={{ fontSize: 17, marginTop: 10, marginHorizontal: 10 }}>
                 Where's your buisness located?
             </Text>
+
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
                 <EvilIcons name="location" size={30} color="black" style={{ justifyContent: 'center', padding: 5, marginHorizontal: 10, borderWidth: 1, borderColor: '#DFDFDF', borderRadius: 3 }} />
                 <TextInput style={styles.businessField} />
+               
             </View>
 
+<MapView
+         style={{ flex: 1, alignItems:'center',margin:10}}
+         provider={PROVIDER_GOOGLE}
+         showsUserLocation
+         initialRegion={regionuser}
+        onRegionChangeComplete={region=>{setregionuser(region)}}
+
+     
+      >
+          <Marker 
+          coordinate={{ latitude: regionuser.latitude, longitude: regionuser.latitude }}
+          title={"Your location"}
+
+           />
+</MapView>
+<Text
+                style={{ fontSize: 17, marginTop: 10, marginHorizontal: 10 }}>
+               longitude
+            </Text>
+
+            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                <EvilIcons name="location" size={30} color="black" style={{ justifyContent: 'center', padding: 5, marginHorizontal: 10, borderWidth: 1, borderColor: '#DFDFDF', borderRadius: 3 }} />
+                <TextInput style={styles.businessField} value={""+regionuser.longitude} />
+               
+            </View>
+            <Text
+                style={{ fontSize: 17, marginTop: 10, marginHorizontal: 10 }}>
+                latitude
+            </Text>
+
+            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                <EvilIcons name="location" size={30} color="black" style={{ justifyContent: 'center', padding: 5, marginHorizontal: 10, borderWidth: 1, borderColor: '#DFDFDF', borderRadius: 3 }} />
+                <TextInput style={styles.businessField} value={""+regionuser.latitude} />
+               
+            </View>
+            <Text
+                style={{ fontSize: 17, marginTop: 10, marginHorizontal: 10 }}>
+                Area
+            </Text>
+
+            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                <EvilIcons name="location" size={30} color="black" style={{ justifyContent: 'center', padding: 5, marginHorizontal: 10, borderWidth: 1, borderColor: '#DFDFDF', borderRadius: 3 }} />
+                <TextInput style={styles.businessField}  />
+               
+            </View>
             <View style={{ flexDirection: 'row', marginTop: 20 }}>
                 <CheckBox
                     value={isSelected}

@@ -70,7 +70,7 @@ function VendorSignup({ route, navigation }) {
         style={styles.checkbox}
       /> */}
             <ScrollView style={{ height: 20, marginHorizontal: 10, marginTop: 15, }}>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', }}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent:'left', }}>
                     {categories.map((item, key) => 
                   
                     (

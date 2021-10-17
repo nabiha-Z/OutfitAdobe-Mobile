@@ -80,9 +80,9 @@ function SignupScreen({ route, navigation }) {
         <TextInput
           placeholder="Username"
           placeholderTextColor="#00716F"
-          value={getUsername}
+          // value={getUsername}
           onChangeText={(text) => setUsername(text)}
-          style={{ paddingHorizontal: 10 }}
+          style={{ paddingHorizontal: 10, width: 200 }}
         />
       </View>
       <View
@@ -99,10 +99,10 @@ function SignupScreen({ route, navigation }) {
         }}>
         <Icon name="mail" color="#00716F" size={24} />
         <TextInput
-          style={{ paddingHorizontal: 10 }}
+          style={{ paddingHorizontal: 10, width: 200 }}
           placeholder="Email"
           placeholderTextColor="#00716F"
-          value={getEmail}
+          // value={getEmail}
           onChangeText={(text) => setEmail(text)}
         />
       </View>
@@ -125,9 +125,9 @@ function SignupScreen({ route, navigation }) {
           maxLength={11}
           placeholder="Contact"
           placeholderTextColor="#00716F"
-          value={getContact}
+          // value={getContact}
           onChangeText={(text) => setContact(text)}
-          style={{ paddingHorizontal: 10 }}
+          style={{ paddingHorizontal: 10 , width: 200}}
         />
       </View>
       <View
@@ -147,7 +147,7 @@ function SignupScreen({ route, navigation }) {
           secureTextEntry
           placeholder="Password"
           placeholderTextColor="#00716F"
-          style={{ paddingHorizontal: 10 }}
+          style={{ paddingHorizontal: 10 , width: 200}}
           value={getPassword}
           onChangeText={(text) => setPassword(text)}
         />
@@ -162,11 +162,11 @@ function SignupScreen({ route, navigation }) {
           paddingVertical: 10,
           borderRadius: 23,
         }}>
-        <TouchableOpacity onPress={addUser}>
+        <TouchableOpacity >
           <Text
             style={{
               color: 'white',
-              fontFamily: 'SemiBold',
+               width: 200,textAlign:'center'
             }}>
             Register
           </Text>
