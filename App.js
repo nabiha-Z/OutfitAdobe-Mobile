@@ -77,7 +77,7 @@ function App() {
           />
           <Stack.Screen name="WorkingHours" component={WorkingHours} 
        options={({ navigation, route }) => ({
-         title:'Set your location',
+         title:'Set your timings',
           headerStyle: {
            backgroundColor:'white',
             height:100 

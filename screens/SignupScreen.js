@@ -122,20 +122,30 @@ function SignupScreen({ route, navigation }) {
         <Icon name="user" color="#796565" size={24} />
         <TextInput
           placeholder="Username"
+<<<<<<< HEAD
           placeholderTextColor="#796565"
           value={getUsername}
+=======
+          placeholderTextColor="#00716F"
+          // value={getUsername}
+>>>>>>> 49b9c2f60e3e451a6afa50bd3bed04fb9fdbfdb0
           onChangeText={(text) => setUsername(text)}
-          style={{ paddingHorizontal: 10 }}
+          style={{ paddingHorizontal: 10, width: 200 }}
         />
       </View>
       <View
         style={styles.inputField}>
         <Icon name="mail" color="#796565" size={24} />
         <TextInput
-          style={{ paddingHorizontal: 10 }}
+          style={{ paddingHorizontal: 10, width: 200 }}
           placeholder="Email"
+<<<<<<< HEAD
           placeholderTextColor="#796565"
           value={getEmail}
+=======
+          placeholderTextColor="#00716F"
+          // value={getEmail}
+>>>>>>> 49b9c2f60e3e451a6afa50bd3bed04fb9fdbfdb0
           onChangeText={(text) => setEmail(text)}
         />
 
@@ -149,10 +159,15 @@ function SignupScreen({ route, navigation }) {
           keyboardType="numeric"
           maxLength={11}
           placeholder="Contact"
+<<<<<<< HEAD
           placeholderTextColor="#796565"
           value={getContact}
+=======
+          placeholderTextColor="#00716F"
+          // value={getContact}
+>>>>>>> 49b9c2f60e3e451a6afa50bd3bed04fb9fdbfdb0
           onChangeText={(text) => setContact(text)}
-          style={{ paddingHorizontal: 10 }}
+          style={{ paddingHorizontal: 10 , width: 200}}
         />
       </View>
       <Text style={{ color: 'red', fontSize: 12 }}>{contactError}</Text>
@@ -162,18 +177,40 @@ function SignupScreen({ route, navigation }) {
         <TextInput
           secureTextEntry
           placeholder="Password"
+<<<<<<< HEAD
           placeholderTextColor="#796565"
           style={{ paddingHorizontal: 10 }}
+=======
+          placeholderTextColor="#00716F"
+          style={{ paddingHorizontal: 10 , width: 200}}
+>>>>>>> 49b9c2f60e3e451a6afa50bd3bed04fb9fdbfdb0
           value={getPassword}
           onChangeText={(text) => setPassword(text)}
         />
       </View>
       <View
+<<<<<<< HEAD
         style={styles.loginBtn}>
         <TouchableOpacity onPress={addUser}>
           <Text
             style={{
               color: 'white',
+=======
+        style={{
+          marginHorizontal: 45,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: 30,
+          backgroundColor: '#00716F',
+          paddingVertical: 10,
+          borderRadius: 23,
+        }}>
+        <TouchableOpacity >
+          <Text
+            style={{
+              color: 'white',
+               width: 200,textAlign:'center'
+>>>>>>> 49b9c2f60e3e451a6afa50bd3bed04fb9fdbfdb0
             }}>
             Create Account
           </Text>
