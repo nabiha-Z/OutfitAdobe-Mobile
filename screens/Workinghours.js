@@ -167,8 +167,6 @@ function VendorSignup({ route, navigation }) {
                                     height: 23,
                                     borderRadius: 25,
                                     padding: 1,
-
-
                                 }}
                                 circleStyle={{
                                     width: 20,

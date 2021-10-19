@@ -11,26 +11,40 @@ import beard from '../images/beard.png';
 import aesthetic from '../images/aesthetic.png';
 import salon from '../images/salon.png';
 import beauty from '../images/beauty.png';
+import { back } from 'react-native/Libraries/Animated/src/Easing';
 
 
 function VendorSignup({ route, navigation }) {
     const [categories, setCategories] = useState([
-        { id: 1, icon: hair, title: 'Hair Salon', checked: false },
-        { id: 2, icon: spa, title: 'Spa', checked: false },
-        { id: 3, icon: beard, title: 'Barbershop', checked: false },
-        { id: 4, icon: aesthetic, title: 'Aesthetic', checked: false },
-        { id: 5, icon: salon, title: 'Salon', checked: false },
-        { id: 6, icon: beauty, title: 'Beauty Salon', checked: false }]);
+        { id: 1, icon: beauty, title: 'Beauty & Wellness', border: '#C8C4C4', background: 'white', checked: false },
+        { id: 2, icon: spa, title: 'Medical', border: '#C8C4C4', background: 'white', checked: false },
+        { id: 3, icon: beard, title: 'Sports', border: '#C8C4C4', background: 'white', checked: false },
+        { id: 4, icon: aesthetic, title: 'Freelancer', border: '#C8C4C4', background: 'white', checked: false },
+        { id: 5, icon: salon, title: 'Events', border: '#C8C4C4', background: 'white', checked: false },
+        { id: 6, icon: beauty, title: 'Entertainment', border: '#C8C4C4', background: 'white', checked: false },
+        { id: 7, icon: salon, title: 'Official', border: '#C8C4C4', background: 'white', checked: false },
+        { id: 8, icon: salon, title: 'Education', border: '#C8C4C4', background: 'white', checked: false },]);
 
-    const [getPassword, setPassword] = useState(null);
-    const [isSelected, setSelection] = useState(false);
 
     const onChange = (item) => {
+
         const newData = categories.map(newItem => {
 
             if (newItem.id === item.id) {
+                var color, background;
+                if (item.checked === false) {
+                    color = '#EAF3F2';
+                    background = '#EAF3F2';
+
+                } else {
+                    color = '#C8C4C4';
+                    background = 'white';
+                }
+
                 return {
                     ...newItem,
+                    border: color,
+                    background: background,
                     checked: !item.checked
                 }
             }
@@ -57,7 +71,7 @@ function VendorSignup({ route, navigation }) {
                 Business Setup
             </Text>
             <Text
-                style={{ fontSize: 25, marginTop: 5, marginHorizontal: 10,  fontWeight: 'bold', color:'#5B5A59'}}>
+                style={{ fontSize: 25, marginTop: 5, marginHorizontal: 10, fontWeight: 'bold', color: '#5B5A59' }}>
                 Have any business name in mind?
             </Text>
             <Text
@@ -89,34 +103,38 @@ function VendorSignup({ route, navigation }) {
         style={styles.checkbox}
       /> */}
 
-            <ScrollView style={{ height: 20, marginHorizontal:10, marginTop: 15, marginLeft:7, paddingRight:15}}>
+            <ScrollView style={{ height: 20, marginHorizontal: 5, marginTop: 15, marginLeft: 11, paddingRight: 15 }}>
                 <View style={styles.categoriesView}>
                     {categories.map((item, key) =>
 
                     (
                         <>
-                            
+
                             <View style={styles.checkboxContainer} key={key}>
-                            <CheckBox
-                                
-                                value={item.checked}
-                                style={styles.ckItem}
-                                disabled={false}
-                                onAnimationType='fill'
-                                offAnimationType='fade'
-                                boxType='square'
-                                onValueChange={() => onChange(item)}
-                            />
+                                <CheckBox
+                                    key={item.id}
+                                    value={item.checked}
+                                    style={[styles.ckItem, { zIndex: 1 }]}
+                                    disabled={false}
+                                    onAnimationType='fill'
+                                    offAnimationType='fade'
+                                    boxType='square'
+                                    onValueChange={() => onChange(item)}
+                                />
+                                <View style={[styles.customCheckbox, { zIndex: 0, borderColor: item.border, backgroundColor: item.background }]} >
+                                    <Image source={item.icon} style={{ width: '80%', height: '60%', alignSelf: 'center' }} />
+                                    <Text style={styles.btnTxt}>{item.title} </Text>
+                                </View>
                                 {/* <Text style={styles.label}>Do you like React Native?</Text> */}
-                                <View style={[styles.customCheckbox, styles.elevation]} key={key}>
-                                <Image source={item.icon} style={{ width: '100%', height: '80%'}} />
-                                {/* <Feather name={item.icon} size={24} color="black" /> */}
-                                <Text style={styles.btnTxt}>{item.title}</Text>
-                            </View>
-                            
+                                {/* <View style={[styles.customCheckbox, styles.elevation, { borderColor: bordercolor }]} >
+                                    
+                                    {/* <Feather name={item.icon} size={24} color="black" /> 
+                                    <Text style={styles.btnTxt}>{item.title}</Text>
+                                </View> */}
+
                             </View>
 
-                            
+
                         </>
                     ))}
                 </View>
@@ -155,28 +173,14 @@ const styles = StyleSheet.create({
 
     },
     customCheckbox: {
-        flexDirection: 'row',
-        borderColor: '#C8C4C4',
-
         padding: 10,
         borderWidth: 1,
         width: 80,
         height: 100,
         borderRadius: 5,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
+        borderColor: 'white',
         backgroundColor: 'white',
-        marginTop: 10,
-        
-        
-        
-
-    },
-    checkbox: {
-        flexDirection: 'row',
-        flexWrap: 'wrap'
-
-
+        borderColor: '#C8C4C4',
     },
     footerTab: {
         borderTopWidth: 1,
@@ -200,13 +204,14 @@ const styles = StyleSheet.create({
     elevation: {
         elevation: 5,
         shadowColor: '#F4F0F0',
-        
+
     },
     btnTxt: {
         fontSize: 10,
         opacity: 0.5,
         alignSelf: 'center',
-        textAlign: 'center'
+        textAlign: 'center',
+        top: 5
     },
     categoriesView: {
         flexDirection: 'row',
@@ -215,17 +220,14 @@ const styles = StyleSheet.create({
     },
     ckItem: {
         alignSelf: "center",
-        width: 40,
+        width: 80,
         height: 90,
-        opacity: 0.7,
+        opacity: 0,
+        position: 'absolute'
     },
     checkboxContainer: {
         flexDirection: "row",
         marginBottom: 20,
-    },
-    label: {
-        margin: 8,
-        
     },
 
 });
