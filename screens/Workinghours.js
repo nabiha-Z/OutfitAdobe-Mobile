@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Switch, Modal, CheckBox } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 import { Feather } from '@expo/vector-icons';
 import SwitchToggle from "react-native-switch-toggle";

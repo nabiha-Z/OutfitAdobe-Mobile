@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, CheckBox, ScrollView } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, CheckBox, ScrollView, Modal } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 import { Feather } from '@expo/vector-icons';
 import { Checkbox } from 'react-native-paper';
@@ -16,15 +16,17 @@ import { back } from 'react-native/Libraries/Animated/src/Easing';
 
 function VendorSignup({ route, navigation }) {
     const [categories, setCategories] = useState([
-        { id: 1, icon: beauty, title: 'Beauty & Wellness', border: '#C8C4C4', background: 'white', checked: false },
-        { id: 2, icon: spa, title: 'Medical', border: '#C8C4C4', background: 'white', checked: false },
-        { id: 3, icon: beard, title: 'Sports', border: '#C8C4C4', background: 'white', checked: false },
-        { id: 4, icon: aesthetic, title: 'Freelancer', border: '#C8C4C4', background: 'white', checked: false },
-        { id: 5, icon: salon, title: 'Events', border: '#C8C4C4', background: 'white', checked: false },
-        { id: 6, icon: beauty, title: 'Entertainment', border: '#C8C4C4', background: 'white', checked: false },
-        { id: 7, icon: salon, title: 'Official', border: '#C8C4C4', background: 'white', checked: false },
-        { id: 8, icon: salon, title: 'Education', border: '#C8C4C4', background: 'white', checked: false },]);
+        { id: 1, icon: beauty, title: 'Beauty & Wellness', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Beauty Salons', 'Hair Salons', 'Nail Salons', 'Spa'] },
+        { id: 2, icon: spa, title: 'Medical', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Psychologist', 'Physiologist', 'Dentists', 'Acupunture', 'Chiropractors', 'Medical'] },
+        { id: 3, icon: beard, title: 'Sports', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Gyms', 'Golf Classes', 'Sport Item Rental', 'Sport Resources'] },
+        { id: 4, icon: aesthetic, title: 'Freelancer', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Driving Schools', 'Pet Services', 'Household', 'Cleaning', 'Design Consulltions', 'Spiritual Services', 'Meeting Rooms', 'Coaching', 'Counselling'] },
+        { id: 5, icon: salon, title: 'Events', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Business Event', 'Events', 'Photographers'] },
+        { id: 6, icon: beauty, title: 'Entertainment', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Resturants', 'Escape Rooms', 'Equipment Rental', 'Art Classes'] },
+        { id: 7, icon: salon, title: 'Official', border: '#C8C4C4', background: 'white', checked: false, subCat: ['City Councils', 'Embassies & Consulates', 'Attorney', 'Legal', 'Business Attorney', 'Financial Services', 'Interview Scheduling', 'Call Centers'] },
+        { id: 8, icon: salon, title: 'Education', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Universities', 'Colleges', 'Libraries', 'Teaching', 'Tutoring Lessons', 'Parent Meetings', 'Child care'] }]);
 
+    const [show, setShow] = useState({ visible: false, currentItem: '' });
+    const [isModalVisible, setModalVisible] = useState(false);
 
     const onChange = (item) => {
 
@@ -54,10 +56,59 @@ function VendorSignup({ route, navigation }) {
             }
         })
 
-        console.log(newData);
+        //console.log(newData);
 
+        console.log("LATESTT\n\n");
         setCategories(newData);
-        //console.log("AFTERRR = ", categories)
+        // const newShow = show.map(element => {
+        //     return {
+
+        //     }
+        // })
+        if (item.checked === false) {
+            show.visible = true;
+            show.currentItem = item.title;
+            //console.log("newShow= ", newShow);
+            setShow(show);
+
+            console.log("AFTERRR = ", show);;
+            setModalVisible(true);
+        }
+
+    }
+
+    const closeModal = () => {
+        show.visible = false;
+        show.currentItem = '';
+        setModalVisible(false);
+        console.log("showw= ", show);
+    }
+
+    const ModalContent = (sub) => {
+        console.log("gfgfjdghjhgjhdjfhg")
+        return (
+            <>
+                {console.log("sub= ", sub)}
+                <Text>{sub}</Text>
+                <View style={styles.checkboxContainer}>
+                    <CheckBox
+                        disabled={false}
+                        onAnimationType='fill'
+                        offAnimationType='fade'
+                        boxType='square'
+                        onValueChange={() => onChange()}
+                    />
+
+                    {/* <Text style={styles.label}>Do you like React Native?</Text> */}
+                    {/* <View style={[styles.customCheckbox, styles.elevation, { borderColor: bordercolor }]} >
+                    
+                    {/* <Feather name={item.icon} size={24} color="black" /> 
+                    <Text style={styles.btnTxt}>{item.title}</Text>
+                </View> */}
+
+                </View>
+            </>
+        )
     }
     return (
 
@@ -140,6 +191,7 @@ function VendorSignup({ route, navigation }) {
                 </View>
             </ScrollView>
 
+
             <View style={styles.footerTab}>
                 <TouchableOpacity
                     style={styles.footerBtn}
@@ -148,7 +200,65 @@ function VendorSignup({ route, navigation }) {
                     <Text style={{ color: 'white', alignSelf: 'center' }}>Next step</Text>
                 </TouchableOpacity>
             </View>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={show.visible}
+            >
+
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        {categories.map((item, key) => {
+
+                            {
+                                item.title == show.currentItem &&
+
+                                <>
+
+                                    <View style={styles.checkboxContainer} key={key}>
+                                        <CheckBox
+                                            key={item.id}
+
+                                            disabled={false}
+                                            onAnimationType='fill'
+                                            offAnimationType='fade'
+                                            boxType='square'
+                                            onValueChange={() => onChange()}
+                                        />
+                                        <View style={[styles.customCheckbox, { zIndex: 0, borderColor: item.border, backgroundColor: item.background }]} >
+                                            <Image source={item.icon} style={{ width: '80%', height: '60%', alignSelf: 'center' }} />
+                                            <Text style={styles.btnTxt}>{item.title} </Text>
+                                        </View>
+                                        {/* <Text style={styles.label}>Do you like React Native?</Text> */}
+                                        {/* <View style={[styles.customCheckbox, styles.elevation, { borderColor: bordercolor }]} >
+                
+                {/* <Feather name={item.icon} size={24} color="black" /> 
+                <Text style={styles.btnTxt}>{item.title}</Text>
+            </View> */}
+
+                                    </View>
+
+
+                                </>
+
+                            }
+                        })}
+
+
+                        <TouchableOpacity
+                            style={[styles.ModalBtn]}
+                            onPress={() => closeModal()}
+                        >
+                            <Text style={{ fontSize: 17, color: 'white' }}>Close</Text>
+                        </TouchableOpacity>
+
+                    </View>
+                </View>
+            </Modal>
+
         </View>
+
 
 
     );
@@ -228,6 +338,39 @@ const styles = StyleSheet.create({
     checkboxContainer: {
         flexDirection: "row",
         marginBottom: 20,
+    },
+    centeredView: {
+        borderTopWidth: 1,
+        borderColor: '#908D8D'
+
+    },
+    modalView: {
+
+        backgroundColor: 'rgba(230, 230, 230,0.9)',
+        borderRadius: 20,
+        padding: 20,
+        justifyContent: 'center',
+        alignItems: "center",
+        shadowColor: "#000",
+        height: '100%',
+        width: '100%'
+
+    },
+    ModalBtn: {
+        margin: 10,
+        marginTop: 20,
+        borderRadius: 10,
+        padding: 16,
+        width: 120,
+        backgroundColor: '#3E3737',
+        alignItems: 'center',
+        alignContent: 'center',
+
+    },
+    modalText: {
+        color: 'black',
+        fontSize: 20,
+        textAlign: 'center'
     },
 
 });
