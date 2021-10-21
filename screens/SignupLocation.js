@@ -22,8 +22,9 @@ const categories = [
     { id: 6, icon: beauty, title: 'Beauty Salon' }]
 
 function VendorSignup({ route, navigation }) {
-    const [getEmail, setEmail] = useState(null);
-    const [getPassword, setPassword] = useState(null);
+
+    var {categories,businessName,Email, SubCat} = route.params;
+    console.log("categories,businessName,\n",categories,"\n",businessName,"\n",Email,"\n",SubCat);
     const [isSelected, setSelection] = useState(false);
     const [business, setBusiness] = useState(true);
     const [regionuser, setregionuser] = useState({

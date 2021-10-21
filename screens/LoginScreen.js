@@ -57,7 +57,7 @@ function Vendor({ route, navigation }) {
     <View style={styles.container}>
       <Image
         source={require('../images/img5.png')}
-        style={{ width: '100%', height: '40%' }}
+        style={{ width: '90%', height: '35%' }}
       />
       <Text
         style={{ fontSize: 20, alignSelf: 'center', textAlign: 'center' }}>
@@ -69,6 +69,7 @@ function Vendor({ route, navigation }) {
           textAlign: 'center',
           marginTop: 5,
           opacity: 0.5,
+          marginBottom:20
         }}>
         Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
         sint. Velit officia consequat duis enim velit mollit.

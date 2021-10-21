@@ -10,6 +10,7 @@ function SignupScreen({ route, navigation }) {
   const [getUsername, setUsername] = useState(null);
   const [getPassword, setPassword] = useState(null);
   const [getConfirmPass, setConfirmPass] = useState(null);
+  const [error, setError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [contactError, setContactError] = useState("");
   const [users, setUsers] = useState([]);
@@ -35,20 +36,9 @@ function SignupScreen({ route, navigation }) {
   }, [])
 
   const addUser = () => {
+    console.log("email=", getEmail);
     var validEmailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z]+(.[a-z]{2,4})*$/;
-    // console.log('here');
-    // console.log(
-    //   'getUsername= ',
-    //   getUsername,
-    //   'getPassword=',
-    //   getPassword,
-    //   'getContact=',
-    //   getContact,
-    //   'getConfirmPass=',
-    //   getConfirmPass,
-    //   'getEmail=',
-    //   getEmail
-    // );
+
 
     if (getUsername != null &&
       getPassword != null &&
@@ -56,12 +46,12 @@ function SignupScreen({ route, navigation }) {
       getEmail != null) {
 
       if (getEmail.match(validEmailRegex)) {
-        setEmailError(null);
+        setEmailError("");
         users.map((item, index) => {
           //checking if any user already exists
           if (item.email === getEmail) {
             count = count + 1;
-            console.log("Coint= ", count);
+            console.log("Count= ", count);
           }
         });
         if (count === 0) {
@@ -102,11 +92,11 @@ function SignupScreen({ route, navigation }) {
     <View style={styles.container}>
       <Image
         source={require('../images/img4.png')}
-        style={{ width: '100%', height: '40%' }}
+        style={{ width: '80%', height: '30%', marginTop: -30 }}
       />
       <Text
-        style={{ fontSize: 20, alignSelf: 'center', textAlign: 'center' }}>
-        Create a new Account
+        style={{ fontSize: 20, alignSelf: 'center', textAlign: 'center', fontWeight: 'bold' }}>
+        Create a new account
       </Text>
       <Text
         style={{
@@ -114,22 +104,12 @@ function SignupScreen({ route, navigation }) {
           textAlign: 'center',
           marginTop: 5,
           opacity: 0.5,
+          marginBottom: 20
         }}>
-        Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
-        sint. Velit officia consequat duis enim velit mollit.
+        Amet minim mollit non deserunt ullamco est sit aliqua dolor amet sint.
       </Text>
       <View
-        style={{
-          marginTop: 30,
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: 45,
-          borderWidth: 2,
-          paddingHorizontal: 10,
-          borderColor: '#00716F',
-          borderRadius: 23,
-          paddingVertical: 4,
-        }}>
+        style={styles.inputField}>
         <Icon name="user" color="#00716F" size={24} />
         <TextInput
           placeholder="Username"
@@ -140,17 +120,7 @@ function SignupScreen({ route, navigation }) {
         />
       </View>
       <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: 45,
-          borderWidth: 2,
-          marginTop: 15,
-          paddingHorizontal: 10,
-          borderColor: '#00716F',
-          borderRadius: 23,
-          paddingVertical: 4,
-        }}>
+        style={styles.inputField}>
         <Icon name="mail" color="#00716F" size={24} />
         <TextInput
           style={{ paddingHorizontal: 10 }}
@@ -160,19 +130,10 @@ function SignupScreen({ route, navigation }) {
           onChangeText={(text) => setEmail(text)}
         />
       </View>
+      <Text style={styles.errorTxt}>{emailError}</Text>
 
       <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: 45,
-          borderWidth: 2,
-          marginTop: 15,
-          paddingHorizontal: 10,
-          borderColor: '#00716F',
-          borderRadius: 23,
-          paddingVertical: 4,
-        }}>
+        style={styles.inputField}>
         <Icon name="phone" color="#00716F" size={24} />
         <TextInput
           keyboardType="numeric"
@@ -185,17 +146,7 @@ function SignupScreen({ route, navigation }) {
         />
       </View>
       <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: 45,
-          borderWidth: 2,
-          marginTop: 15,
-          paddingHorizontal: 10,
-          borderColor: '#00716F',
-          borderRadius: 23,
-          paddingVertical: 4,
-        }}>
+        style={styles.inputField}>
         <Icon name="lock" color="#00716F" size={24} />
         <TextInput
           secureTextEntry
@@ -207,20 +158,12 @@ function SignupScreen({ route, navigation }) {
         />
       </View>
       <View
-        style={{
-          marginHorizontal: 45,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 30,
-          backgroundColor: '#00716F',
-          paddingVertical: 10,
-          borderRadius: 23,
-        }}>
-        <TouchableOpacity onPress={addUser}>
+        style={styles.signupBtn}>
+        <TouchableOpacity onPress={() => addUser()}>
           <Text
             style={{
               color: 'white',
-              fontFamily: 'SemiBold',
+              fontWeight: 'bold',
             }}>
             Register
           </Text>
@@ -241,24 +184,30 @@ const styles = StyleSheet.create({
   inputField: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 45,
-    borderWidth: 2,
+    marginHorizontal: 25,
+    borderWidth: 1,
     marginTop: 10,
-    paddingHorizontal: 10,
-    borderColor: '#796565',
-    borderRadius: 23,
+    paddingHorizontal: 5,
+    borderColor: '#ADADAD',
+    borderRadius: 9,
     paddingVertical: 4,
-    width: '70%'
+    width: '80%'
   },
-  loginBtn: {
-    marginHorizontal: 50,
+  signupBtn: {
+    marginHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 30,
-    backgroundColor: '#796565',
+    backgroundColor: '#457973',
     paddingVertical: 10,
-    borderRadius: 23,
-    width: '70%'
+    borderRadius: 13,
+    width: '80%'
+  },
+  errorTxt: {
+    marginTop: 5,
+    fontSize: 12,
+    color: 'red',
+    marginHorizontal: 10,
   }
 
 

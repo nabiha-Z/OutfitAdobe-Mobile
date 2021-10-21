@@ -11,23 +11,101 @@ import beard from '../images/beard.png';
 import aesthetic from '../images/aesthetic.png';
 import salon from '../images/salon.png';
 import beauty from '../images/beauty.png';
-import { back } from 'react-native/Libraries/Animated/src/Easing';
 
 
 function VendorSignup({ route, navigation }) {
     const [categories, setCategories] = useState([
-        { id: 1, icon: beauty, title: 'Beauty & Wellness', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Beauty Salons', 'Hair Salons', 'Nail Salons', 'Spa'] },
-        { id: 2, icon: spa, title: 'Medical', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Psychologist', 'Physiologist', 'Dentists', 'Acupunture', 'Chiropractors', 'Medical'] },
-        { id: 3, icon: beard, title: 'Sports', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Gyms', 'Golf Classes', 'Sport Item Rental', 'Sport Resources'] },
-        { id: 4, icon: aesthetic, title: 'Freelancer', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Driving Schools', 'Pet Services', 'Household', 'Cleaning', 'Design Consulltions', 'Spiritual Services', 'Meeting Rooms', 'Coaching', 'Counselling'] },
-        { id: 5, icon: salon, title: 'Events', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Business Event', 'Events', 'Photographers'] },
-        { id: 6, icon: beauty, title: 'Entertainment', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Resturants', 'Escape Rooms', 'Equipment Rental', 'Art Classes'] },
-        { id: 7, icon: salon, title: 'Official', border: '#C8C4C4', background: 'white', checked: false, subCat: ['City Councils', 'Embassies & Consulates', 'Attorney', 'Legal', 'Business Attorney', 'Financial Services', 'Interview Scheduling', 'Call Centers'] },
-        { id: 8, icon: salon, title: 'Education', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Universities', 'Colleges', 'Libraries', 'Teaching', 'Tutoring Lessons', 'Parent Meetings', 'Child care'] }]);
+        { id: 0, icon: beauty, title: 'Beauty & Wellness', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Beauty Salons', 'Hair Salons', 'Nail Salons', 'Spa'] },
+        { id: 1, icon: spa, title: 'Medical', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Psychologist', 'Physiologist', 'Dentists', 'Acupunture', 'Chiropractors', 'Medical'] },
+        { id: 2, icon: beard, title: 'Sports', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Gyms', 'Golf Classes', 'Sport Item Rental', 'Sport Resources'] },
+        { id: 3, icon: aesthetic, title: 'Freelancer', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Driving Schools', 'Pet Services', 'Household', 'Cleaning', 'Design Consulltions', 'Spiritual Services', 'Meeting Rooms', 'Coaching', 'Counselling'] },
+        { id: 4, icon: salon, title: 'Events', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Business Event', 'Events', 'Photographers'] },
+        { id: 5, icon: beauty, title: 'Entertainment', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Resturants', 'Escape Rooms', 'Equipment Rental', 'Art Classes'] },
+        { id: 6, icon: salon, title: 'Official', border: '#C8C4C4', background: 'white', checked: false, subCat: ['City Councils', 'Embassies & Consulates', 'Attorney', 'Legal', 'Business Attorney', 'Financial Services', 'Interview Scheduling', 'Call Centers'] },
+        { id: 7, icon: salon, title: 'Education', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Universities', 'Colleges', 'Libraries', 'Teaching', 'Tutoring Lessons', 'Parent Meetings', 'Child care'] }]);
 
     const [show, setShow] = useState({ visible: false, currentItem: '' });
     const [isModalVisible, setModalVisible] = useState(false);
+    const [businessName, setBusinessName] = useState("");
+    const [email, setEmail] = useState("");
+    const [error, setError] = useState("");
+    const [length, setlength] = useState(1);
+    const [emailError, setEmailError] = useState("");
+    const [vendors, setVendors] = useState([]);
+    const [checkedItems, setCheckedItems] = useState([]);
+    const [selectedSub, setSelectedSub] = useState([{ title: "", subcate: [] }]);
 
+    const getData = async () => {
+        const response = await fetch(`${FIREBASE_API_ENDPOINT}/vendors.json`);
+        const data = await response.json();
+        if (data == null) {
+            setVendors([]);
+        } else {
+            let arr = Object.entries(data).map((item) => ({
+                ...item[1],
+                key: item[0],
+            }));
+            setVendors(arr);
+        }
+    };
+
+    useEffect(() => {
+        getData()
+
+    }, [])
+
+    const nextPage = () => {
+        var count = 0;
+        var validEmailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z]+(.[a-z]{2,4})*$/;
+
+        console.log("lengths= ", businessName.length);
+        if (businessName.length === 0 || email.length === 0) {
+            setError("Fill out all fields")
+        } else if (email.match(validEmailRegex)) {
+            setEmailError("");
+            setError("");
+            vendors.map((item, index) => {
+                //checking if any user already exists
+                if (item.email === email) {
+                    count = count + 1;
+                    
+                }
+            });
+            if (count === 0) {
+                const selectedData = [], subcategories=[];
+                categories.map(item => {
+
+                    if (item.checked === true) {
+
+                        selectedData.push({ id: item.id, title: item.title, icon: item.icon, subCat: item.subCat, checked: item.checked });
+                    }
+
+                })
+                categories.map((item)=>{
+                    selectedSub.map((element)=>{
+                        if(item.title == element.title){
+                            if(item.checked == true){
+                               
+                                subcategories.push(element);
+                            }
+                        }
+                    })
+                })
+                console.log("next page data= ", subcategories);
+                navigation.navigate('SignupLocation', {
+                    categories: selectedData, businessName: businessName, Email: email, SubCat:subcategories
+                })
+            } else {
+                setEmailError("This email has already been used.");
+
+            }
+
+        } else {
+
+            setEmailError("Enter correct Email");
+
+        }
+    }
     const onChange = (item) => {
 
         const newData = categories.map(newItem => {
@@ -58,7 +136,7 @@ function VendorSignup({ route, navigation }) {
 
         //console.log(newData);
 
-        console.log("LATESTT\n\n");
+
         setCategories(newData);
         // const newShow = show.map(element => {
         //     return {
@@ -71,7 +149,7 @@ function VendorSignup({ route, navigation }) {
             //console.log("newShow= ", newShow);
             setShow(show);
 
-            console.log("AFTERRR = ", show);;
+            // console.log("AFTERRR = ", show);;
             setModalVisible(true);
         }
 
@@ -81,34 +159,57 @@ function VendorSignup({ route, navigation }) {
         show.visible = false;
         show.currentItem = '';
         setModalVisible(false);
-        console.log("showw= ", show);
+        var arr=[];
+        setCheckedItems(arr);
+        setCheckedItems(arr);
+        //console.log("checked = ", checkedItems);
+       
     }
 
-    const ModalContent = (sub) => {
-        console.log("gfgfjdghjhgjhdjfhg")
-        return (
-            <>
-                {console.log("sub= ", sub)}
-                <Text>{sub}</Text>
-                <View style={styles.checkboxContainer}>
-                    <CheckBox
-                        disabled={false}
-                        onAnimationType='fill'
-                        offAnimationType='fade'
-                        boxType='square'
-                        onValueChange={() => onChange()}
-                    />
 
-                    {/* <Text style={styles.label}>Do you like React Native?</Text> */}
-                    {/* <View style={[styles.customCheckbox, styles.elevation, { borderColor: bordercolor }]} >
-                    
-                    {/* <Feather name={item.icon} size={24} color="black" /> 
-                    <Text style={styles.btnTxt}>{item.title}</Text>
-                </View> */}
+    const onSelect = (item, element) => {
 
-                </View>
-            </>
-        )
+        var arr = checkedItems;
+        if (arr.length == 0) {
+            arr[0] = item.title;
+            arr[1] = element
+        } else if (arr.indexOf(element, 1) == -1) {
+            arr.push(element);
+            setCheckedItems(arr);
+        }
+
+        console.log("On select checkedArray= ", checkedItems);
+    }
+    const onConfirm = () => {
+        var title = checkedItems[0];
+        var count = 0;
+        if (length != 1) {
+
+            selectedSub.map((item) => {
+                if (item.title === title) {
+                    count++;
+                }
+            })
+            if (count == 0) {
+
+                
+                var cat = checkedItems.splice(1,checkedItems.length);
+               
+                setSelectedSub([...selectedSub, { title: title, subcate: cat }]);
+            }
+
+
+            console.log("New data seletedd= ", selectedSub);
+        } else {
+
+            var cat = checkedItems.splice(1,checkedItems.length);
+            
+            setSelectedSub([{ title: title, subcate: cat }]);
+            setlength(2);
+            
+            console.log("selesctedddd= ", selectedSub);
+        }
+        closeModal();
     }
     return (
 
@@ -122,7 +223,7 @@ function VendorSignup({ route, navigation }) {
                 Business Setup
             </Text>
             <Text
-                style={{ fontSize: 25, marginTop: 5, marginHorizontal: 10, fontWeight: 'bold', color: '#5B5A59' }}>
+                style={styles.heading}>
                 Have any business name in mind?
             </Text>
             <Text
@@ -130,17 +231,19 @@ function VendorSignup({ route, navigation }) {
                 This shall be your brand name, that your clients will get to see.
             </Text>
 
+            <Text style={styles.errorTxt}>{error}</Text>
             <Text
                 style={{ fontSize: 12, marginTop: 10, marginHorizontal: 10 }}>
                 Business Name
             </Text>
-            <TextInput style={styles.businessField} />
+            <TextInput style={styles.businessField} onChangeText={(text) => setBusinessName(text)} />
 
             <Text
                 style={{ fontSize: 12, marginTop: 10, marginHorizontal: 10 }}>
                 Email
             </Text>
-            <TextInput style={styles.businessField} />
+            <TextInput style={styles.businessField} onChangeText={(text) => setEmail(text)} />
+            <Text style={styles.errorTxt}>{emailError}</Text>
 
 
 
@@ -195,7 +298,7 @@ function VendorSignup({ route, navigation }) {
             <View style={styles.footerTab}>
                 <TouchableOpacity
                     style={styles.footerBtn}
-                    onPress={() => navigation.navigate('SignupLocation')}
+                    onPress={() => nextPage()}
                 >
                     <Text style={{ color: 'white', alignSelf: 'center' }}>Next step</Text>
                 </TouchableOpacity>
@@ -210,48 +313,94 @@ function VendorSignup({ route, navigation }) {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         {categories.map((item, key) => {
+                            if (item.title === show.currentItem) {
+                                console.log("hereee");
+                                console.log("item= ", item.title);
+                                console.log("current= ", show.currentItem);
+                                return (
+                                    <View>
+                                        <Text style={[styles.heading, styles.subCateHeading]}> Select sub categories</Text>
 
-                            {
-                                item.title == show.currentItem &&
+                                        <View style={[styles.checkboxContainer]}>
+                                            <ScrollView style={{ height: 280, marginHorizontal: -10 }}>
 
-                                <>
+                                                {item.subCat.map((element, index) => (
+                                                    <>
 
-                                    <View style={styles.checkboxContainer} key={key}>
-                                        <CheckBox
-                                            key={item.id}
+                                                        <TouchableOpacity
+                                                            key={index}
+                                                            style={styles.subCatBtn}
+                                                            onPress={() => onSelect(item, element)}
+                                                        >
+                                                            <Text style={{ color: 'white', marginTop: 5 }}>{element}</Text>
+                                                        </TouchableOpacity>
 
-                                            disabled={false}
-                                            onAnimationType='fill'
-                                            offAnimationType='fade'
-                                            boxType='square'
-                                            onValueChange={() => onChange()}
-                                        />
-                                        <View style={[styles.customCheckbox, { zIndex: 0, borderColor: item.border, backgroundColor: item.background }]} >
-                                            <Image source={item.icon} style={{ width: '80%', height: '60%', alignSelf: 'center' }} />
-                                            <Text style={styles.btnTxt}>{item.title} </Text>
+                                                        {/* <CheckBox
+                                                    
+                                                    disabled={false}
+                                                    onAnimationType='fill'
+                                                    offAnimationType='fade'
+                                                    boxType='square'
+                                                    tintColors={{ true: 'white', false: 'black' }}
+                                                    onValueChange={() => onCheck(element)}
+                                                /> */}
+
+
+
+                                                    </>
+
+                                                ))}
+
+                                            </ScrollView>
                                         </View>
+
                                         {/* <Text style={styles.label}>Do you like React Native?</Text> */}
                                         {/* <View style={[styles.customCheckbox, styles.elevation, { borderColor: bordercolor }]} >
-                
-                {/* <Feather name={item.icon} size={24} color="black" /> 
-                <Text style={styles.btnTxt}>{item.title}</Text>
-            </View> */}
+                                    
+                                    {/* <Feather name={item.icon} size={24} color="black" /> 
+                                    <Text style={styles.btnTxt}>{item.title}</Text>
+                                </View> */}
 
                                     </View>
-
-
-                                </>
-
+                                )
                             }
                         })}
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text>PLZdfv</Text>
+                            {selectedSub.map((item) => {
+                                {
+                                    item.subcate.map((element, key) => (
+                                        <>
+                                            <Text style={{ color: 'white', fontSize: 9 }}>yhyfvfv</Text>
+                                     
+                                            <TouchableOpacity
+                                                key={key}
+                                                style={{ backgroundColor: 'rgba(71, 72, 72,0.3)', padding: 10, borderRadius: 25 }}>
+                                                <Text style={{ color: 'white', fontSize: 9 }}>- {element}</Text>
+                                            </TouchableOpacity>
+                                        </>
+                                    ))
+                                }
+                            }
 
+                            )}
 
-                        <TouchableOpacity
-                            style={[styles.ModalBtn]}
-                            onPress={() => closeModal()}
-                        >
-                            <Text style={{ fontSize: 17, color: 'white' }}>Close</Text>
-                        </TouchableOpacity>
+                        </View>
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <TouchableOpacity
+                                style={[styles.ModalBtn, { backgroundColor: 'black' }]}
+                                onPress={() => closeModal()}
+                            >
+                                <Text style={{ fontSize: 17, color: 'white' }}>Close</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.ModalBtn]}
+                                onPress={() => onConfirm()}
+                            >
+                                <Text style={{ fontSize: 17, color: 'white' }}>Done</Text>
+                            </TouchableOpacity>
+                        </View>
 
                     </View>
                 </View>
@@ -281,6 +430,13 @@ const styles = StyleSheet.create({
         borderColor: '#DFDFDF',
         marginHorizontal: 10
 
+    },
+    heading: {
+        fontSize: 25,
+        marginTop: 5,
+        marginHorizontal: 10,
+        fontWeight: 'bold',
+        color: '#5B5A59'
     },
     customCheckbox: {
         padding: 10,
@@ -341,19 +497,21 @@ const styles = StyleSheet.create({
     },
     centeredView: {
         borderTopWidth: 1,
-        borderColor: '#908D8D'
+        borderColor: '#908D8D',
+        justifyContent: 'center',
+        alignItems: "center",
 
     },
     modalView: {
 
-        backgroundColor: 'rgba(230, 230, 230,0.9)',
+        backgroundColor: 'rgba(41, 41, 41,0.8)',
         borderRadius: 20,
         padding: 20,
         justifyContent: 'center',
         alignItems: "center",
         shadowColor: "#000",
-        height: '100%',
-        width: '100%'
+        height: '80%',
+        width: '80%',
 
     },
     ModalBtn: {
@@ -372,6 +530,29 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center'
     },
+    errorTxt: {
+        marginTop: 5,
+        fontSize: 12,
+        color: 'red',
+        marginHorizontal: 10,
+    },
+    subCateHeading: {
+        backgroundColor: 'rgba(41, 41, 41,0.9)',
+        padding: 10,
+        fontSize: 18,
+        marginBottom: 30,
+        color: 'white',
+        borderRadius: 10, textAlign: 'center',
+
+    },
+    subCatBtn: {
+        padding: 10,
+        borderRadius: 5,
+        backgroundColor: 'rgba(31, 32, 32,0.4)',
+        width: '90%',
+        marginHorizontal: 10,
+        margin: 10
+    }
 
 });
 export default VendorSignup;
