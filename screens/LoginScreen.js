@@ -31,6 +31,7 @@ function Vendor({ route, navigation }) {
   }, [])
 
   const authenticateUser = () => {
+    console.log("frfb");
     if (getEmail != null && getPassword != null) {
       users.map((item, index) => {
         if (item.email == getEmail) {

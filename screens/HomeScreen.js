@@ -25,20 +25,30 @@ function HomeScreen({ route, navigation }) {
                     marginTop: 0,
                     color: '#FFFFFF',
                     fontSize: 25,
-                    fontWeight:'bold'
+                    fontWeight: 'bold'
                 }}>
                 Welcome to One Queue
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('VendorLogin')}><Text style={styles.Txt}>Become a vendor</Text></TouchableOpacity>
-                <View style={[styles.emailBtn, styles.elevation]}>
-                    <Text onPress={() => navigation.navigate('LoginScreen')}>Continue with email</Text>
-                </View>
-                <Text style={styles.bottomTxt}> or connect with</Text>
-                <View style={styles.bottomView}>
-                <Icon name='google' style={styles.icons}/> 
-                
+            <View style={[styles.emailBtn, styles.elevation]}>
+                <Text onPress={() => navigation.navigate('LoginScreen')}>Continue with email</Text>
             </View>
-            
+            <Text style={styles.bottomTxt}> or connect with</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginLeft:5}}>
+               <TouchableOpacity style={styles.bottomView}>
+               
+                    <Icon name='google' style={styles.icons} />
+
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.bottomView}>
+                    <Image
+                        source={require('../images/apple.png')}
+                        style={[styles.icons,{ width: '10%', height: '25%', alignSelf: 'center', padding: 16,}]}
+                    />
+
+                </TouchableOpacity>
+            </View>
+
         </View>
     );
 }
@@ -69,31 +79,31 @@ const styles = StyleSheet.create({
         elevation: 20,
         shadowColor: '#52006A',
     },
-    bottomView:{
-        justifyContent:'center',
-        alignItems:'center',
-        flexDirection:'row'
+    bottomView: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row'
     },
-    bottomTxt:{
-       color:'#FFFFFF',
-       margin:10,
-       alignSelf:'center'
+    bottomTxt: {
+        color: '#FFFFFF',
+        margin: 10,
+        alignSelf: 'center'
 
     },
-    Txt:{
-        color:'#FFFFFF',
-        margin:10,
-        alignSelf:'center',
-        textDecorationLine:'underline',
-        opacity:0.6
+    Txt: {
+        color: '#FFFFFF',
+        margin: 10,
+        alignSelf: 'center',
+        textDecorationLine: 'underline',
+        opacity: 0.6
     },
-    icons:{
-        backgroundColor:'white',
-        borderRadius:50,
-        padding:10,
-        margin:10
+    icons: {
+        backgroundColor: 'white',
+        borderRadius: 50,
+        padding: 10,
+        margin: 10
     }
 
-    
+
 });
 export default HomeScreen;

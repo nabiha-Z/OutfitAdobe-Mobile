@@ -275,14 +275,12 @@ function VendorSignup({ route, navigation }) {
                             style={{ width: '100%', height: '40%' }}
                         />
                         <Text style={styles.modalText}>Your business is set up</Text>
-
                         <TouchableOpacity
                             style={[styles.ModalBtn]}
                             onPress={() => navigation.navigate('VendorLogin')}
                         >
                             <Text style={{ fontSize: 17, color: 'white' }}>Signin</Text>
                         </TouchableOpacity>
-
                     </View>
                 </View>
             </Modal>

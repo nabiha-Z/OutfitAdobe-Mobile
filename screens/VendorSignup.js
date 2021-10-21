@@ -32,6 +32,7 @@ function VendorSignup({ route, navigation }) {
     const [length, setlength] = useState(1);
     const [emailError, setEmailError] = useState("");
     const [vendors, setVendors] = useState([]);
+    const [display,setDisplay] =useState(false);
     const [checkedItems, setCheckedItems] = useState([]);
     const [selectedSub, setSelectedSub] = useState([{ title: "", subcate: [] }]);
 
@@ -48,9 +49,30 @@ function VendorSignup({ route, navigation }) {
             setVendors(arr);
         }
     };
+    const DisplayCheckedItem = () => {
+        console.log("Display checkeddddd: ", display);
+        return (
+            
+               
+                    checkedItems.map((item) => (
+                        <>
+                            
+                            <TouchableOpacity
+                                style={{ backgroundColor: 'grey', padding: 5, borderRadius: 20, margin: 5 }}>
+                             
+                                <Text style={{ color: 'white', fontSize: 10 }}>{item}</Text>
+                            </TouchableOpacity>
+                        </>
+                    ))
+
+            
+        )
+
+    }
 
     useEffect(() => {
         getData()
+        DisplayCheckedItem()
 
     }, [])
 
@@ -162,6 +184,7 @@ function VendorSignup({ route, navigation }) {
         var arr = [];
         setCheckedItems(arr);
         setCheckedItems(arr);
+        setDisplay(false);
         //console.log("checked = ", checkedItems);
 
     }
@@ -173,10 +196,16 @@ function VendorSignup({ route, navigation }) {
         if (arr.length == 0) {
             arr[0] = item.title;
             arr[1] = element
+            setDisplay(true);
         } else if (arr.indexOf(element, 1) == -1) {
             arr.push(element);
             setCheckedItems(arr);
+
+            setDisplay(false);
+
         }
+        setDisplay(true);
+        
 
         console.log("On select checkedArray= ", checkedItems);
     }
@@ -279,12 +308,7 @@ function VendorSignup({ route, navigation }) {
                                     <Image source={item.icon} style={{ width: '80%', height: '60%', alignSelf: 'center' }} />
                                     <Text style={styles.btnTxt}>{item.title} </Text>
                                 </View>
-                                {/* <Text style={styles.label}>Do you like React Native?</Text> */}
-                                {/* <View style={[styles.customCheckbox, styles.elevation, { borderColor: bordercolor }]} >
-                                    
-                                    {/* <Feather name={item.icon} size={24} color="black" /> 
-                                    <Text style={styles.btnTxt}>{item.title}</Text>
-                                </View> */}
+                             
 
                             </View>
 
@@ -314,9 +338,7 @@ function VendorSignup({ route, navigation }) {
                     <View style={styles.modalView}>
                         {categories.map((item, key) => {
                             if (item.title === show.currentItem) {
-                                console.log("hereee");
-                                console.log("item= ", item.title);
-                                console.log("current= ", show.currentItem);
+                                
                                 return (
                                     <View>
                                         <Text style={[styles.heading, styles.subCateHeading]}> Select sub categories</Text>
@@ -335,7 +357,7 @@ function VendorSignup({ route, navigation }) {
                                                             <Text style={{ color: 'white', marginTop: 5 }}>{element}</Text>
                                                         </TouchableOpacity>
 
-                                                    
+
 
                                                     </>
 
@@ -344,25 +366,16 @@ function VendorSignup({ route, navigation }) {
                                             </ScrollView>
                                         </View>
 
-                                       
+
 
                                     </View>
                                 )
                             }
                         })}
-                        <View style={{ flexDirection: 'row', flexWrap:'wrap',marginHorizontal:30}}>
-
-                            {checkedItems.map((item) => (
-                                <>
-                                {console.log("item=",item)}
-                                    <TouchableOpacity
-                                    style={{backgroundColor:'grey', padding:5, borderRadius:20, margin:5}}>
-                                        <Text style={{color:'white', fontSize:10}}>{item}</Text>
-                                    </TouchableOpacity>
-                                </>
-                            ))
-
-                            }
+                      
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: 40 }}>
+                           
+                            {display&& DisplayCheckedItem()}
 
                         </View>
 
