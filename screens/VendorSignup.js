@@ -68,11 +68,11 @@ function VendorSignup({ route, navigation }) {
                 //checking if any user already exists
                 if (item.email === email) {
                     count = count + 1;
-                    
+
                 }
             });
             if (count === 0) {
-                const selectedData = [], subcategories=[];
+                const selectedData = [], subcategories = [];
                 categories.map(item => {
 
                     if (item.checked === true) {
@@ -81,11 +81,11 @@ function VendorSignup({ route, navigation }) {
                     }
 
                 })
-                categories.map((item)=>{
-                    selectedSub.map((element)=>{
-                        if(item.title == element.title){
-                            if(item.checked == true){
-                               
+                categories.map((item) => {
+                    selectedSub.map((element) => {
+                        if (item.title == element.title) {
+                            if (item.checked == true) {
+
                                 subcategories.push(element);
                             }
                         }
@@ -93,7 +93,7 @@ function VendorSignup({ route, navigation }) {
                 })
                 console.log("next page data= ", subcategories);
                 navigation.navigate('SignupLocation', {
-                    categories: selectedData, businessName: businessName, Email: email, SubCat:subcategories
+                    categories: selectedData, businessName: businessName, Email: email, SubCat: subcategories
                 })
             } else {
                 setEmailError("This email has already been used.");
@@ -159,11 +159,11 @@ function VendorSignup({ route, navigation }) {
         show.visible = false;
         show.currentItem = '';
         setModalVisible(false);
-        var arr=[];
+        var arr = [];
         setCheckedItems(arr);
         setCheckedItems(arr);
         //console.log("checked = ", checkedItems);
-       
+
     }
 
 
@@ -192,9 +192,9 @@ function VendorSignup({ route, navigation }) {
             })
             if (count == 0) {
 
-                
-                var cat = checkedItems.splice(1,checkedItems.length);
-               
+
+                var cat = checkedItems.splice(1, checkedItems.length);
+
                 setSelectedSub([...selectedSub, { title: title, subcate: cat }]);
             }
 
@@ -202,11 +202,11 @@ function VendorSignup({ route, navigation }) {
             console.log("New data seletedd= ", selectedSub);
         } else {
 
-            var cat = checkedItems.splice(1,checkedItems.length);
-            
+            var cat = checkedItems.splice(1, checkedItems.length);
+
             setSelectedSub([{ title: title, subcate: cat }]);
             setlength(2);
-            
+
             console.log("selesctedddd= ", selectedSub);
         }
         closeModal();
@@ -335,17 +335,7 @@ function VendorSignup({ route, navigation }) {
                                                             <Text style={{ color: 'white', marginTop: 5 }}>{element}</Text>
                                                         </TouchableOpacity>
 
-                                                        {/* <CheckBox
                                                     
-                                                    disabled={false}
-                                                    onAnimationType='fill'
-                                                    offAnimationType='fade'
-                                                    boxType='square'
-                                                    tintColors={{ true: 'white', false: 'black' }}
-                                                    onValueChange={() => onCheck(element)}
-                                                /> */}
-
-
 
                                                     </>
 
@@ -354,36 +344,25 @@ function VendorSignup({ route, navigation }) {
                                             </ScrollView>
                                         </View>
 
-                                        {/* <Text style={styles.label}>Do you like React Native?</Text> */}
-                                        {/* <View style={[styles.customCheckbox, styles.elevation, { borderColor: bordercolor }]} >
-                                    
-                                    {/* <Feather name={item.icon} size={24} color="black" /> 
-                                    <Text style={styles.btnTxt}>{item.title}</Text>
-                                </View> */}
+                                       
 
                                     </View>
                                 )
                             }
                         })}
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text>PLZdfv</Text>
-                            {selectedSub.map((item) => {
-                                {
-                                    item.subcate.map((element, key) => (
-                                        <>
-                                            <Text style={{ color: 'white', fontSize: 9 }}>yhyfvfv</Text>
-                                     
-                                            <TouchableOpacity
-                                                key={key}
-                                                style={{ backgroundColor: 'rgba(71, 72, 72,0.3)', padding: 10, borderRadius: 25 }}>
-                                                <Text style={{ color: 'white', fontSize: 9 }}>- {element}</Text>
-                                            </TouchableOpacity>
-                                        </>
-                                    ))
-                                }
-                            }
+                        <View style={{ flexDirection: 'row', flexWrap:'wrap',marginHorizontal:30}}>
 
-                            )}
+                            {checkedItems.map((item) => (
+                                <>
+                                {console.log("item=",item)}
+                                    <TouchableOpacity
+                                    style={{backgroundColor:'grey', padding:5, borderRadius:20, margin:5}}>
+                                        <Text style={{color:'white', fontSize:10}}>{item}</Text>
+                                    </TouchableOpacity>
+                                </>
+                            ))
+
+                            }
 
                         </View>
 
@@ -510,8 +489,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: "center",
         shadowColor: "#000",
-        height: '80%',
-        width: '80%',
+        height: '86%',
+        width: '90%',
 
     },
     ModalBtn: {
