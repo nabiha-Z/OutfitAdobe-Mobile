@@ -72,19 +72,20 @@ export default function Dashboard({ route, navigation }) {
                 <Tab.Screen name={"Home"} component={Home} options={{
                     title: 'Dashboard',
                     headerStyle: {
-                        height: 80
+                        height:90
                     },
                     headerTitleStyle: {
                         color: 'black',
                         textAlign: 'center',
-                        left: 75,
-                        top: 10
+                        left: 60,
+                        top: 15
                     },
                     headerLeft: () =>
 
                     (<TouchableOpacity
+                    style={{padding:20,paddingLeft: 20, top: 15}}
                         onPress={() => navigation.popToTop()}>
-                        <FontAwesome5 name="arrow-left" size={20} color="black" style={{ paddingLeft: 20, top: 10 }} />
+                        <FontAwesome5 name="arrow-left" size={20} color="black" />
                     </TouchableOpacity>),
                     tabBarIcon: ({ focused }) => (
                         <View style={{
@@ -112,13 +113,13 @@ export default function Dashboard({ route, navigation }) {
                 <Tab.Screen name={"Sales"} component={Sales} options={{
                     title: "Sales",
                     headerStyle: {
-                        height: 80
+                        height:90
                     },
                     headerTitleStyle: {
                         color: 'black',
                         textAlign: 'center',
                         left: 130,
-                        top: 10
+                        top: 15
                     },
 
                     tabBarIcon: ({ focused }) => (
@@ -151,13 +152,13 @@ export default function Dashboard({ route, navigation }) {
                 {/* <Tab.Screen name={"Profile"} component={Sales} options={{
                     title: "Business Profile",
                     headerStyle: {
-                        height: 80
+                        height:90
                     },
                     headerTitleStyle: {
                         color: 'black',
                         textAlign: 'center',
                         left: 130,
-                        top: 10
+                        top: 15
                     },
                     tabBarIcon: ({ focused }) => (
 
@@ -184,13 +185,13 @@ export default function Dashboard({ route, navigation }) {
                 <Tab.Screen name={"Profile"} component={Profile} options={{
                     title: "Business Profile",
                     headerStyle: {
-                        height: 80
+                        height:90
                     },
                     headerTitleStyle: {
                         color: 'black',
                         textAlign: 'center',
                         left: 80,
-                        top: 10
+                        top: 15
                     },
                     tabBarIcon: ({ focused }) => (
                         <View style={{
@@ -223,13 +224,13 @@ export default function Dashboard({ route, navigation }) {
                 <Tab.Screen name={"Notifications"} component={Notification} options={{
                     title: "Notifications",
                     headerStyle: {
-                        height: 80
+                        height:90
                     },
                     headerTitleStyle: {
                         color: 'black',
                         textAlign: 'center',
                         left: 100,
-                        top: 10
+                        top: 15
                     },
                     tabBarIcon: ({ focused }) => (
                         <View style={{
@@ -257,13 +258,13 @@ export default function Dashboard({ route, navigation }) {
                 <Tab.Screen name={"Chats"} component={Chats} options={{
                     title: "Chats",
                     headerStyle: {
-                        height: 80
+                        height:90
                     },
                     headerTitleStyle: {
                         color: 'black',
                         textAlign: 'center',
                         left: 120,
-                        top: 10
+                        top: 15
                     },
                     tabBarIcon: ({ focused }) => (
                         <View style={{

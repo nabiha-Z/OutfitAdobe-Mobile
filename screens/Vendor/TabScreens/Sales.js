@@ -6,41 +6,42 @@ import { FontAwesome } from '@expo/vector-icons';
 export default function Home() {
     return (
         <View style={styles.container}>
-            <View style={styles.tabContainer}>
+            <TouchableOpacity style={styles.tabContainer}>
+
                 <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
                 <View style={styles.textContainer}>
                     <Text style={styles.mainText}>Daily Sales</Text>
                     <Text style={styles.subText}>See daily totals of sales made and payments cancelled</Text>
                 </View>
                 <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-            </View>
+            </TouchableOpacity>
 
-            <View style={styles.tabContainer}>
+            <TouchableOpacity style={styles.tabContainer}>
                 <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
                 <View style={styles.textContainer}>
                     <Text style={styles.mainText}>Invoices</Text>
                     <Text style={styles.subText}>List all sales made, with filter and extract options</Text>
                 </View>
                 <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-            </View>
+            </TouchableOpacity>
 
-            <View style={styles.tabContainer}>
+            <TouchableOpacity style={styles.tabContainer}>
                 <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
                 <View style={styles.textContainer}>
                     <Text style={styles.mainText}>Vouchers</Text>
                     <Text style={styles.subText}>List all the vouchers issued, with filter and extract options</Text>
                 </View>
                 <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-            </View>
+            </TouchableOpacity>
 
-            <View style={styles.tabContainer}>
+            <TouchableOpacity style={styles.tabContainer}>
                 <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
                 <View style={styles.textContainer}>
                     <Text style={styles.mainText}>Statics and Analytics</Text>
                     <Text style={styles.subText}>See all statics here</Text>
                 </View>
                 <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-            </View>
+            </TouchableOpacity>
 
         </View>
     )
@@ -56,10 +57,10 @@ const styles = StyleSheet.create({
     tabContainer: {
         flexDirection: 'row',
         width: '90%',
-        borderBottomWidth:1,
-        borderColor:'#D4D4D7',
-        paddingBottom:20,
-        marginBottom:10
+        borderBottomWidth: 1,
+        borderColor: '#D4D4D7',
+        paddingBottom: 20,
+        marginBottom: 10
     },
     textContainer: {
         width: '70%',
@@ -69,8 +70,8 @@ const styles = StyleSheet.create({
         marginBottom: 8
     },
     subText: {
-        fontSize: 9,
+        fontSize: 11,
         color: '#909193',
-        lineHeight: 13,
+        lineHeight: 15,
     }
 })
