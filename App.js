@@ -12,6 +12,7 @@ import LoginScreen from './screens/LoginScreen';
 import VendorSignup from './screens/VendorSignup';
 import SignupLocation from './screens/SignupLocation';
 import WorkingHours from './screens/Workinghours';
+import Dashboard from './screens/Vendor/Dashboard';
 
 
 
@@ -20,6 +21,7 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
+      
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} 
        options={({ navigation, route }) => ({
@@ -82,6 +84,16 @@ function App() {
            backgroundColor:'white',
             height:100 
           },
+          })}
+          />
+          <Stack.Screen name="Dashboard" component={Dashboard} 
+       options={({ navigation, route }) => ({
+         title:'',
+          headerStyle: {
+           backgroundColor:'#47A7AB',
+            height:0 
+          },
+          headerLeft: null
           })}
           />
       </Stack.Navigator>

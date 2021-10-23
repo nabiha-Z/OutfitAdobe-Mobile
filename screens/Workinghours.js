@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 import { Feather } from '@expo/vector-icons';
 import SwitchToggle from "react-native-switch-toggle";
@@ -150,6 +150,7 @@ function VendorSignup({ route, navigation }) {
                         <DataTable.Title >       </DataTable.Title>
 
                     </DataTable.Header>
+                    <ScrollView style={{ height: 320 }}>
                     {toggles.map((item, key) => (
                         <View key={key} style={{ flexDirection: 'row', marginTop: 10, marginHorizontal: 15 }}>
                             <Text style={{ marginTop: 10 }}>{item.day}</Text>
@@ -249,6 +250,7 @@ function VendorSignup({ route, navigation }) {
 
                         </View>
                     ))}
+                    </ScrollView>
 
                 </DataTable>
             </View>
@@ -277,7 +279,8 @@ function VendorSignup({ route, navigation }) {
                         <Text style={styles.modalText}>Your business is set up</Text>
                         <TouchableOpacity
                             style={[styles.ModalBtn]}
-                            onPress={() => navigation.navigate('VendorLogin')}
+                            onPress={() => {setModalVisible(false)
+                                navigation.navigate('Dashboard')}}
                         >
                             <Text style={{ fontSize: 17, color: 'white' }}>Signin</Text>
                         </TouchableOpacity>

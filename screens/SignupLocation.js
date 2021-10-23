@@ -125,12 +125,12 @@ function VendorSignup({ route, navigation }) {
             </Text>
                     <View style={{ flexDirection: 'row', marginTop: 10 }}>
                         <Feather name="smartphone" size={25} color="black" style={{ justifyContent: 'center', padding: 5, marginHorizontal: 10, borderWidth: 1, borderColor: '#DFDFDF', borderRadius: 3 }} />
-                        <TextInput style={styles.businessField} />
+                        <TextInput style={styles.businessField} placeholder="Enter Contact"/>
 
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 10 }}>
                         <MaterialCommunityIcons name="email-outline" size={25} color="black" style={{ justifyContent: 'center', padding: 5, marginHorizontal: 10, borderWidth: 1, borderColor: '#DFDFDF', borderRadius: 3 }} />
-                        <TextInput style={styles.businessField} placeholder="useless placeholder"/>
+                        <TextInput style={styles.businessField} placeholder="Enter Email"/>
 
                     </View>
                 </>}
