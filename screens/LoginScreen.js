@@ -1,15 +1,50 @@
 import React, { useEffect, useState } from 'react';
+import { initializeApp, getApps, getApp,  } from "firebase/app";
+import firebaseConfig from '../Firebase/FirebaseConfig';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut} from "firebase/auth";
 
 
 const FIREBASE_API_ENDPOINT =
   'https://onequeue-912fa-default-rtdb.firebaseio.com/';
 
+
+
 function Vendor({ route, navigation }) {
   const [getEmail, setEmail] = useState(null);
   const [getPassword, setPassword] = useState(null);
   const [users, setUsers] = useState([]);
+
+  // const firebaseConfig = {
+  //   apiKey: "AIzaSyBTGehuql0lmwhW69joWIyjrlmf-0I9ReE",
+  //   authDomain: "onequeue-912fa.firebaseapp.com",
+  //   databaseURL: "https://onequeue-912fa-default-rtdb.firebaseio.com",
+  //   projectId: "onequeue-912fa",
+  //   storageBucket: "onequeue-912fa.appspot.com",
+  //   messagingSenderId: "188273292512",
+  //   appId: "1:188273292512:web:3f52d65ea600461edfcc85",
+  //   measurementId: "G-2BNFLV95DK"
+  // }
+
+  let app;
+  if (!getApps().length) {
+    app = initializeApp(firebaseConfig);
+  } else {
+    app = getApp();
+  }
+  const auth = getAuth(app); 
+
+  onAuthStateChanged(auth, user => {
+
+    if(user){
+      console.log("logged in ");
+    }else{
+      console.log("logged out user");
+    }
+    
+  })
+
 
   const getData = async () => {
     const response = await fetch(`${FIREBASE_API_ENDPOINT}/users.json`);
@@ -28,29 +63,53 @@ function Vendor({ route, navigation }) {
     getData()
   }, [])
 
+
+
   const authenticateUser = () => {
     console.log("frfb");
     if (getEmail != null && getPassword != null) {
-      users.map((item, index) => {
-        if (item.email == getEmail) {
-          if (item.password == getPassword) {
-            alert('Loged in');
-            setEmail("");
-            setPassword("");
+      signInWithEmailAndPassword(auth, getEmail, getPassword)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;;
+          alert("Logged in")
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log("erroe= ", errorMessage);
+          alert("User not found")
+        });
+      // users.map((item, index) => {
+      //   if (item.email == getEmail) {
+      //     if (item.password == getPassword) {
+      //       alert('Loged in');
+      //       setEmail("");
+      //       setPassword("");
 
-          } else {
-            alert('Incorrect Password');
-          }
-        } else {
-          alert('Check your Email or Signup now.');
-          //message.success('Check your Email or Signup now.');
-        }
-      });
+      //     } else {
+      //       alert('Incorrect Password');
+      //     }
+      //   } else {
+      //     alert('Check your Email or Signup now.');
+      //     //message.success('Check your Email or Signup now.');
+      //   }
+      // });
     } else {
       alert('Fill the fields');
       //message.error('Fill the fields');
     }
   };
+
+  const logout =() =>{
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      console.log("signed Out")
+    }).catch((error) => {
+      // An error happened.
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -68,7 +127,7 @@ function Vendor({ route, navigation }) {
           textAlign: 'center',
           marginTop: 5,
           opacity: 0.5,
-          marginBottom:20
+          marginBottom: 20
         }}>
         Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
         sint. Velit officia consequat duis enim velit mollit.
@@ -104,6 +163,16 @@ function Vendor({ route, navigation }) {
           }}
           onPress={authenticateUser}>
           <Text style={{ color: 'white' }}>Sign in</Text>
+        </TouchableOpacity>
+      </View>
+      <View
+        style={styles.signupBtn}>
+        <TouchableOpacity
+          style={{
+            color: 'white',
+          }}
+          onPress={logout}>
+          <Text style={{ color: 'white' }}>Logout</Text>
         </TouchableOpacity>
       </View>
       <Text

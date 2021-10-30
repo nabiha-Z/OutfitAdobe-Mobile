@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 import Icon from '@expo/vector-icons/AntDesign';
 const FIREBASE_API_ENDPOINT =
   'https://onequeue-912fa-default-rtdb.firebaseio.com/';
@@ -16,26 +19,44 @@ function SignupScreen({ route, navigation }) {
   const [users, setUsers] = useState([]);
   var count = 0;
 
-  const getData = async () => {
-    const response = await fetch(`${FIREBASE_API_ENDPOINT}/users.json`);
-    const data = await response.json();
-    if (data == null) {
-      setUsers([]);
-    } else {
-      let arr = Object.entries(data).map((item) => ({
-        ...item[1],
-        key: item[0],
-      }));
-      setUsers(arr);
-    }
-  };
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBTGehuql0lmwhW69joWIyjrlmf-0I9ReE",
+    authDomain: "onequeue-912fa.firebaseapp.com",
+    databaseURL: "https://onequeue-912fa-default-rtdb.firebaseio.com",
+    projectId: "onequeue-912fa",
+    storageBucket: "onequeue-912fa.appspot.com",
+    messagingSenderId: "188273292512",
+    appId: "1:188273292512:web:3f52d65ea600461edfcc85",
+    measurementId: "G-2BNFLV95DK"
+  }
+
+  let app;
+  if (!getApps().length) {
+    app = initializeApp(firebaseConfig);
+  } else {
+    app = getApp();
+  }
+  const auth = getAuth(app);
+  const db = getFirestore();
 
 
-  useEffect(() => {
-    getData()
-  }, [])
+  // const writeData = () =>{
+  //   try {
+  //     const docRef = await addDoc(collection(db, "users"), {
+  //       first: "Ada",
+  //       last: "Lovelace",
+  //       born: 1815
+  //     });
+  //     console.log("Document written with ID: ", docRef.id);
+  //   } catch (e) {
+  //     console.error("Error adding document: ", e);
+  //   }
 
-  const addUser = () => {
+  // }
+
+
+  const addUser = async () => {
     console.log("email=", getEmail);
     var validEmailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z]+(.[a-z]{2,4})*$/;
 
@@ -55,26 +76,58 @@ function SignupScreen({ route, navigation }) {
           }
         });
         if (count === 0) {
-          var requestOptions = {
-            method: 'POST',
-            body: JSON.stringify({
-              username: getUsername,
-              password: getPassword,
-              contact: getContact,
-              email: getEmail,
-            }),
-          };
-          fetch(`${FIREBASE_API_ENDPOINT}/users.json`, requestOptions)
-            .then((response) => response.text())
-            .then((result) => console.log(result))
-            .catch((error) => console.log('error', error));
 
-          setUsername('');
-          setPassword('');
-          setContact('');
-          setEmail('');
-          alert('Account Created');
-          navigation.navigate('LoginScreen');
+
+          const userAuth = await createUserWithEmailAndPassword(auth, getEmail, getPassword)
+            .then((user) => {
+              console.log("userrrrrr=", user);
+              console.log("created")
+              setUsername('');
+              setPassword('');
+              setContact('');
+              setEmail('');
+              alert('Account Created');
+            })
+            .catch(error => {
+              console.log("Error= ", error.message)
+              alert("User already existed with this email")
+            })
+
+            console.log("Contact: ", getContact);
+            console.log("phoneNumber=", auth.currentUser)
+          await updateProfile(auth.currentUser, {
+            phoneNumber: getContact,
+            displayName: getUsername,
+          }).then(() => {
+            console.log("");
+          }).catch((error) => {
+            console.log("error: ", error)
+          });
+
+          console.log("userAuth: ", auth.currentUser);
+          //   var user = {
+          //     name: getUsername,
+          //     phone: getContact,
+          //     uid: userAuth.uid,
+          //     email: userAuth.email
+          // }
+          // .then((userCredential) => {
+
+          //   console.log("created");
+          //   const user = userCredential.user;
+          //   console.log("user=", user)
+          //   
+          //   navigation.navigate('LoginScreen');
+          // })
+          // .catch(error => {
+          //   console.log('error= ', error.message);
+
+          // })
+          // fetch(`${FIREBASE_API_ENDPOINT}/users.json`, requestOptions)
+          //   .then((response) => response.text())
+          //   .then((result) => console.log(result))
+          //   .catch((error) => console.log('error', error));
+
         } else {
           alert("This account already exists")
         }

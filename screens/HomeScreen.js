@@ -31,7 +31,7 @@ function HomeScreen({ route, navigation }) {
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('VendorLogin')}><Text style={styles.Txt}>Become a vendor</Text></TouchableOpacity>
             <View style={[styles.emailBtn, styles.elevation]}>
-                <Text onPress={() => navigation.navigate('Dashboard')}>Continue with email</Text>
+                <Text onPress={() => navigation.navigate('LoginScreen')}>Continue with email</Text>
             </View>
             <Text style={styles.bottomTxt}> or connect with</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginLeft:5}}>
