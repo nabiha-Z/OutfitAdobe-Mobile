@@ -9,9 +9,7 @@ const FIREBASE_API_ENDPOINT =
 function Vendor({ route, navigation }) {
   const [getEmail, setEmail] = useState(null);
   const [getPassword, setPassword] = useState(null);
-
   const [users, setUsers] = useState([]);
-
 
   const getData = async () => {
     const response = await fetch(`${FIREBASE_API_ENDPOINT}/users.json`);

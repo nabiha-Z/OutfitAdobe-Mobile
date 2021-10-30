@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
-import Icon from '@expo/vector-icons/AntDesign';
-import { Feather } from '@expo/vector-icons';
 import SwitchToggle from "react-native-switch-toggle";
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import { DataTable } from 'react-native-paper';
+
 const FIREBASE_API_ENDPOINT =
     'https://onequeue-912fa-default-rtdb.firebaseio.com/';
 function VendorSignup({ route, navigation }) {
