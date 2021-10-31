@@ -39,8 +39,10 @@ function Vendor({ route, navigation }) {
 
     if(user){
       console.log("logged in ");
+      navigation.navigate("Dashboard")
     }else{
       console.log("logged out user");
+      navigation.navigate("LoginScreen")
     }
     
   })
@@ -73,6 +75,7 @@ function Vendor({ route, navigation }) {
           // Signed in 
           const user = userCredential.user;;
           alert("Logged in")
+          navigation.navigate("Dashboard")
           // ...
         })
         .catch((error) => {
@@ -102,14 +105,7 @@ function Vendor({ route, navigation }) {
     }
   };
 
-  const logout =() =>{
-    signOut(auth).then(() => {
-      // Sign-out successful.
-      console.log("signed Out")
-    }).catch((error) => {
-      // An error happened.
-    });
-  }
+ 
 
   return (
     <View style={styles.container}>
@@ -165,16 +161,7 @@ function Vendor({ route, navigation }) {
           <Text style={{ color: 'white' }}>Sign in</Text>
         </TouchableOpacity>
       </View>
-      <View
-        style={styles.signupBtn}>
-        <TouchableOpacity
-          style={{
-            color: 'white',
-          }}
-          onPress={logout}>
-          <Text style={{ color: 'white' }}>Logout</Text>
-        </TouchableOpacity>
-      </View>
+     
       <Text
         onPress={() => navigation.navigate('SignupScreen')}
         style={{
