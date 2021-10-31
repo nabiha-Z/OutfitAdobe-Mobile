@@ -10,7 +10,8 @@ import VendorSignup from './screens/VendorSignup';
 import SignupLocation from './screens/SignupLocation';
 import WorkingHours from './screens/Workinghours';
 import Dashboard from './screens/Vendor/Dashboard';
-
+import StaffDetails from './screens/Vendor/TabScreens/Profile/Staffs';
+import AddStaff from './screens/Vendor/TabScreens/Profile/NewStaff';
 
 
 const Stack = createStackNavigator();
@@ -84,6 +85,27 @@ function App() {
           })}
         />
         <Stack.Screen name="Dashboard" component={Dashboard}
+          options={({ navigation, route }) => ({
+            title: '',
+            headerStyle: {
+              backgroundColor: '#47A7AB',
+              height: 0
+            },
+            headerLeft: null
+          })}
+        />
+
+        <Stack.Screen name="StaffDetails" component={StaffDetails}
+          options={({ navigation, route }) => ({
+            title: '',
+            headerStyle: {
+              backgroundColor: '#47A7AB',
+              height: 0
+            },
+            headerLeft: null
+          })}
+        />
+        <Stack.Screen name="AddStaff" component={AddStaff}
           options={({ navigation, route }) => ({
             title: '',
             headerStyle: {

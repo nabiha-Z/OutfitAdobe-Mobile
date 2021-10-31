@@ -8,11 +8,11 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 
-import Home from './TabScreens/Home';
-import Chats from './TabScreens/Chats';
-import Sales from './TabScreens/Sales';
-import Profile from './TabScreens/Profile';
-import Notification from './TabScreens/Notification';
+import Home from './TabScreens/Home/Home';
+import Chats from './TabScreens/Chats/Chats';
+import Sales from './TabScreens/Sales/Sales';
+import Profile from './TabScreens/Profile/Profile';
+import Notification from './TabScreens/Notifications/Notification';
 
 function getWidth() {
     let width = Dimensions.get("window").width
