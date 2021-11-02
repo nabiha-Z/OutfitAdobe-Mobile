@@ -2,30 +2,27 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import { initializeApp, getApps, getApp, } from "firebase/app";
+import firebase from 'firebase/app'
 import firebaseConfig from '../../../../Firebase/FirebaseConfig';
-import { getAuth, signOut } from "firebase/auth";
+import { StackActions } from '@react-navigation/native';
 
-export default function Profile(router, navigation) {
+export default function Profile({ route, navigation }) {
 
-    const colors = ["#C2E4EE","#B2DBD6", "#D2B1B1", "#D0D4FA"];
-    let app;
-    if (!getApps().length) {
-        app = initializeApp(firebaseConfig);
-    } else {
-        app = getApp();
+    const colors = ["#C2E4EE", "#B2DBD6", "#D2B1B1", "#D0D4FA"];
+
+    if (!firebase.apps.length) {
+        const firebaseApp = firebase.initializeApp(firebaseConfig);
     }
-
-    const auth = getAuth(app);
-
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
     const logout = () => {
-        signOut(auth).then(() => {
+
+        auth.signOut().then(() => {
             console.log("signed Out")
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'HomeScreen' }]
-            })
+            navigation.dispatch(
+                StackActions.popToTop()
+              );
         }).catch((error) => {
             console.log("Logout Error: ", error.message)
         });
@@ -33,19 +30,19 @@ export default function Profile(router, navigation) {
     return (
         <View style={styles.container}>
 
-            
 
-                <View style={{alignItems:'center' }}>
-                    <View style={[styles.imgContainer, {backgroundColor: colors[Math.floor(Math.random() * 5) + 0]}]}>
-                        <Text style={styles.imgLabel}>{auth.currentUser.displayName[0].toUpperCase()}</Text>
-                    </View>
-                    <Text style={styles.imgLabel}>{auth.currentUser.displayName}</Text>
-                    <Text style={{color:'#6791DA', marginBottom:40}}>My Profile</Text>
+
+            <View style={{ alignItems: 'center' }}>
+                <View style={[styles.imgContainer, { backgroundColor: colors[Math.floor(Math.random() * 5) + 0] }]}>
+                    <Text style={styles.imgLabel}>{auth.currentUser.displayName[0].toUpperCase()}</Text>
                 </View>
-                
-                
-                <ScrollView style={{ height: 20, marginHorizontal: -10 }}>
-                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('StaffDetails')}>
+                <Text style={styles.imgLabel}>{auth.currentUser.displayName}</Text>
+                <Text style={{ color: '#6791DA', marginBottom: 40 }}>My Profile</Text>
+            </View>
+
+
+            <ScrollView style={{ height: 20, marginHorizontal: -15, padding: 10 }}>
+                <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate("StaffDetails")}>
 
                     <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
                     <View style={styles.textContainer}>
@@ -79,7 +76,7 @@ export default function Profile(router, navigation) {
                     </View>
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
-                
+
 
                 <TouchableOpacity style={styles.tabContainer}>
                     <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
@@ -107,6 +104,9 @@ export default function Profile(router, navigation) {
                     </View>
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
+                <View style={{ height: 150 }}>
+                    <Text></Text>
+                </View>
             </ScrollView>
         </View>
     )
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#FFFFFF',
-        padding:0,
+        padding: 0,
         paddingTop: 30,
     },
     tabContainer: {
@@ -149,12 +149,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-       
+
     },
-    imgLabel:{
-        fontWeight:'bold',
-        fontSize:30,
-        color:'#3F3E40',
+    imgLabel: {
+        fontWeight: 'bold',
+        fontSize: 30,
+        color: '#3F3E40',
 
     }
 })

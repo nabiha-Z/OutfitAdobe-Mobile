@@ -7,24 +7,11 @@ import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { EvilIcons } from '@expo/vector-icons';
 const FIREBASE_API_ENDPOINT =
     'https://onequeue-912fa-default-rtdb.firebaseio.com/';
-import hair from '../images/hair.png';
-import spa from '../images/spa.png';
-import beard from '../images/beard.png';
-import aesthetic from '../images/aesthetic.png';
-import salon from '../images/salon.png';
-import beauty from '../images/beauty.png';
-const categories = [
-    { id: 1, icon: hair, title: 'Hair Salon' },
-    { id: 2, icon: spa, title: 'Spa' },
-    { id: 3, icon: beard, title: 'Barbershop' },
-    { id: 4, icon: aesthetic, title: 'Aesthetic' },
-    { id: 5, icon: salon, title: 'Salon' },
-    { id: 6, icon: beauty, title: 'Beauty Salon' }]
 
-function VendorSignup({ route, navigation }) {
+function VendorLocation({ route, navigation }) {
 
-    var {categories,businessName,Email, SubCat} = route.params;
-    console.log("categories,businessName,\n",categories,"\n",businessName,"\n",Email,"\n",SubCat);
+    var {categories,businessName,Email, SubCat, TeamSize} = route.params;
+    
     const [isSelected, setSelection] = useState(false);
     const [business, setBusiness] = useState(true);
     const [regionuser, setregionuser] = useState({
@@ -219,4 +206,4 @@ const styles = StyleSheet.create({
     }
 
 });
-export default VendorSignup;
+export default VendorLocation;

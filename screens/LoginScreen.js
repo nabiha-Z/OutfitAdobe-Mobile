@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { initializeApp, getApps, getApp,  } from "firebase/app";
+import * as firebase from 'firebase';
+import { LogBox } from 'react-native';
+import _ from 'lodash';
 import firebaseConfig from '../Firebase/FirebaseConfig';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut} from "firebase/auth";
 
 
 const FIREBASE_API_ENDPOINT =
@@ -16,26 +17,25 @@ function Vendor({ route, navigation }) {
   const [getPassword, setPassword] = useState(null);
   const [users, setUsers] = useState([]);
 
-  // const firebaseConfig = {
-  //   apiKey: "AIzaSyBTGehuql0lmwhW69joWIyjrlmf-0I9ReE",
-  //   authDomain: "onequeue-912fa.firebaseapp.com",
-  //   databaseURL: "https://onequeue-912fa-default-rtdb.firebaseio.com",
-  //   projectId: "onequeue-912fa",
-  //   storageBucket: "onequeue-912fa.appspot.com",
-  //   messagingSenderId: "188273292512",
-  //   appId: "1:188273292512:web:3f52d65ea600461edfcc85",
-  //   measurementId: "G-2BNFLV95DK"
-  // }
+  LogBox.ignoreLogs(['Warning:...']); // ignore specific logs
+LogBox.ignoreAllLogs(); // ignore all logs
+const _console = _.clone(console);
+console.warn = message => {
+if (message.indexOf('Setting a timer') <= -1) {
+   _console.warn(message);
+   }
+};
 
-  let app;
-  if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
-  } else {
-    app = getApp();
+  if(!firebase.apps.length){
+  const firebaseApp = firebase.initializeApp(firebaseConfig);
   }
-  const auth = getAuth(app); 
+  // if (firebase.app.lenght) {
+  //  firebase.initializeApp(firebaseConfig);
+  // } 
+  const auth = firebase.auth();
+  const db =firebase.firestore(); 
 
-  onAuthStateChanged(auth, user => {
+  auth.onAuthStateChanged(user => {
 
     if(user){
       console.log("logged in ");
@@ -70,11 +70,13 @@ function Vendor({ route, navigation }) {
   const authenticateUser = () => {
     console.log("frfb");
     if (getEmail != null && getPassword != null) {
-      signInWithEmailAndPassword(auth, getEmail, getPassword)
+      auth.signInWithEmailAndPassword(getEmail, getPassword)
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;;
-          alert("Logged in")
+          alert("Logged in");
+          setEmail("");
+          setPassword("");
           navigation.navigate("Dashboard")
           // ...
         })

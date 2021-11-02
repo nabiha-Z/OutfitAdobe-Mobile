@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Alert, View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import {  StyleSheet,  } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
@@ -12,7 +12,6 @@ import WorkingHours from './screens/Workinghours';
 import Dashboard from './screens/Vendor/Dashboard';
 import StaffDetails from './screens/Vendor/TabScreens/Profile/Staffs';
 import AddStaff from './screens/Vendor/TabScreens/Profile/NewStaff';
-
 
 const Stack = createStackNavigator();
 
@@ -97,22 +96,25 @@ function App() {
 
         <Stack.Screen name="StaffDetails" component={StaffDetails}
           options={({ navigation, route }) => ({
-            title: '',
+            title: 'Staff Details',
             headerStyle: {
-              backgroundColor: '#47A7AB',
-              height: 0
+              height: 100
             },
-            headerLeft: null
+            headerTitleStyle: {
+              color: 'black',
+              textAlign: 'center',
+              left: 60,
+          },
           })}
         />
         <Stack.Screen name="AddStaff" component={AddStaff}
           options={({ navigation, route }) => ({
-            title: '',
-            headerStyle: {
-              backgroundColor: '#47A7AB',
-              height: 0
-            },
-            headerLeft: null
+            title: 'New Staff',
+            headerTitleStyle: {
+              color: 'black',
+              textAlign: 'center',
+              left: 70,
+          },
           })}
         />
       </Stack.Navigator>

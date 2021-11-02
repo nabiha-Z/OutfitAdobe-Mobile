@@ -182,7 +182,7 @@ export default function Dashboard({ route, navigation }) {
                     )
                 }}></Tab.Screen> */}
 
-                <Tab.Screen name={"Profile"} component={Profile} options={{
+                <Tab.Screen name={"Profile"} component={Profile} options={({ navigation, route }) => ({
                     title: "Business Profile",
                     headerStyle: {
                         height:90
@@ -211,7 +211,7 @@ export default function Dashboard({ route, navigation }) {
                             ></FontAwesome5>
                         </View>
                     )
-                }} listeners={({ navigation, route }) => ({
+                })} listeners={({ navigation, route }) => ({
                     // Onpress Update....
                     tabPress: e => {
                         Animated.spring(tabOffsetValue, {

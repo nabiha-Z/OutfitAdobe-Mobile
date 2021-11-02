@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, CheckBox, ScrollView, Modal } from 'react-native';
-import Icon from '@expo/vector-icons/AntDesign';
-import { Feather } from '@expo/vector-icons';
-import { Checkbox } from 'react-native-paper';
+
+import { RadioButton } from 'react-native-paper';
+
 const FIREBASE_API_ENDPOINT =
     'https://onequeue-912fa-default-rtdb.firebaseio.com/';
 import hair from '../images/hair.png';
@@ -11,6 +11,13 @@ import beard from '../images/beard.png';
 import aesthetic from '../images/aesthetic.png';
 import salon from '../images/salon.png';
 import beauty from '../images/beauty.png';
+
+import one from '../images/1person.png';
+import onee from '../images/one.png';
+import two from '../images/3people.png';
+import five from '../images/5people.png';
+import eleven from '../images/11people.png';
+
 
 
 function VendorSignup({ route, navigation }) {
@@ -24,15 +31,23 @@ function VendorSignup({ route, navigation }) {
         { id: 6, icon: salon, title: 'Official', border: '#C8C4C4', background: 'white', checked: false, subCat: ['City Councils', 'Embassies & Consulates', 'Attorney', 'Legal', 'Business Attorney', 'Financial Services', 'Interview Scheduling', 'Call Centers'] },
         { id: 7, icon: salon, title: 'Education', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Universities', 'Colleges', 'Libraries', 'Teaching', 'Tutoring Lessons', 'Parent Meetings', 'Child care'] }]);
 
+    const [teamSize, setTeamSize] = useState([
+        { id: 0, icon: onee, title: "It's just me", border: '#C8C4C4', background: 'white', selected: false },
+        { id: 1, icon: two, title: "2-4", border: '#C8C4C4', background: 'white', selected: false },
+        { id: 2, icon: five, title: "5-10", border: '#C8C4C4', background: 'white', selected: false },
+        { id: 3, icon: eleven, title: "11+", border: '#C8C4C4', background: 'white', selected: false }
+    ]);
+
     const [show, setShow] = useState({ visible: false, currentItem: '' });
     const [isModalVisible, setModalVisible] = useState(false);
     const [businessName, setBusinessName] = useState("");
+    const [team, setTeam] = useState("");
     const [email, setEmail] = useState("");
-    const [error, setError] = useState("");
+    const [errors, setErrors] = useState({field:'', categories:'', team:''});
     const [length, setlength] = useState(1);
-    const [emailError, setEmailError] = useState("");
     const [vendors, setVendors] = useState([]);
-    const [display,setDisplay] =useState(false);
+    const [emailError, setEmailError] = useState("");
+    const [display, setDisplay] = useState(false);
     const [checkedItems, setCheckedItems] = useState([]);
     const [selectedSub, setSelectedSub] = useState([{ title: "", subcate: [] }]);
 
@@ -52,20 +67,20 @@ function VendorSignup({ route, navigation }) {
     const DisplayCheckedItem = () => {
         console.log("Display checkeddddd: ", display);
         return (
-            
-               
-                    checkedItems.map((item) => (
-                        <>
-                            
-                            <TouchableOpacity
-                                style={{ backgroundColor: 'grey', padding: 5, borderRadius: 20, margin: 5 }}>
-                             
-                                <Text style={{ color: 'white', fontSize: 10 }}>{item}</Text>
-                            </TouchableOpacity>
-                        </>
-                    ))
 
-            
+
+            checkedItems.map((item) => (
+                <>
+
+                    <TouchableOpacity
+                        style={{ backgroundColor: 'grey', padding: 5, borderRadius: 20, margin: 5 }}>
+
+                        <Text style={{ color: 'white', fontSize: 10 }}>{item}</Text>
+                    </TouchableOpacity>
+                </>
+            ))
+
+
         )
 
     }
@@ -77,15 +92,15 @@ function VendorSignup({ route, navigation }) {
     }, [])
 
     const nextPage = () => {
-        var count = 0;
+        var count = 0, countCat=0, countTeam=0;
         var validEmailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z]+(.[a-z]{2,4})*$/;
 
         console.log("lengths= ", businessName.length);
         if (businessName.length === 0 || email.length === 0) {
-            setError("Fill out all fields")
+            setErrors({field:'Fill out all fields',categories:'',team:''});
         } else if (email.match(validEmailRegex)) {
             setEmailError("");
-            setError("");
+            setErrors({field:'',categories:'',team:''});
             vendors.map((item, index) => {
                 //checking if any user already exists
                 if (item.email === email) {
@@ -95,14 +110,23 @@ function VendorSignup({ route, navigation }) {
             });
             if (count === 0) {
                 const selectedData = [], subcategories = [];
+                
                 categories.map(item => {
 
                     if (item.checked === true) {
 
                         selectedData.push({ id: item.id, title: item.title, icon: item.icon, subCat: item.subCat, checked: item.checked });
+                    }else{
+                        countCat++;
                     }
 
                 })
+
+                if(countCat === categories.length){
+                    setErrors({field:'Select Categories',categories:'Select Categories',team:''});
+                }else{
+
+                    setErrors({field:'',categories:'',team:''});
                 categories.map((item) => {
                     selectedSub.map((element) => {
                         if (item.title == element.title) {
@@ -113,10 +137,25 @@ function VendorSignup({ route, navigation }) {
                         }
                     })
                 })
-                console.log("next page data= ", subcategories);
-                navigation.navigate('SignupLocation', {
-                    categories: selectedData, businessName: businessName, Email: email, SubCat: subcategories
+
+                teamSize.map((item) => {
+                    if(item.selected === false){
+                        countTeam++;
+                    }
                 })
+
+                if(countTeam === teamSize.length){
+                    setErrors({field:'Select Team Size',categories:'',team:'Select Team Size'});
+                }else{
+                    setErrors({field:'',categories:'',team:''});
+                    //console.log("next page data= ", subcategories);
+                    navigation.navigate('SignupLocation', {
+                        categories: selectedData, businessName: businessName, Email: email, SubCat: subcategories, TeamSize:team
+                    })
+                }
+                
+               
+            }
             } else {
                 setEmailError("This email has already been used.");
 
@@ -130,6 +169,7 @@ function VendorSignup({ route, navigation }) {
     }
     const onChange = (item) => {
 
+        setErrors("");
         const newData = categories.map(newItem => {
 
             if (newItem.id === item.id) {
@@ -177,6 +217,52 @@ function VendorSignup({ route, navigation }) {
 
     }
 
+    const onSizeSelect = (item) => {
+
+        //console.log("Item Radio = ", item);
+        var color, background;
+        const newData = teamSize.map(newItem => {
+
+            if (newItem.selected === true && (newItem.id != item.id)) {
+                console.log("Uncheck")
+                color = '#C8C4C4';
+                background = 'white';
+                return {
+                    ...newItem,
+                    border: color,
+                    background: background,
+                    selected: !item.selected
+                }
+            }
+
+            if (newItem.id === item.id) {
+
+                if (item.selected === false) {
+                    color = '#EAF3F2';
+                    background = '#EAF3F2';
+                    setTeam(item.title);
+
+                } else {
+                    color = '#C8C4C4';
+                    background = 'white';
+                }
+
+                return {
+                    ...newItem,
+                    border: color,
+                    background: background,
+                    selected: !item.selected
+                }
+            }
+            return {
+                ...newItem,
+                selected: newItem.selected
+            }
+        })
+
+        setTeamSize(newData);
+    }
+
     const closeModal = () => {
         show.visible = false;
         show.currentItem = '';
@@ -205,7 +291,7 @@ function VendorSignup({ route, navigation }) {
 
         }
         setDisplay(true);
-        
+
 
         console.log("On select checkedArray= ", checkedItems);
     }
@@ -247,68 +333,106 @@ function VendorSignup({ route, navigation }) {
         source={require('../images/img4.png')}
         style={{ width: '100%', height: '40%' }}
       /> */}
-            <Text
-                style={{ fontSize: 15, opacity: 0.5, marginHorizontal: 10 }}>
-                Business Setup
-            </Text>
-            <Text
-                style={styles.heading}>
-                Have any business name in mind?
-            </Text>
-            <Text
-                style={{ fontSize: 13, opacity: 0.7, marginTop: 5, marginHorizontal: 10 }}>
-                This shall be your brand name, that your clients will get to see.
-            </Text>
+            <ScrollView style={{ height: 80 }}>
+                <Text
+                    style={{ fontSize: 15, opacity: 0.5, marginHorizontal: 10 }}>
+                    Business Setup
+                </Text>
+                <Text
+                    style={styles.heading}>
+                    Have any business name in mind?
+                </Text>
+                <Text
+                    style={styles.desc}>
+                    This shall be your brand name, that your clients will get to see.
+                </Text>
 
-            <Text style={styles.errorTxt}>{error}</Text>
-            <Text
-                style={{ fontSize: 12, marginTop: 10, marginHorizontal: 10 }}>
-                Business Name
-            </Text>
-            <TextInput style={styles.businessField} onChangeText={(text) => setBusinessName(text)} />
+                <Text style={styles.errorsTxt}>{errors.field}</Text>
+                <Text
+                    style={{ fontSize: 12, marginTop: 10, marginHorizontal: 10 }}>
+                    Business Name
+                </Text>
+                <TextInput style={styles.businessField} onChangeText={(text) => setBusinessName(text)} />
 
-            <Text
-                style={{ fontSize: 12, marginTop: 10, marginHorizontal: 10 }}>
-                Email
-            </Text>
-            <TextInput style={styles.businessField} onChangeText={(text) => setEmail(text)} />
-            <Text style={styles.errorTxt}>{emailError}</Text>
+                <Text
+                    style={{ fontSize: 12, marginTop: 10, marginHorizontal: 10 }}>
+                    Email
+                </Text>
+                <TextInput style={styles.businessField} onChangeText={(text) => setEmail(text)} />
+                <Text style={styles.errorsTxt}>{emailError}</Text>
+
+                <Text
+                    style={[styles.heading, { fontSize: 20 }]}>
+                    Select Categories
+                </Text>
+                <Text style={styles.errorsTxt}>{errors.categories}</Text>
+                <ScrollView style={{ height: 370, marginHorizontal: 5, marginTop: 15, marginLeft: 11, paddingRight: 15 }}>
+                    <View style={styles.categoriesView}>
+                        {categories.map((item, key) =>
+
+                        (
+                            <>
+
+                                <View style={styles.checkboxContainer} key={key}>
+                                    <CheckBox
+                                        key={item.id}
+                                        value={item.checked}
+                                        style={[styles.ckItem, { zIndex: 1 }]}
+                                        disabled={false}
+                                        onAnimationType='fill'
+                                        offAnimationType='fade'
+                                        boxType='square'
+                                        onValueChange={() => onChange(item)}
+                                    />
+                                    <View style={[styles.customCheckbox, { zIndex: 0, borderColor: item.border, backgroundColor: item.background }]} >
+                                        <Image source={item.icon} style={{ width: '80%', height: '60%', alignSelf: 'center' }} />
+                                        <Text style={styles.btnTxt}>{item.title} </Text>
+                                    </View>
+
+
+                                </View>
+
+
+                            </>
+                        ))}
+                    </View>
+                </ScrollView>
 
 
 
-            {/* <Checkbox
-      value={isSelected}
-      onValueChange={setSelection}
-    //   value="salon"
-    //   onChange={(e) => {if(e.checked){
-    //       setCategory([...categories, e.value])}
-    //     }}
-        style={styles.checkbox}
-      /> */}
+                <Text
+                    style={styles.heading}>
+                    What's your team size?
+                </Text>
 
-            <ScrollView style={{ height: 20, marginHorizontal: 5, marginTop: 15, marginLeft: 11, paddingRight: 15 }}>
+                <Text
+                    style={[styles.desc, { color: 'black' }]}>
+                    Your team size shall help us set up your calendar accordingly.
+                </Text>
+                <Text style={styles.errorsTxt}>{errors.team}</Text>
                 <View style={styles.categoriesView}>
-                    {categories.map((item, key) =>
+                    {teamSize.map((item, key) =>
 
                     (
                         <>
 
-                            <View style={styles.checkboxContainer} key={key}>
+                            <View style={[styles.checkboxContainer, { width: '40%', marginHorizontal: 13 }]} key={key}>
+
                                 <CheckBox
                                     key={item.id}
-                                    value={item.checked}
+                                    value={item.selected}
                                     style={[styles.ckItem, { zIndex: 1 }]}
                                     disabled={false}
                                     onAnimationType='fill'
                                     offAnimationType='fade'
                                     boxType='square'
-                                    onValueChange={() => onChange(item)}
+                                    onValueChange={() => onSizeSelect(item)}
                                 />
-                                <View style={[styles.customCheckbox, { zIndex: 0, borderColor: item.border, backgroundColor: item.background }]} >
-                                    <Image source={item.icon} style={{ width: '80%', height: '60%', alignSelf: 'center' }} />
+                                <View style={[styles.customCheckbox, { zIndex: 0, borderColor: item.border, backgroundColor: item.background, width: '100%', height: 120, }]} >
+                                    <Image source={item.icon} style={{ width: '100%', height: '80%', alignSelf: 'center' }} />
                                     <Text style={styles.btnTxt}>{item.title} </Text>
                                 </View>
-                             
+
 
                             </View>
 
@@ -316,88 +440,86 @@ function VendorSignup({ route, navigation }) {
                         </>
                     ))}
                 </View>
-            </ScrollView>
 
-
-            <View style={styles.footerTab}>
-                <TouchableOpacity
-                    style={styles.footerBtn}
-                    onPress={() => nextPage()}
-                >
-                    <Text style={{ color: 'white', alignSelf: 'center' }}>Next step</Text>
-                </TouchableOpacity>
-            </View>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={show.visible}
-            >
-
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        {categories.map((item, key) => {
-                            if (item.title === show.currentItem) {
-                                
-                                return (
-                                    <View>
-                                        <Text style={[styles.heading, styles.subCateHeading]}> Select sub categories</Text>
-
-                                        <View style={[styles.checkboxContainer]}>
-                                            <ScrollView style={{ height: 280, marginHorizontal: -10 }}>
-
-                                                {item.subCat.map((element, index) => (
-                                                    <>
-
-                                                        <TouchableOpacity
-                                                            key={index}
-                                                            style={styles.subCatBtn}
-                                                            onPress={() => onSelect(item, element)}
-                                                        >
-                                                            <Text style={{ color: 'white', marginTop: 5 }}>{element}</Text>
-                                                        </TouchableOpacity>
-
-
-
-                                                    </>
-
-                                                ))}
-
-                                            </ScrollView>
-                                        </View>
-
-
-
-                                    </View>
-                                )
-                            }
-                        })}
-                      
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: 40 }}>
-                           
-                            {display&& DisplayCheckedItem()}
-
-                        </View>
-
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <TouchableOpacity
-                                style={[styles.ModalBtn, { backgroundColor: 'black' }]}
-                                onPress={() => closeModal()}
-                            >
-                                <Text style={{ fontSize: 17, color: 'white' }}>Close</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.ModalBtn]}
-                                onPress={() => onConfirm()}
-                            >
-                                <Text style={{ fontSize: 17, color: 'white' }}>Done</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                    </View>
+                <View style={styles.footerTab}>
+                    <TouchableOpacity
+                        style={styles.footerBtn}
+                        onPress={() => nextPage()}
+                    >
+                        <Text style={{ color: 'white', alignSelf: 'center' }}>Next step</Text>
+                    </TouchableOpacity>
                 </View>
-            </Modal>
 
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={show.visible}
+                >
+
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            {categories.map((item, key) => {
+                                if (item.title === show.currentItem) {
+
+                                    return (
+                                        <View>
+                                            <Text style={[styles.heading, styles.subCateHeading]}> Select sub categories</Text>
+
+                                            <View style={[styles.checkboxContainer]}>
+                                                <ScrollView style={{ height: 280, marginHorizontal: -10 }}>
+
+                                                    {item.subCat.map((element, index) => (
+                                                        <>
+
+                                                            <TouchableOpacity
+                                                                key={index}
+                                                                style={styles.subCatBtn}
+                                                                onPress={() => onSelect(item, element)}
+                                                            >
+                                                                <Text style={{ color: 'white', marginTop: 5 }}>{element}</Text>
+                                                            </TouchableOpacity>
+
+
+
+                                                        </>
+
+                                                    ))}
+
+                                                </ScrollView>
+                                            </View>
+
+
+
+                                        </View>
+                                    )
+                                }
+                            })}
+
+                            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: 40 }}>
+
+                                {display && DisplayCheckedItem()}
+
+                            </View>
+
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <TouchableOpacity
+                                    style={[styles.ModalBtn, { backgroundColor: 'black' }]}
+                                    onPress={() => closeModal()}
+                                >
+                                    <Text style={{ fontSize: 17, color: 'white' }}>Close</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.ModalBtn]}
+                                    onPress={() => onConfirm()}
+                                >
+                                    <Text style={{ fontSize: 17, color: 'white' }}>Done</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                        </View>
+                    </View>
+                </Modal>
+            </ScrollView>
         </View>
 
 
@@ -412,7 +534,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         width: '100%',
         padding: 10,
-        paddingRight: 40
+        paddingRight: 30,
+
     },
     businessField: {
         width: '90%',
@@ -447,7 +570,6 @@ const styles = StyleSheet.create({
         flex: 0.3,
         marginLeft: 10,
         width: '100%',
-        top: 10,
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
@@ -486,12 +608,15 @@ const styles = StyleSheet.create({
     checkboxContainer: {
         flexDirection: "row",
         marginBottom: 20,
+
+
     },
     centeredView: {
         borderTopWidth: 1,
         borderColor: '#908D8D',
         justifyContent: 'center',
         alignItems: "center",
+
 
     },
     modalView: {
@@ -522,7 +647,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center'
     },
-    errorTxt: {
+    errorsTxt: {
         marginTop: 5,
         fontSize: 12,
         color: 'red',
@@ -544,6 +669,13 @@ const styles = StyleSheet.create({
         width: '90%',
         marginHorizontal: 10,
         margin: 10
+    }
+    ,
+    desc: {
+        fontSize: 13,
+        opacity: 0.7,
+        marginTop: 5,
+        marginHorizontal: 10
     }
 
 });

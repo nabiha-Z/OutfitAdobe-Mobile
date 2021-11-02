@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
+import firebase from 'firebase/app';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import Icon from '@expo/vector-icons/AntDesign';
@@ -32,13 +31,11 @@ function SignupScreen({ route, navigation }) {
   }
 
   let app;
-  if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
-  } else {
-    app = getApp();
-  }
-  const auth = getAuth(app);
-  const db = getFirestore();
+  if (!firebase.app.lenght) {
+   firebase.initializeApp(firebaseConfig);
+  } 
+  const auth = firebase.auth();
+  const db =firebase.firestore();
 
 
   // const writeData = () =>{
@@ -78,7 +75,7 @@ function SignupScreen({ route, navigation }) {
         if (count === 0) {
 
 
-          const userAuth = await createUserWithEmailAndPassword(auth, getEmail, getPassword)
+          await auth.createUserWithEmailAndPassword( getEmail, getPassword)
             .then((user) => {
               console.log("userrrrrr=", user);
               console.log("created")

@@ -1,108 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import { initializeApp, getApps, getApp, } from "firebase/app";
-import firebaseConfig from '../../../../Firebase/FirebaseConfig';
-import { getAuth, signOut } from "firebase/auth";
 
-export default function StaffDetails(router, navigation) {
+import { useSafeAreaFrame } from "react-native-safe-area-context";
+
+export default function StaffDetails({ route, navigation }) {
 
 
-    const colors = ["#C2E4EE", "#B2DBD6", "#D2B1B1", "#D0D4FA"];
-
-    navigation.setOptions({
-        headerRight: () => (
-            <TouchableOpacity
-                onPress={() => {
-                    navigation.navigate('AddStaff')
-                }
-                }
-                style={styles.historyButton}
-            >
-                <Text style={{ color: '#D7D9D9' }}>Add Staff</Text>
-            </TouchableOpacity>
-        ),
-    });
-    let app;
-    if (!getApps().length) {
-        app = initializeApp(firebaseConfig);
-    } else {
-        app = getApp();
-    }
-
-    const auth = getAuth(app);
-
+    const [staffs, setStaffs] = useState([{ id: 1 }, { id: 2 }, { id: 3 }]);
 
 
     return (
         <View style={styles.container}>
+            <View style={styles.header}>
+                <Text style={styles.heading}>Current Staff Details</Text>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('AddStaff')
+                    }
+                    }
+                    style={styles.addButton}
+                >
+                    <AntDesign name="plus" size={20} style={{ color: '#D7D9D9' }} />
+                </TouchableOpacity>
 
-            <Text style={styles.imgLabel}>Current Staff Details</Text>
+            </View>
             <ScrollView style={{ height: 10, marginHorizontal: -10 }}>
+                {staffs.map((item, key) => (
 
-                <TouchableOpacity style={styles.tabContainer}>
+                    <TouchableOpacity style={styles.tabContainer} key={key}>
+                        <AntDesign name="user" size={24} style={{ marginRight: 10, top: 4 }} />
+                        <View style={styles.textContainer}>
+                            <Text style={styles.mainText}>Staff {item.id}</Text>
+                            <Text style={styles.subText}>Tap to view Details</Text>
+                        </View>
 
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.mainText}>Staff</Text>
-                    </View>
 
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-                </TouchableOpacity>
+                    </TouchableOpacity>
+                ))}
 
-                <TouchableOpacity style={styles.tabContainer}>
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.mainText}>Services</Text>
-                    </View>
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-                </TouchableOpacity>
 
-                <TouchableOpacity style={styles.tabContainer}>
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.mainText}>Resources</Text>
-                    </View>
 
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.tabContainer}>
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.mainText}>Inventory</Text>
-
-                    </View>
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.tabContainer}>
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.mainText}>Contact Center</Text>
-
-                    </View>
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.tabContainer}>
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.mainText}>Settings</Text>
-
-                    </View>
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.tabContainer} onPress={logout}>
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.mainText}>Logout</Text>
-
-                    </View>
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-                </TouchableOpacity>
             </ScrollView>
         </View>
     )
@@ -115,6 +54,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         padding: 0,
         paddingTop: 30,
+    },
+    heading: {
+        fontSize: 25,
+        marginTop: 17,
+        marginHorizontal: 10,
+        fontWeight: 'bold',
+        color: '#5B5A59'
     },
     tabContainer: {
         flexDirection: 'row',
@@ -136,21 +82,32 @@ const styles = StyleSheet.create({
         color: '#909193',
         lineHeight: 15,
     },
-    imgContainer: {
-        width: 100,
-        height: 100,
-        borderRadius: 100 / 2,
-        padding: 20,
-        margin: 15,
-        alignItems: 'center',
+    addButton: {
+        backgroundColor: '#22524C',
         justifyContent: 'center',
-        textAlign: 'center',
+        alignItems: 'center',
+        width: 50,
+        height: 50,
+        borderRadius: 50 / 2,
+        padding: 10,
+        margin: 10,
+        marginRight: 20,
+    },
+    header: {
+        flexDirection: 'row',
+        marginLeft: 20,
+        marginBottom: 20
 
     },
-    imgLabel: {
-        fontWeight: 'bold',
-        fontSize: 30,
-        color: '#3F3E40',
-
+    mainText: {
+        fontSize: 15,
+        color: 'black',
+        fontWeight: 'bold'
+    },
+    subText: {
+        fontSize: 11,
+        color: '#909193',
+        lineHeight: 15
     }
+
 })
