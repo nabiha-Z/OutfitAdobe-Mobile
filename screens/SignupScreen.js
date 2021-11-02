@@ -31,9 +31,9 @@ function SignupScreen({ route, navigation }) {
   }
 
   let app;
-  if (!firebase.app.lenght) {
-   firebase.initializeApp(firebaseConfig);
-  } 
+  if(!firebase.apps.length){
+    const firebaseApp = firebase.initializeApp(firebaseConfig);
+    } 
   const auth = firebase.auth();
   const db =firebase.firestore();
 

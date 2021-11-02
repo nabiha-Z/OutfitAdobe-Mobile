@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Alert, View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import moment from 'moment';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
@@ -9,12 +10,24 @@ function NewStaff({ navigation }) {
 
     const [time2, setTime2] = useState("20:00");
     const [getName, setName] = useState(null);
+    const [getContact, setContact] = useState(null);
     const [error, setError] = useState("");
     const [time1, setTime1] = useState("9:00");
     const [show1, setShow1] = useState(false);
     const [show2, setShow2] = useState(false);
+    const [image, setImage] = useState(null);
 
 
+    useEffect(() => {
+        (async () => {
+            if (Platform.OS !== 'web') {
+                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                if (status !== 'granted') {
+                    alert('Sorry, we need camera roll permissions to make this work!');
+                }
+            }
+        })();
+    }, []);
 
     const handlePicker1 = (dateTime) => {
         console.log("Selected Value= ", dateTime);
@@ -36,6 +49,22 @@ function NewStaff({ navigation }) {
         setShow1(false);
         setShow2(false);
     }
+
+    const pickImage = async () => {
+        console.log("Picturesssss")
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [2, 2],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.cancelled) {
+            setImage(result.uri);
+        }
+    };
 
     const addStaff = () => {
 
@@ -66,23 +95,29 @@ function NewStaff({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.heading}>Add a new Staff</Text>
-                <Text style={{
-                    fontSize: 11,
-                    color: '#4B494B',
-                    textAlign: 'center',
-                    marginTop: 7,
-                    marginBottom: 10
+            <Text
+                style={styles.heading}>
+                Add a new Staff
+            </Text>
+            <Text
+                style={styles.desc}>
+                This will add a new staff in your business whom users can ask services from
+            </Text>
 
-                }}>This will add a new staff in your business whom users can ask services from</Text>
-            </View>
             <Text style={styles.label}>Full Name:</Text>
             <TextInput
                 style={styles.inputField}
                 placeholder='Enter Full Name'
                 value={getName}
                 onChangeText={text => setName(text)}
+            />
+
+            <Text style={styles.label}>Contact:</Text>
+            <TextInput
+                style={styles.inputField}
+                placeholder='Enter Full Name'
+                value={getContact}
+                onChangeText={text => setContact(text)}
             />
             <Text style={styles.label}>Select your timings</Text>
 
@@ -94,7 +129,7 @@ function NewStaff({ navigation }) {
                 >
                     <Text>{time1}</Text>
                 </TouchableOpacity>
-                <Text> to</Text>
+                <Text> --</Text>
                 <TouchableOpacity
                     style={styles.timePicker}
                     onPress={() => setShow2(true)}
@@ -125,6 +160,20 @@ function NewStaff({ navigation }) {
                 onCancel={hidePicker}
             />
 
+
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity style={styles.imageBtn} onPress={pickImage} >
+                    <Entypo name="arrow-up" size={15} color="white" style={{}} />
+                    <Text style={{ color: 'white', textAlign: 'center', margin: 0 }}>Choose Image</Text>
+                </TouchableOpacity>
+
+
+                {image && (
+                    <TouchableOpacity style={styles.selectedImgBtn} onPress={() => setImage(null)}>
+                        <Image source={{ uri: image }} style={styles.selectedImage} />
+                    </TouchableOpacity>)}
+            </View>
+
             <TouchableOpacity
                 onPress={addStaff}
                 style={styles.addButton}
@@ -141,23 +190,22 @@ function NewStaff({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         backgroundColor: 'white',
-        padding: 20
-    },
+        padding: 20,
 
-    header: {
-        alignItems: 'center',
-        margin: 40,
-        marginTop: 10
     },
     heading: {
         fontSize: 25,
         marginTop: 5,
-        marginHorizontal: 10,
         fontWeight: 'bold',
         color: '#5B5A59'
     },
+    desc: {
+        fontSize: 13,
+        opacity: 0.7,
+        marginTop: 5,
+    },
+
     label: {
         fontWeight: 'bold',
         fontSize: 15,
@@ -170,27 +218,23 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         padding: 5,
         borderColor: '#95BFBA',
-        textAlign: 'center'
+
     },
     addButton: {
         backgroundColor: '#22524C',
-        justifyContent: 'center',
         alignItems: 'center',
-        width: '70%',
+        width: '100%',
         padding: 10,
-        margin: 10,
-        marginLeft: 20,
         marginTop: 40,
         borderRadius: 15,
 
     },
     timePickerView: {
         flexDirection: 'row',
-        justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
         alignContent: 'center',
-        width: '70%',
+        width: '100%',
         marginTop: 10
     },
     timePicker: {
@@ -207,6 +251,38 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: '#8E8E8E',
         textAlign: 'center'
+    },
+
+    imageBtn: {
+        flexDirection: 'row',
+        backgroundColor: '#687EA3',
+        padding: 10,
+        borderRadius: 20,
+        paddingLeft: 15,
+        marginTop: 20,
+        width: '45%',
+        alignItems: 'center',
+        textAlign: 'center',
+        elevation: 20,
+        shadowColor: '#0B1A34',
+    },
+    selectedImgBtn: {
+        backgroundColor: '#E1E7F1', 
+        width: 40, 
+        height: 40, 
+        zIndex: 2, 
+        padding: 10, 
+        borderRadius: 40 / 2,
+        marginTop:20,
+        marginLeft:10
+    },
+    selectedImage: {
+        width: 30,
+        height: 30,
+        borderRadius: 30 / 2,
+        position: 'absolute',
+        alignSelf: 'center',
+        top: 5
 
     }
 });
