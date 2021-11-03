@@ -47,6 +47,7 @@ function VendorSignup({ route, navigation }) {
 
     const handlePicker1 = (dateTime, item) => {
         console.log("Selected Value= ", dateTime);
+        console.log("selected item", item);
         var selectedTime = moment(dateTime).format('HH:mm');
         console.log("formatted time= ", selectedTime);
         //setTime(selectedTime);

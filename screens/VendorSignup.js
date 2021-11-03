@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, CheckBox, ScrollView, Modal } from 'react-native';
-
+import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
+import { CheckBox } from 'react-native-elements'
 import { RadioButton } from 'react-native-paper';
 
 const FIREBASE_API_ENDPOINT =
@@ -376,13 +376,13 @@ function VendorSignup({ route, navigation }) {
                                 <View style={styles.checkboxContainer} key={key}>
                                     <CheckBox
                                         key={item.id}
-                                        value={item.checked}
-                                        style={[styles.ckItem, { zIndex: 1 }]}
+                                        checked={item.checked}
+                                        containerStyle={[styles.ckItem, { zIndex: 1 }]}
                                         disabled={false}
                                         onAnimationType='fill'
                                         offAnimationType='fade'
                                         boxType='square'
-                                        onValueChange={() => onChange(item)}
+                                        onPress={() => onChange(item)}
                                     />
                                     <View style={[styles.customCheckbox, { zIndex: 0, borderColor: item.border, backgroundColor: item.background }]} >
                                         <Image source={item.icon} style={{ width: '80%', height: '60%', alignSelf: 'center' }} />
@@ -420,13 +420,13 @@ function VendorSignup({ route, navigation }) {
 
                                 <CheckBox
                                     key={item.id}
-                                    value={item.selected}
-                                    style={[styles.ckItem, { zIndex: 1 }]}
+                                    checked={item.selected}
+                                    containerStyle={[styles.ckItem, { zIndex: 1 }]}
                                     disabled={false}
                                     onAnimationType='fill'
                                     offAnimationType='fade'
                                     boxType='square'
-                                    onValueChange={() => onSizeSelect(item)}
+                                    onPress={() => onSizeSelect(item)}
                                 />
                                 <View style={[styles.customCheckbox, { zIndex: 0, borderColor: item.border, backgroundColor: item.background, width: '100%', height: 120, }]} >
                                     <Image source={item.icon} style={{ width: '100%', height: '80%', alignSelf: 'center' }} />
