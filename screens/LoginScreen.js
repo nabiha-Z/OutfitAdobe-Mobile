@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import * as firebase from 'firebase';
+import firebase from 'firebase';
 import { LogBox } from 'react-native';
 import _ from 'lodash';
 import firebaseConfig from '../Firebase/FirebaseConfig';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 
-
-const FIREBASE_API_ENDPOINT =
-  'https://onequeue-912fa-default-rtdb.firebaseio.com/';
 
 
 
@@ -47,23 +44,6 @@ if (message.indexOf('Setting a timer') <= -1) {
     
   })
 
-
-  const getData = async () => {
-    const response = await fetch(`${FIREBASE_API_ENDPOINT}/users.json`);
-    const data = await response.json();
-    if (data == null) {
-      setUsers([]);
-    } else {
-      let arr = Object.entries(data).map((item) => ({
-        ...item[1],
-        key: item[0],
-      }));
-      setUsers(arr);
-    }
-  };
-  useEffect(() => {
-    getData()
-  }, [])
 
 
 

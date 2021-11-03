@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {  StyleSheet,  } from 'react-native';
+import { StyleSheet, } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
@@ -12,6 +12,11 @@ import WorkingHours from './screens/Workinghours';
 import Dashboard from './screens/Vendor/Dashboard';
 import StaffDetails from './screens/Vendor/TabScreens/Profile/Staffs';
 import AddStaff from './screens/Vendor/TabScreens/Profile/NewStaff';
+import ContactScreen from './screens/Vendor/TabScreens/Profile/Contact';
+import SettingScreen from './screens/Vendor/TabScreens/Profile/Settings';
+import CalendarScreen from './screens/Vendor/TabScreens/Profile/Calendar';
+import Location from './screens/Vendor/TabScreens/Profile/Location';
+import Password from './screens/Vendor/TabScreens/Profile/Password';
 
 const Stack = createStackNavigator();
 
@@ -104,7 +109,7 @@ function App() {
               color: 'black',
               textAlign: 'center',
               left: 60,
-          },
+            },
           })}
         />
         <Stack.Screen name="AddStaff" component={AddStaff}
@@ -114,8 +119,76 @@ function App() {
               color: 'black',
               textAlign: 'center',
               left: 70,
-          },
+            },
           })}
+        />
+        <Stack.Screen name="ContactScreen" component={ContactScreen}
+          options={({ navigation, route }) => ({
+            title: 'Contact Center',
+            headerTitleStyle: {
+              color: 'black',
+              textAlign: 'center',
+              left: 50,
+            },
+          })}
+        />
+
+        <Stack.Screen name="SettingScreen" component={SettingScreen}
+          options={({ navigation, route }) => ({
+            title: '',
+            headerStyle: {
+              height: 0,
+
+            },
+          })}
+
+        />
+        <Stack.Screen name="CalendarScreen" component={CalendarScreen}
+          options={({ navigation, route }) => ({
+            title: 'Change Calendar',
+            headerStyle: {
+              height: 100,
+            },
+            headerTitleStyle: {
+
+              color: 'black',
+              textAlign: 'center',
+              left: 30,
+            },
+          })}
+
+        />
+
+        <Stack.Screen name="Location" component={Location}
+          options={({ navigation, route }) => ({
+            title: 'Change Location',
+            headerStyle: {
+              height: 100,
+            },
+            headerTitleStyle: {
+
+              color: 'black',
+              textAlign: 'center',
+              left: 30,
+            },
+          })}
+
+        />
+
+        <Stack.Screen name="Password" component={Password}
+          options={({ navigation, route }) => ({
+            title: 'Change Password',
+            headerStyle: {
+              height: 100,
+            },
+            headerTitleStyle: {
+
+              color: 'black',
+              textAlign: 'center',
+              left: 30,
+            },
+          })}
+
         />
       </Stack.Navigator>
     </NavigationContainer>

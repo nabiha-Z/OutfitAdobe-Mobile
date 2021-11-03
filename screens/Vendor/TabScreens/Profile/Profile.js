@@ -78,7 +78,7 @@ export default function Profile({ route, navigation }) {
                 </TouchableOpacity>
 
 
-                <TouchableOpacity style={styles.tabContainer}>
+                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('ContactScreen')}>
                     <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Contact Center</Text>
@@ -87,7 +87,7 @@ export default function Profile({ route, navigation }) {
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.tabContainer}>
+                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('SettingScreen')}>
                     <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Settings</Text>

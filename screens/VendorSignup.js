@@ -12,8 +12,7 @@ import aesthetic from '../images/aesthetic.png';
 import salon from '../images/salon.png';
 import beauty from '../images/beauty.png';
 
-import one from '../images/1person.png';
-import onee from '../images/one.png';
+import one from '../images/onee.png';
 import two from '../images/3people.png';
 import five from '../images/5people.png';
 import eleven from '../images/11people.png';
@@ -32,24 +31,26 @@ function VendorSignup({ route, navigation }) {
         { id: 7, icon: salon, title: 'Education', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Universities', 'Colleges', 'Libraries', 'Teaching', 'Tutoring Lessons', 'Parent Meetings', 'Child care'] }]);
 
     const [teamSize, setTeamSize] = useState([
-        { id: 0, icon: onee, title: "It's just me", border: '#C8C4C4', background: 'white', selected: false },
+        { id: 0, icon: one, title: "It's just me", border: '#C8C4C4', background: 'white', selected: false },
         { id: 1, icon: two, title: "2-4", border: '#C8C4C4', background: 'white', selected: false },
         { id: 2, icon: five, title: "5-10", border: '#C8C4C4', background: 'white', selected: false },
         { id: 3, icon: eleven, title: "11+", border: '#C8C4C4', background: 'white', selected: false }
     ]);
 
-    const [show, setShow] = useState({ visible: false, currentItem: '' });
-    const [isModalVisible, setModalVisible] = useState(false);
-    const [businessName, setBusinessName] = useState("");
+
     const [team, setTeam] = useState("");
     const [email, setEmail] = useState("");
-    const [errors, setErrors] = useState({field:'', categories:'', team:''});
     const [length, setlength] = useState(1);
     const [vendors, setVendors] = useState([]);
-    const [emailError, setEmailError] = useState("");
     const [display, setDisplay] = useState(false);
+    const [getPassword, setPassword] = useState(null);
+    const [businessName, setBusinessName] = useState("");
     const [checkedItems, setCheckedItems] = useState([]);
+    const [username, setUsername] = useState("");
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [show, setShow] = useState({ visible: false, currentItem: '' });
     const [selectedSub, setSelectedSub] = useState([{ title: "", subcate: [] }]);
+    const [errors, setErrors] = useState({ field: '', email: '', pass: '', categories: '', team: '' });
 
     const getData = async () => {
         const response = await fetch(`${FIREBASE_API_ENDPOINT}/vendors.json`);
@@ -92,15 +93,15 @@ function VendorSignup({ route, navigation }) {
     }, [])
 
     const nextPage = () => {
-        var count = 0, countCat=0, countTeam=0;
+        var count = 0, countCat = 0, countTeam = 0;
         var validEmailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z]+(.[a-z]{2,4})*$/;
 
         console.log("lengths= ", businessName.length);
-        if (businessName.length === 0 || email.length === 0) {
-            setErrors({field:'Fill out all fields',categories:'',team:''});
+        if (businessName.length === 0 || email.length === 0 || username.length === 0 || getPassword.length === 0) {
+            setErrors({ field: 'Fill out all fields', email: '', pass: '', categories: '', team: '' });
         } else if (email.match(validEmailRegex)) {
-            setEmailError("");
-            setErrors({field:'',categories:'',team:''});
+
+            setErrors({ field: '', email: '', pass: '', categories: '', team: '' });
             vendors.map((item, index) => {
                 //checking if any user already exists
                 if (item.email === email) {
@@ -109,61 +110,68 @@ function VendorSignup({ route, navigation }) {
                 }
             });
             if (count === 0) {
-                const selectedData = [], subcategories = [];
-                
-                categories.map(item => {
+                if (getPassword.length < 6) {
+                    setErrors({ field: '', email: '', pass: 'Password should have alteat 6 characters', categories: '', team: '' });
+                } else {
+                    setErrors({ field: '', email: '', pass: '', categories: '', team: '' });
 
-                    if (item.checked === true) {
+                    const selectedData = [], subcategories = [];
 
-                        selectedData.push({ id: item.id, title: item.title, icon: item.icon, subCat: item.subCat, checked: item.checked });
-                    }else{
-                        countCat++;
-                    }
+                    categories.map(item => {
 
-                })
+                        if (item.checked === true) {
 
-                if(countCat === categories.length){
-                    setErrors({field:'Select Categories',categories:'Select Categories',team:''});
-                }else{
-
-                    setErrors({field:'',categories:'',team:''});
-                categories.map((item) => {
-                    selectedSub.map((element) => {
-                        if (item.title == element.title) {
-                            if (item.checked == true) {
-
-                                subcategories.push(element);
-                            }
+                            selectedData.push({ id: item.id, title: item.title, icon: item.icon, subCat: item.subCat, checked: item.checked });
+                        } else {
+                            countCat++;
                         }
-                    })
-                })
 
-                teamSize.map((item) => {
-                    if(item.selected === false){
-                        countTeam++;
+                    })
+
+                    if (countCat === categories.length) {
+                        setErrors({ field: 'Select Categories', email: '', pass: '', categories: 'Select Categories', team: '' });
+                    } else {
+
+                        setErrors({ field: '', email: '', pass: '', categories: '', team: '' });
+                        categories.map((item) => {
+                            selectedSub.map((element) => {
+                                if (item.title == element.title) {
+                                    if (item.checked === true) {
+
+                                        subcategories.push(element);
+                                    }
+                                }
+                            })
+                        })
+
+                        teamSize.map((item) => {
+                            if (item.selected === false) {
+                                countTeam++;
+                            }
+                        })
+
+                        if (countTeam === teamSize.length) {
+                            setErrors({ field: 'Select Team Size', email: '', pass: '', categories: '', team: 'Select Team Size' });
+                        } else {
+                            setErrors({ field: '', email: '', pass: '', categories: '', team: '' });
+                            //console.log("next page data= ", subcategories);
+                            navigation.navigate('SignupLocation', {
+                                categories: selectedData, businessName: businessName, Username: username, Email: email, Password: getPassword, SubCat: subcategories, TeamSize: team
+                            })
+                        }
+
+
                     }
-                })
-
-                if(countTeam === teamSize.length){
-                    setErrors({field:'Select Team Size',categories:'',team:'Select Team Size'});
-                }else{
-                    setErrors({field:'',categories:'',team:''});
-                    //console.log("next page data= ", subcategories);
-                    navigation.navigate('SignupLocation', {
-                        categories: selectedData, businessName: businessName, Email: email, SubCat: subcategories, TeamSize:team
-                    })
                 }
-                
-               
-            }
             } else {
-                setEmailError("This email has already been used.");
+                setErrors({ field: '', email: 'This email has already been used', pass: '', categories: '', team: '' });
+
 
             }
 
         } else {
 
-            setEmailError("Enter correct Email");
+            setErrors({ field: '', email: 'Invalid Email', pass: '', categories: '', team: '' });
 
         }
     }
@@ -359,7 +367,23 @@ function VendorSignup({ route, navigation }) {
                     Email
                 </Text>
                 <TextInput style={styles.businessField} onChangeText={(text) => setEmail(text)} />
-                <Text style={styles.errorsTxt}>{emailError}</Text>
+                <Text style={styles.errorsTxt}>{errors.email}</Text>
+
+                <Text
+                    style={{ fontSize: 12, marginTop: 10, marginHorizontal: 10 }}>
+                    Username
+                </Text>
+                <TextInput style={styles.businessField} onChangeText={(text) => setUsername(text)} />
+
+                <Text
+                    style={{ fontSize: 12, marginTop: 10, marginHorizontal: 10 }}>
+                    Password
+                </Text>
+                <TextInput 
+                 secureTextEntry
+                style={styles.businessField}
+                 onChangeText={(text) => setPassword(text)} />
+                <Text style={styles.errorsTxt}>{errors.pass}</Text>
 
                 <Text
                     style={[styles.heading, { fontSize: 20 }]}>
