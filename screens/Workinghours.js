@@ -211,36 +211,6 @@ function WorkingHours({ route, navigation }) {
 
                     </DataTable.Header>
                     <ScrollView style={{ height: 320 }}>
-<<<<<<< HEAD
-                    {toggles.map((item, key) => (
-                        <View key={key} style={{ flexDirection: 'row', marginTop: 10, marginHorizontal: 15 }}>
-                            <Text style={{ marginTop: 10 }}>{item.day}</Text>
-                             {/* {console.log("itemsssss=====",item)} */}
-                            <SwitchToggle
-                                switchOn={item.toggle}
-                                onPress={() => updateToggle(item)}
-                                backgroundColorOff="#CFD2D1"
-                                backgroundColorOn="#87BEA6"
-                                circleColorOff="#484B4A"
-                                containerStyle={{
-                                    marginTop: 10,
-                                    marginLeft: 52,
-                                    width: 50,
-                                    height: 23,
-                                    borderRadius: 25,
-                                    padding: 1,
-                                }}
-                                circleStyle={{
-                                    width: 20,
-                                    height: 20,
-                                    borderRadius: 20,
-
-                                }}
-
-                            />
-
-                            {/* <SwitchToggle
-=======
                         {toggles.map((item, key) => (
                             <View key={key} style={{ flexDirection: 'row', marginTop: 10, marginHorizontal: 15 }}>
                                 <Text style={{ marginTop: 10 }}>{item.day}</Text>
@@ -269,7 +239,6 @@ function WorkingHours({ route, navigation }) {
                                 />
 
                                 {/* <SwitchToggle
->>>>>>> 129a9cc6de85787a52b374bf110cb88ac5f14db6
                         switchOn={toggle[item.id]}
                         onPress={() => updateToggle(item.id,toggle[item.id])}
                         containerStyle={{
@@ -340,37 +309,7 @@ function WorkingHours({ route, navigation }) {
 
 
                             </View>
-<<<<<<< HEAD
-                            {/* {console.log("item= ", item.id)}
-                            {console.log("item= ", item.id)} */}
-                            <DateTimePicker
-                                isVisible={show1}
-                                testID="dateTimePicker1"
-                                value={item.time1}
-                                mode="time"
-                                is24Hour={true}
-                                display="default"
-                                onConfirm={(e) => handlePicker1(e, item)}
-                                onCancel={hidePicker}
-                            />
-                       
-                            <DateTimePicker
-                                isVisible={show2}
-                                testID="dateTimePicker2"
-                                value={item.time2}
-                                mode="time"
-                                is24Hour={true}
-                                display="default"
-                                onConfirm={(e) => handlePicker2(e, item)}
-                                onCancel={hidePicker}
-                            />
-
-
-                        </View>
-                    ))}
-=======
                         ))}
->>>>>>> 129a9cc6de85787a52b374bf110cb88ac5f14db6
                     </ScrollView>
 
                 </DataTable>

@@ -38,7 +38,8 @@
     "react-native-safe-area-view": "^1.1.1",
     "react-native-switch-toggle": "^2.2.1",
     "react-native-web": "~0.13.12",
-    "toggle-switch-react-native": "^3.2.0"
+    "toggle-switch-react-native": "^3.2.0",
+    "react-native-svg": "12.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

@@ -88,26 +88,8 @@ function VendorLocation({ route, navigation }) {
 
                         />
                     </MapView>
-                    <Text
-                        style={{ fontSize: 14, marginTop: 10, marginHorizontal: 10 }}>
-                        longitude
-                    </Text>
-
-                    <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                        <EvilIcons name="location" size={25} color="black" style={styles.iconBox} />
-                        <TextInput style={styles.businessField} value={"" + regionuser.longitude} />
-
-                    </View>
-                    <Text
-                        style={{ fontSize: 14, marginTop: 6, marginHorizontal: 10 }}>
-                        latitude
-                    </Text>
-
-                    <View style={{ flexDirection: 'row', marginTop: 6 }}>
-                        <EvilIcons name="location" size={25} color="black" style={{ justifyContent: 'center', padding: 5, marginHorizontal: 10, borderWidth: 1, borderColor: '#DFDFDF', borderRadius: 3 }} />
-                        <TextInput style={styles.businessField} value={"" + regionuser.latitude} />
-
-                    </View>
+                    
+                   
                     <Text
                         style={{ fontSize: 14, marginTop: 6, marginHorizontal: 10 }}>
                         Area
