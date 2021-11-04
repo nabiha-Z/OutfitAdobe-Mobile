@@ -118,6 +118,7 @@ function VendorLocation({ route, navigation }) {
                         <TextInput style={styles.businessField} value={"" + regionuser.latitude} />
 
                     </View> */}
+                    
                     <Text
                         style={{ fontSize: 14, marginTop: 6, marginHorizontal: 10 }}>
                         Area
