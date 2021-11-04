@@ -49,7 +49,7 @@ export default function Settings({ route, navigation }) {
                         <View style={styles.textContainer}>
                             <Text style={styles.mainText}>Personal Details</Text>
                         </View>
-                        <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 50, top: 20 }} />
+                        <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 50, top: 5 }} />
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('Password')}>
@@ -57,7 +57,7 @@ export default function Settings({ route, navigation }) {
                         <View style={styles.textContainer}>
                             <Text style={styles.mainText}>Change Passwords</Text>
                         </View>
-                        <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 50, top: 20 }} />
+                        <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 50, top: 5 }} />
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('CalendarScreen')}>
@@ -66,7 +66,7 @@ export default function Settings({ route, navigation }) {
                             <Text style={styles.mainText}>Calendar Settings</Text>
                         </View>
 
-                        <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 50, top: 20 }} />
+                        <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 50, top: 5 }} />
                     </TouchableOpacity>
                     <View style={styles.tabContainer}>
                         <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
@@ -104,7 +104,7 @@ export default function Settings({ route, navigation }) {
                             <Text style={styles.mainText}>Online Links</Text>
 
                         </View>
-                        <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 50, top: 20 }} />
+                        <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 50, top: 5 }} />
                     </TouchableOpacity>
 
 
@@ -114,7 +114,7 @@ export default function Settings({ route, navigation }) {
                             <Text style={styles.mainText}>Locations</Text>
 
                         </View>
-                        <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 50, top: 20 }} />
+                        <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 50, top: 5 }} />
                     </TouchableOpacity>
 
                 </ScrollView>
@@ -144,16 +144,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         borderBottomWidth: 1,
-        borderColor: '#D4D4D7',
+        borderColor: '#E4E4E7',
         paddingBottom: 20,
-        marginBottom: 10
+        marginBottom: 10,
+        padding:10
     },
     textContainer: {
         width: '70%',
         justifyContent: 'center',
     },
     mainText: {
-        marginBottom: 8
+        marginBottom: 8,
+        color: '#6D6D6F',
+        fontWeight:'bold'
+        
     },
     subText: {
         fontSize: 11,
@@ -194,7 +198,7 @@ const styles = StyleSheet.create({
     lowerContainer: {
         backgroundColor: 'white',
         width: '85%',
-        height: '60%',
+        height: '65%',
         borderRadius: 5,
         marginTop: -80,
     },
