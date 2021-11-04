@@ -1,31 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import firebaseConfig from '../Firebase/FirebaseConfig';
 import Icon from '@expo/vector-icons/AntDesign';
-const FIREBASE_API_ENDPOINT =
-    'https://onequeue-912fa-default-rtdb.firebaseio.com/';
+import firebase from 'firebase';
+import { LogBox } from 'react-native';
+import _ from 'lodash';
+
 
 function Vendor({ route, navigation }) {
   const [getEmail, setEmail] = useState(null);
   const [getPassword, setPassword] = useState(null);
   const [vendors, setvendors] = useState([]);
-  const getData = async () => {
-    const response = await fetch(`${FIREBASE_API_ENDPOINT}/vendors.json`);
-    
-    const data = await response.json();
-    if (data == null) {
-      setvendors([]);
-    } else {
-      let arr = Object.entries(data).map((item) => ({
-        ...item[1],
-        key: item[0],
-      }));
-      setvendors(arr);
+
+
+  LogBox.ignoreLogs(['Warning:...']); // ignore specific logs
+  LogBox.ignoreAllLogs(); // ignore all logs
+  const _console = _.clone(console);
+  console.warn = message => {
+    if (message.indexOf('Setting a timer') <= -1) {
+      _console.warn(message);
     }
   };
 
-  useEffect(() => {
-    getData()
-  }, [])
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  const auth = firebase.auth();
+  auth.onAuthStateChanged(user => {
+
+    if (user) {
+      console.log("logged in ");
+      navigation.navigate("Dashboard")
+    } else {
+      console.log("logged out user");
+      navigation.navigate("LoginScreen")
+    }
+
+  })
 
   const authenticateUser = () => {
     if (getEmail != null && getPassword != null) {
@@ -57,7 +69,7 @@ function Vendor({ route, navigation }) {
         style={{ width: '100%', height: '40%' }}
       />
       <Text
-        style={{ fontSize: 20,  alignSelf: 'center', textAlign:'center' }}>
+        style={{ fontSize: 20, alignSelf: 'center', textAlign: 'center' }}>
         Welcome, Login into your account.
       </Text>
       <Text
@@ -82,7 +94,7 @@ function Vendor({ route, navigation }) {
         />
       </View>
       <View
-         style={styles.inputField}>
+        style={styles.inputField}>
         <Icon name="lock" color="#3E3737" size={24} />
         <TextInput
           secureTextEntry
@@ -118,33 +130,33 @@ function Vendor({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#FFFFFF',
-      width:'100%'
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    width: '100%'
   },
-  inputField:{
+  inputField: {
     flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: 45,
-          borderWidth: 2,
-          marginTop: 10,
-          paddingHorizontal: 10,
-          borderColor: '#3E3737',
-          borderRadius: 23,
-          paddingVertical: 4,
-          width:'70%'
+    alignItems: 'center',
+    marginHorizontal: 45,
+    borderWidth: 2,
+    marginTop: 10,
+    paddingHorizontal: 10,
+    borderColor: '#3E3737',
+    borderRadius: 23,
+    paddingVertical: 4,
+    width: '70%'
   },
-  signupBtn:{
+  signupBtn: {
     marginHorizontal: 50,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 30,
-          backgroundColor: '#3E3737',
-          paddingVertical: 10,
-          borderRadius: 23,
-          width:'70%'
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 30,
+    backgroundColor: '#3E3737',
+    paddingVertical: 10,
+    borderRadius: 23,
+    width: '70%'
   }
 
 });

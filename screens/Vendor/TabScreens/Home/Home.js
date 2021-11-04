@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 export default function Home({route, navigation}) {
     return (
         <View style={styles.container}>
-            <Text>This the home screen</Text>
+            <Text>This the Home screen</Text>
         </View>
     )
 

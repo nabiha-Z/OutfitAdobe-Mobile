@@ -8,11 +8,7 @@ import { EvilIcons } from '@expo/vector-icons';
 
 function VendorLocation({ route, navigation }) {
 
-    var { categories, businessName, Username, Email, Password, SubCat, TeamSize } = route.params;
-
-    console.log("subcat = ", SubCat);
-
-    console.log("name= ", Username)
+    
 
     const [isSelected, setSelection] = useState(false);
     const [business, setBusiness] = useState(true);
@@ -37,18 +33,12 @@ function VendorLocation({ route, navigation }) {
 
         if (isSelected) {
             if (email != null && mobile != null) {
-                navigation.navigate('WorkingHours', {
-                    categories: categories, businessName: businessName, Username: Username, Email: Email, 
-                    Password: Password,  SubCat: SubCat, TeamSize: TeamSize, BusinessEmail: email, Contact: mobile
-                })
+                navigation.pop()
             } else {
                 setErrors("Fill out all fields")
             }
         } else {
-            navigation.navigate('WorkingHours', {
-                categories: categories, businessName: businessName, Email: Email, Username: Username, 
-                Password: Password, SubCat: SubCat, TeamSize: TeamSize, Region: regionuser
-            })
+            navigation.pop()
         }
 
     }
@@ -98,7 +88,7 @@ function VendorLocation({ route, navigation }) {
 
                         />
                     </MapView>
-                    {/* <Text
+                    <Text
                         style={{ fontSize: 14, marginTop: 10, marginHorizontal: 10 }}>
                         longitude
                     </Text>
@@ -107,8 +97,8 @@ function VendorLocation({ route, navigation }) {
                         <EvilIcons name="location" size={25} color="black" style={styles.iconBox} />
                         <TextInput style={styles.businessField} value={"" + regionuser.longitude} />
 
-                    </View> */}
-                    {/* <Text
+                    </View>
+                    <Text
                         style={{ fontSize: 14, marginTop: 6, marginHorizontal: 10 }}>
                         latitude
                     </Text>
@@ -117,7 +107,7 @@ function VendorLocation({ route, navigation }) {
                         <EvilIcons name="location" size={25} color="black" style={{ justifyContent: 'center', padding: 5, marginHorizontal: 10, borderWidth: 1, borderColor: '#DFDFDF', borderRadius: 3 }} />
                         <TextInput style={styles.businessField} value={"" + regionuser.latitude} />
 
-                    </View> */}
+                    </View>
                     <Text
                         style={{ fontSize: 14, marginTop: 6, marginHorizontal: 10 }}>
                         Area
@@ -169,7 +159,7 @@ function VendorLocation({ route, navigation }) {
                     style={styles.footerBtn}
                     onPress={nextPage}
                 >
-                    <Text style={{ color: 'white', alignSelf: 'center' }}>Next step</Text>
+                    <Text style={{ color: 'white', alignSelf: 'center' }}>Done</Text>
                 </TouchableOpacity>
             </View>
         </View>

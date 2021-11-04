@@ -1,10 +1,18 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import firebase from 'firebase/app'
 import firebaseConfig from '../../../../Firebase/FirebaseConfig';
 import { StackActions } from '@react-navigation/native';
+
+
+import staff from '../../../../images/staff.png';
+import inventory from '../../../../images/inventory.png';
+import service from '../../../../images/service.png';
+import setting from '../../../../images/settings.png';
+import contact from '../../../../images/contact.png';
+import logoutI from '../../../../images/logout.png';
 
 export default function Profile({ route, navigation }) {
 
@@ -41,10 +49,10 @@ export default function Profile({ route, navigation }) {
             </View>
 
 
-            <ScrollView style={{ height: 20, marginHorizontal: -15, padding: 10 }}>
+            <ScrollView style={{ height: 20, marginHorizontal: -7, padding: 10 }}>
                 <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate("StaffDetails")}>
 
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
+                <Image source={staff} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Staff</Text>
                     </View>
@@ -52,34 +60,28 @@ export default function Profile({ route, navigation }) {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.tabContainer}>
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
+                <Image source={service} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Services</Text>
                     </View>
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.tabContainer}>
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.mainText}>Resources</Text>
-                    </View>
-
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-                </TouchableOpacity>
+                
 
                 <TouchableOpacity style={styles.tabContainer}>
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
+                <Image source={inventory} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Inventory</Text>
 
                     </View>
+                    
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
 
 
-                <TouchableOpacity style={styles.tabContainer}>
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
+                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('ContactScreen')}>
+                <Image source={contact} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Contact Center</Text>
 
@@ -87,8 +89,8 @@ export default function Profile({ route, navigation }) {
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.tabContainer}>
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
+                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('SettingScreen')}>
+                <Image source={setting} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Settings</Text>
 
@@ -97,7 +99,7 @@ export default function Profile({ route, navigation }) {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.tabContainer} onPress={logout}>
-                    <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
+                <Image source={logoutI} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Logout</Text>
 
@@ -133,7 +135,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     mainText: {
-        marginBottom: 8
+        marginBottom: 8,
+        color: '#3C4C7E',
+        fontWeight:'bold'
     },
     subText: {
         fontSize: 11,

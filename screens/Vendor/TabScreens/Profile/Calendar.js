@@ -4,23 +4,10 @@ import moment from 'moment';
 import firebase from 'firebase/app';
 import { DataTable } from 'react-native-paper';
 import SwitchToggle from "react-native-switch-toggle";
-import firebaseConfig from '../Firebase/FirebaseConfig';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
-
-const FIREBASE_API_ENDPOINT =
-    'https://onequeue-912fa-default-rtdb.firebaseio.com/';
 function WorkingHours({ route, navigation }) {
-    var { categories, businessName, Username, Email, Password, SubCat, TeamSize, Region, BusinessEmail, Contact } = route.params;
-
-    console.log("Params: ", Password);
-
-
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    
 
     const [show1, setShow1] = useState(false);
     const [show2, setShow2] = useState(false);
@@ -84,10 +71,10 @@ function WorkingHours({ route, navigation }) {
             }
         })
 
-        // console.log(newData);
+        console.log(newData);
 
         setToggles(newData);
-        // console.log("AFTERRR = ", toggles)
+        console.log("AFTERRR = ", toggles)
 
         // if(selectedDate != undefined){
         //     const selectedTime = selectedDate;
@@ -157,28 +144,9 @@ function WorkingHours({ route, navigation }) {
             //add data into databse
 
 
-            console.log("Created!")
-            await auth.createUserWithEmailAndPassword(Email, Password)
-                .then((user) => {
-                    console.log("userrrrrr=", user);
-                    console.log("created")
-                })
-                .catch(error => {
-                    alert(error.message)
-
-
-                })
-            await auth.currentUser.updateProfile({
-               
-                displayName: Username,
-            }).then(() => {
-                console.log("updated");
-            }).catch((error) => {
-                console.log("error: ", error)
-            });
-
+            
             setModalVisible(true);
-            navigation.navigate('Dashboard')
+            navigation.pop();
 
         }
     }
@@ -188,11 +156,11 @@ function WorkingHours({ route, navigation }) {
 
             <Text
                 style={{ fontSize: 13, opacity: 0.5, marginHorizontal: 10 }}>
-                Business Setup
+                Calendar change
             </Text>
             <Text
                 style={{ fontSize: 25, marginTop: 5, marginHorizontal: 10, fontWeight: 'bold', color: '#5B5A59' }}>
-                Add working hours
+                Change working hours
             </Text>
             <Text
                 style={{ fontSize: 13, opacity: 0.7, marginTop: 5, marginHorizontal: 10 }}>
@@ -211,36 +179,6 @@ function WorkingHours({ route, navigation }) {
 
                     </DataTable.Header>
                     <ScrollView style={{ height: 320 }}>
-<<<<<<< HEAD
-                    {toggles.map((item, key) => (
-                        <View key={key} style={{ flexDirection: 'row', marginTop: 10, marginHorizontal: 15 }}>
-                            <Text style={{ marginTop: 10 }}>{item.day}</Text>
-                             {/* {console.log("itemsssss=====",item)} */}
-                            <SwitchToggle
-                                switchOn={item.toggle}
-                                onPress={() => updateToggle(item)}
-                                backgroundColorOff="#CFD2D1"
-                                backgroundColorOn="#87BEA6"
-                                circleColorOff="#484B4A"
-                                containerStyle={{
-                                    marginTop: 10,
-                                    marginLeft: 52,
-                                    width: 50,
-                                    height: 23,
-                                    borderRadius: 25,
-                                    padding: 1,
-                                }}
-                                circleStyle={{
-                                    width: 20,
-                                    height: 20,
-                                    borderRadius: 20,
-
-                                }}
-
-                            />
-
-                            {/* <SwitchToggle
-=======
                         {toggles.map((item, key) => (
                             <View key={key} style={{ flexDirection: 'row', marginTop: 10, marginHorizontal: 15 }}>
                                 <Text style={{ marginTop: 10 }}>{item.day}</Text>
@@ -269,7 +207,6 @@ function WorkingHours({ route, navigation }) {
                                 />
 
                                 {/* <SwitchToggle
->>>>>>> 129a9cc6de85787a52b374bf110cb88ac5f14db6
                         switchOn={toggle[item.id]}
                         onPress={() => updateToggle(item.id,toggle[item.id])}
                         containerStyle={{
@@ -340,37 +277,7 @@ function WorkingHours({ route, navigation }) {
 
 
                             </View>
-<<<<<<< HEAD
-                            {/* {console.log("item= ", item.id)}
-                            {console.log("item= ", item.id)} */}
-                            <DateTimePicker
-                                isVisible={show1}
-                                testID="dateTimePicker1"
-                                value={item.time1}
-                                mode="time"
-                                is24Hour={true}
-                                display="default"
-                                onConfirm={(e) => handlePicker1(e, item)}
-                                onCancel={hidePicker}
-                            />
-                       
-                            <DateTimePicker
-                                isVisible={show2}
-                                testID="dateTimePicker2"
-                                value={item.time2}
-                                mode="time"
-                                is24Hour={true}
-                                display="default"
-                                onConfirm={(e) => handlePicker2(e, item)}
-                                onCancel={hidePicker}
-                            />
-
-
-                        </View>
-                    ))}
-=======
                         ))}
->>>>>>> 129a9cc6de85787a52b374bf110cb88ac5f14db6
                     </ScrollView>
 
                 </DataTable>
@@ -394,11 +301,11 @@ function WorkingHours({ route, navigation }) {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Image
-                            source={require('../images/tick.png')}
+                            source={require('../../../../images/tick.png')}
                             style={{ width: '100%', height: '40%' }}
                         />
-                        <Text style={styles.modalText}>Your business is set up</Text>
-                        <TouchableOpacity
+                        <Text style={styles.modalText}>Working hours changed</Text>
+                        {/* <TouchableOpacity
                             style={[styles.ModalBtn]}
                             onPress={() => {
                                 setModalVisible(false)
@@ -406,7 +313,7 @@ function WorkingHours({ route, navigation }) {
                             }}
                         >
                             <Text style={{ fontSize: 17, color: 'white' }}>Signin</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                 </View>
             </Modal>

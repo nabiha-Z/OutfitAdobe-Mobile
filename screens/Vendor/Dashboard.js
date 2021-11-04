@@ -72,18 +72,18 @@ export default function Dashboard({ route, navigation }) {
                 <Tab.Screen name={"Home"} component={Home} options={{
                     title: 'Dashboard',
                     headerStyle: {
-                        height:90
+                        height:110
                     },
                     headerTitleStyle: {
                         color: 'black',
                         textAlign: 'center',
                         left: 60,
-                        top: 15
+                        top: 25
                     },
                     headerLeft: () =>
 
                     (<TouchableOpacity
-                    style={{padding:20,paddingLeft: 20, top: 15}}
+                    style={{padding:20,paddingLeft: 20, top: 25}}
                         onPress={() => navigation.popToTop()}>
                         <FontAwesome5 name="arrow-left" size={20} color="black" />
                     </TouchableOpacity>),
@@ -113,13 +113,13 @@ export default function Dashboard({ route, navigation }) {
                 <Tab.Screen name={"Sales"} component={Sales} options={{
                     title: "Sales",
                     headerStyle: {
-                        height:90
+                        height:110
                     },
                     headerTitleStyle: {
                         color: 'black',
                         textAlign: 'center',
-                        left: 130,
-                        top: 15
+                        left: 140,
+                        top: 25
                     },
 
                     tabBarIcon: ({ focused }) => (
@@ -144,54 +144,17 @@ export default function Dashboard({ route, navigation }) {
                 })}></Tab.Screen>
 
 
-                {
-
-                    // Extra Tab Screen For Action Button..
-                }
-
-                {/* <Tab.Screen name={"Profile"} component={Sales} options={{
-                    title: "Business Profile",
-                    headerStyle: {
-                        height:90
-                    },
-                    headerTitleStyle: {
-                        color: 'black',
-                        textAlign: 'center',
-                        left: 130,
-                        top: 15
-                    },
-                    tabBarIcon: ({ focused }) => (
-
-                        <TouchableOpacity>
-                            <View style={{
-                                width: 55,
-                                height: 55,
-                                backgroundColor: '#707DC8',
-                                borderRadius: 30,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                marginBottom: Platform.OS == "android" ? 50 : 30
-                            }}>
-                                <FontAwesome5
-                                    name="user-alt"
-                                    size={20}
-                                    color='white'
-                                ></FontAwesome5>
-                            </View>
-                        </TouchableOpacity>
-                    )
-                }}></Tab.Screen> */}
-
+            
                 <Tab.Screen name={"Profile"} component={Profile} options={({ navigation, route }) => ({
                     title: "Business Profile",
                     headerStyle: {
-                        height:90
+                        height:110
                     },
                     headerTitleStyle: {
                         color: 'black',
                         textAlign: 'center',
-                        left: 80,
-                        top: 15
+                        left: 90,
+                        top: 25
                     },
                     tabBarIcon: ({ focused }) => (
                         <View style={{
@@ -224,13 +187,13 @@ export default function Dashboard({ route, navigation }) {
                 <Tab.Screen name={"Notifications"} component={Notification} options={{
                     title: "Notifications",
                     headerStyle: {
-                        height:90
+                        height:110
                     },
                     headerTitleStyle: {
                         color: 'black',
                         textAlign: 'center',
-                        left: 100,
-                        top: 15
+                        left: 105,
+                        top: 25
                     },
                     tabBarIcon: ({ focused }) => (
                         <View style={{
@@ -258,13 +221,13 @@ export default function Dashboard({ route, navigation }) {
                 <Tab.Screen name={"Chats"} component={Chats} options={{
                     title: "Chats",
                     headerStyle: {
-                        height:90
+                        height:110
                     },
                     headerTitleStyle: {
                         color: 'black',
                         textAlign: 'center',
-                        left: 120,
-                        top: 15
+                        left: 140,
+                        top: 25
                     },
                     tabBarIcon: ({ focused }) => (
                         <View style={{
