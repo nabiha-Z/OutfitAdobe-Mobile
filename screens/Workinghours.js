@@ -70,10 +70,10 @@ function VendorSignup({ route, navigation }) {
             }
         })
 
-        console.log(newData);
+        // console.log(newData);
 
         setToggles(newData);
-        console.log("AFTERRR = ", toggles)
+        // console.log("AFTERRR = ", toggles)
 
         // if(selectedDate != undefined){
         //     const selectedTime = selectedDate;
@@ -154,7 +154,7 @@ function VendorSignup({ route, navigation }) {
                     {toggles.map((item, key) => (
                         <View key={key} style={{ flexDirection: 'row', marginTop: 10, marginHorizontal: 15 }}>
                             <Text style={{ marginTop: 10 }}>{item.day}</Text>
-
+                             {/* {console.log("itemsssss=====",item)} */}
                             <SwitchToggle
                                 switchOn={item.toggle}
                                 onPress={() => updateToggle(item)}
@@ -224,7 +224,8 @@ function VendorSignup({ route, navigation }) {
                                 </TouchableOpacity>
 
                             </View>
-                            {console.log("item= ", item.id)}
+                            {/* {console.log("item= ", item.id)}
+                            {console.log("item= ", item.id)} */}
                             <DateTimePicker
                                 isVisible={show1}
                                 testID="dateTimePicker1"
@@ -235,7 +236,7 @@ function VendorSignup({ route, navigation }) {
                                 onConfirm={(e) => handlePicker1(e, item)}
                                 onCancel={hidePicker}
                             />
-
+                       
                             <DateTimePicker
                                 isVisible={show2}
                                 testID="dateTimePicker2"

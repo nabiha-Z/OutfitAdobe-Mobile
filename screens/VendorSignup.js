@@ -23,7 +23,7 @@ import eleven from '../images/11people.png';
 function VendorSignup({ route, navigation }) {
     const [categories, setCategories] = useState([
         { id: 0, icon: beauty, title: 'Beauty & Wellness', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Beauty Salons', 'Hair Salons', 'Nail Salons', 'Spa'] },
-        { id: 1, icon: spa, title: 'Medical', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Psychologist', 'Physiologist', 'Dentists', 'Acupunture', 'Chiropractors', 'Medical'] },
+        { id: 1, icon: spa, title: 'Medical', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Psychologist', 'Dentists', 'Acupunture', 'Chiropractors', 'Medical'] },
         { id: 2, icon: beard, title: 'Sports', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Gyms', 'Golf Classes', 'Sport Item Rental', 'Sport Resources'] },
         { id: 3, icon: aesthetic, title: 'Freelancer', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Driving Schools', 'Pet Services', 'Household', 'Cleaning', 'Design Consulltions', 'Spiritual Services', 'Meeting Rooms', 'Coaching', 'Counselling'] },
         { id: 4, icon: salon, title: 'Events', border: '#C8C4C4', background: 'white', checked: false, subCat: ['Business Event', 'Events', 'Photographers'] },
@@ -86,8 +86,8 @@ function VendorSignup({ route, navigation }) {
     }
 
     useEffect(() => {
-        getData()
-        DisplayCheckedItem()
+        getData();
+        DisplayCheckedItem();
 
     }, [])
 
@@ -277,7 +277,8 @@ function VendorSignup({ route, navigation }) {
 
 
     const onSelect = (item, element) => {
-
+console.log("item == ",item);
+console.log("element == ",element);
         var arr = checkedItems;
         if (arr.length == 0) {
             arr[0] = item.title;
@@ -285,15 +286,16 @@ function VendorSignup({ route, navigation }) {
             setDisplay(true);
         } else if (arr.indexOf(element, 1) == -1) {
             arr.push(element);
+            
             setCheckedItems(arr);
-
+            
             setDisplay(false);
 
         }
         setDisplay(true);
 
 
-        console.log("On select checkedArray= ", checkedItems);
+        console.log("On select checkedArray= ", arr);
     }
     const onConfirm = () => {
         var title = checkedItems[0];
@@ -497,7 +499,7 @@ function VendorSignup({ route, navigation }) {
 
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: 40 }}>
 
-                                {display && DisplayCheckedItem()}
+                                {DisplayCheckedItem()}
 
                             </View>
 
