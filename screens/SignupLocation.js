@@ -10,16 +10,18 @@ function VendorLocation({ route, navigation }) {
 
     var { categories, businessName, Username, Email, Password, SubCat, TeamSize } = route.params;
 
-    console.log("subcat = ", SubCat);
+    // console.log("subcat = ", SubCat);
 
-    console.log("name= ", Username)
+    // console.log("name= ", Username)
+    console.log(route.params);
 
     const [isSelected, setSelection] = useState(false);
     const [business, setBusiness] = useState(true);
     const [mobile, setMobile] = useState("");
     const [email, setEmail] = useState(null);
     const [errors, setErrors] = useState(null);
-
+    const [location,setLocation]=useState("");
+    const[area,setarea]=useState("");
     const [regionuser, setregionuser] = useState({
         latitude: 51.5079145,
         longitude: -0.0899163,
@@ -47,7 +49,7 @@ function VendorLocation({ route, navigation }) {
         } else {
             navigation.navigate('WorkingHours', {
                 categories: categories, businessName: businessName, Email: Email, Username: Username, 
-                Password: Password, SubCat: SubCat, TeamSize: TeamSize, Region: regionuser
+                Password: Password, SubCat: SubCat, TeamSize: TeamSize, Region: regionuser,area:area, location:location
             })
         }
 
@@ -82,7 +84,7 @@ function VendorLocation({ route, navigation }) {
 
                     <View style={{ flexDirection: 'row', marginTop: 10 }}>
                         <EvilIcons name="location" size={30} color="black" style={{ justifyContent: 'center', padding: 5, marginHorizontal: 10, borderWidth: 1, borderColor: '#DFDFDF', borderRadius: 3 }} />
-                        <TextInput style={styles.businessField} />
+                        <TextInput style={styles.businessField} onChangeText={(text)=>{setLocation(text)}} />
 
                     </View>
                     <MapView
@@ -98,35 +100,18 @@ function VendorLocation({ route, navigation }) {
 
                         />
                     </MapView>
-                    {/* <Text
-                        style={{ fontSize: 14, marginTop: 10, marginHorizontal: 10 }}>
-                        longitude
-                    </Text>
-
-                    <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                        <EvilIcons name="location" size={25} color="black" style={styles.iconBox} />
-                        <TextInput style={styles.businessField} value={"" + regionuser.longitude} />
-
-                    </View> */}
-                    {/* <Text
-                        style={{ fontSize: 14, marginTop: 6, marginHorizontal: 10 }}>
-                        latitude
-                    </Text>
-
-                    <View style={{ flexDirection: 'row', marginTop: 6 }}>
-                        <EvilIcons name="location" size={25} color="black" style={{ justifyContent: 'center', padding: 5, marginHorizontal: 10, borderWidth: 1, borderColor: '#DFDFDF', borderRadius: 3 }} />
-                        <TextInput style={styles.businessField} value={"" + regionuser.latitude} />
-
-                    </View> */}
+                    
+                    
+                   
                     
                     <Text
                         style={{ fontSize: 14, marginTop: 6, marginHorizontal: 10 }}>
-                        Area
+                        Area Name
                     </Text>
 
                     <View style={{ flexDirection: 'row', marginTop: 6 }}>
                         <EvilIcons name="location" size={25} color="black" style={{ justifyContent: 'center', padding: 5, marginHorizontal: 10, borderWidth: 1, borderColor: '#DFDFDF', borderRadius: 3 }} />
-                        <TextInput style={styles.businessField} />
+                        <TextInput style={styles.businessField} onChangeText={(text)=>setarea(text)} />
 
                     </View>
                 </>

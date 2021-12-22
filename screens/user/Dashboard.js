@@ -13,7 +13,7 @@ import Chats from './TabScreens/Chats/Chats';
 import Sales from './TabScreens/Sales/Sales';
 import Profile from './TabScreens/Profile/Profile';
 import Notification from './TabScreens/Notifications/Notification';
-import firebase from "firebase/app";
+import firebase from 'firebase/app';
 function getWidth() {
     let width = Dimensions.get("window").width
 
@@ -110,8 +110,8 @@ export default function Dashboard({ route, navigation }) {
                     }
                 })}></Tab.Screen>
 
-                <Tab.Screen name={"Sales"} component={Sales} options={{
-                    title: "Sales",
+                <Tab.Screen name={"Bookings"} component={Sales} options={{
+                    title: "Bookings",
                     headerStyle: {
                         height:110
                     },
@@ -128,7 +128,7 @@ export default function Dashboard({ route, navigation }) {
                             position: 'absolute',
                             top: 20
                         }}>
-                            <Octicons name="graph" size={22} color={focused ? '#707DC8' : 'gray'} />
+                            <Octicons name="calendar" size={22} color={focused ? '#707DC8' : 'gray'} />
                            
                             
                         </View>

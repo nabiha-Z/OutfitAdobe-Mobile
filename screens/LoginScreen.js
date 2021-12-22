@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import { LogBox } from 'react-native';
 import _ from 'lodash';
-import firebaseConfig from '../Firebase/FirebaseConfig';
+import {firebaseConfig} from '../Firebase/FirebaseConfig';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 
@@ -13,7 +13,6 @@ function Vendor({ route, navigation }) {
   const [getEmail, setEmail] = useState(null);
   const [getPassword, setPassword] = useState(null);
   const [users, setUsers] = useState([]);
-
   LogBox.ignoreLogs(['Warning:...']); // ignore specific logs
 LogBox.ignoreAllLogs(); // ignore all logs
 const _console = _.clone(console);
@@ -24,21 +23,33 @@ if (message.indexOf('Setting a timer') <= -1) {
 };
 
   if(!firebase.apps.length){
-  const firebaseApp = firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
   }
-  // if (firebase.app.lenght) {
-  //  firebase.initializeApp(firebaseConfig);
-  // } 
+
   const auth = firebase.auth();
   const db =firebase.firestore(); 
 
   auth.onAuthStateChanged(user => {
 
     if(user){
-      console.log("logged in ");
-      navigation.navigate("Dashboard")
+      console.log(user.uid)
+      const data=db.collection('service_provider').where(firebase.firestore.FieldPath.documentId(), '==', user.uid).get().then(
+        (a)=>{
+          if(a.docs.length==1){
+            console.log("if")
+            navigation.navigate("Dashboard")
+          }
+          else{
+            console.log("else")
+            navigation.navigate("Dashboard_user")
+          }
+        
+        }
+      )
+     
+      
     }else{
-      console.log("logged out user");
+      // console.log("logged out user");
       navigation.navigate("LoginScreen")
     }
     
@@ -47,17 +58,32 @@ if (message.indexOf('Setting a timer') <= -1) {
 
 
 
-  const authenticateUser = () => {
-    console.log("frfb");
+  const authenticateUser =  () => {
     if (getEmail != null && getPassword != null) {
       auth.signInWithEmailAndPassword(getEmail, getPassword)
         .then((userCredential) => {
           // Signed in 
-          const user = userCredential.user;;
-          alert("Logged in");
+          const user = userCredential.user;
+          const uid = user.uid
+         console.log(uid)
+          const data=db.collection('service_provider').where(firebase.firestore.FieldPath.documentId(), '==', uid).get().then(
+            (a)=>{
+              console.log(a.docs.length)
+              if( a.docs.length == 1 ){
+                console.log("if")
+                navigation.navigate("Dashboard")
+              }
+              else{
+                console.log("else")
+                navigation.navigate("Dashboard_user")
+              }
+            
+            }
+          )
+          // alert("Logged in");
           setEmail("");
           setPassword("");
-          navigation.navigate("Dashboard")
+          // navigation.navigate("Dashboard")
           // ...
         })
         .catch((error) => {
@@ -66,21 +92,6 @@ if (message.indexOf('Setting a timer') <= -1) {
           console.log("erroe= ", errorMessage);
           alert("User not found")
         });
-      // users.map((item, index) => {
-      //   if (item.email == getEmail) {
-      //     if (item.password == getPassword) {
-      //       alert('Loged in');
-      //       setEmail("");
-      //       setPassword("");
-
-      //     } else {
-      //       alert('Incorrect Password');
-      //     }
-      //   } else {
-      //     alert('Check your Email or Signup now.');
-      //     //message.success('Check your Email or Signup now.');
-      //   }
-      // });
     } else {
       alert('Fill the fields');
       //message.error('Fill the fields');

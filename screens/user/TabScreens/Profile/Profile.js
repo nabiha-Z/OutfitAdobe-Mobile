@@ -42,43 +42,20 @@ export default function Profile({ route, navigation }) {
                 <View style={[styles.imgContainer, { backgroundColor: colors[Math.floor(Math.random() * 5) + 0] }]}>
                     <Text style={styles.imgLabel}>{auth.currentUser.displayName}</Text>
                 </View>
-                <Text style={styles.imgLabel}>{auth.currentUser.displayName}</Text>
+                <Text style={styles.imgLabel}>{auth.currentUser.email}</Text>
                 <Text style={{ color: '#6791DA', marginBottom: 40 }}>My Profile</Text>
             </View>
 
 
             <ScrollView style={{ height: 20, marginHorizontal: -7, padding: 10 }}>
-                <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate("StaffDetails")}>
+               
 
-                <Image source={staff} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.mainText}>Staff</Text>
-                    </View>
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.tabContainer}>
-                <Image source={service} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.mainText}>Services</Text>
-                    </View>
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-                </TouchableOpacity>
-
+              
                 
 
-                <TouchableOpacity style={styles.tabContainer}>
-                <Image source={inventory} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.mainText}>Inventory</Text>
+             
 
-                    </View>
-                    
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-                </TouchableOpacity>
-
-
-                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('ContactScreen')}>
+                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('user_ContactScreen')}>
                 <Image source={contact} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Contact Center</Text>
@@ -87,7 +64,7 @@ export default function Profile({ route, navigation }) {
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('SettingScreen')}>
+                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('user_SettingScreen')}>
                 <Image source={setting} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Settings</Text>

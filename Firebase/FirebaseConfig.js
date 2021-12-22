@@ -1,14 +1,9 @@
-
-export default 
-    firebaseConfig= {
-  apiKey: "AIzaSyBTGehuql0lmwhW69joWIyjrlmf-0I9ReE",
-  authDomain: "onequeue-912fa.firebaseapp.com",
-  databaseURL: "https://onequeue-912fa-default-rtdb.firebaseio.com",
-  projectId: "onequeue-912fa",
-  storageBucket: "onequeue-912fa.appspot.com",
-  messagingSenderId: "188273292512",
-  appId: "1:188273292512:web:3f52d65ea600461edfcc85",
-  measurementId: "G-2BNFLV95DK"
-}
-
-
+export const firebaseConfig = {
+  apiKey: "AIzaSyDj5ieNt5PqIjUktkv0T1MDYpAomBrk6Ek",
+  authDomain: "one-queue-6d0eb.firebaseapp.com",
+  projectId: "one-queue-6d0eb",
+  storageBucket: "one-queue-6d0eb.appspot.com",
+  messagingSenderId: "261809161959",
+  appId: "1:261809161959:web:3ee77b08b323f8eb8b0442",
+  measurementId: "G-F8SM60CTZE"
+};

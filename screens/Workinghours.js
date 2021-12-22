@@ -1,40 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
 import moment from 'moment';
-import firebase from 'firebase/app';
+import firebase from "firebase/app";
+import {firebaseConfig} from '../Firebase/FirebaseConfig';
 import { DataTable } from 'react-native-paper';
 import SwitchToggle from "react-native-switch-toggle";
-import firebaseConfig from '../Firebase/FirebaseConfig';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
 
-const FIREBASE_API_ENDPOINT =
-    'https://onequeue-912fa-default-rtdb.firebaseio.com/';
+
 function WorkingHours({ route, navigation }) {
-    var { categories, businessName, Username, Email, Password, SubCat, TeamSize, Region, BusinessEmail, Contact } = route.params;
+    var { categories, businessName, Username, Email, Password, SubCat, TeamSize, Region, BusinessEmail, Contact,area, location } = route.params;
+if(BusinessEmail==null){
+    BusinessEmail="";
+    Contact="";
+}
+if(Region==null){
+    Region={};
+    area="";
+    location="";
 
-    console.log("Params: ", Password);
+}
+    // console.log("Params: ",categories, businessName, Username, Email, Password, SubCat, TeamSize, Region, BusinessEmail, Contact );
 
 
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
+   
     const auth = firebase.auth();
-    const db = firebase.firestore();
-
+    const db=firebase.firestore();
     const [show1, setShow1] = useState(false);
     const [show2, setShow2] = useState(false);
+    const [current, setCurrent] = useState(0);
     const [errors, setErrors] = useState(null);
 
     const [isModalVisible, setModalVisible] = useState(false);
     const [toggles, setToggles] = useState([
-        { id: 0, day: 'Mon', toggle: false, time1: '9:00', time2: '20:00' },
-        { id: 1, day: 'Tue ', toggle: false, time1: '9:00', time2: '20:00' },
-        { id: 2, day: 'Wed', toggle: false, time1: '9:00', time2: '20:00' },
-        { id: 3, day: 'Thur', toggle: false, time1: '9:00', time2: '20:00' },
-        { id: 4, day: 'Fri   ', toggle: false, time1: '9:00', time2: '20:00' },
-        { id: 5, day: 'Sat  ', toggle: false, time1: '9:00', time2: '20:00' },
-        { id: 6, day: 'Sun ', toggle: false, time1: '9:00', time2: '20:00' }]);
+        { id: 0, day: 'Mon', toggle: false, time1: '9:00', time2: '16:00' },
+        { id: 1, day: 'Tue ', toggle: false, time1: '10:00', time2: '16:00' },
+        { id: 2, day: 'Wed', toggle: false, time1: '11:00', time2: '16:00' },
+        { id: 3, day: 'Thur', toggle: false, time1: '12:00', time2: '16:00' },
+        { id: 4, day: 'Fri   ', toggle: false, time1: '13:00', time2: '16:00' },
+        { id: 5, day: 'Sat  ', toggle: false, time1: '14:00', time2: '16:00' },
+        { id: 6, day: 'Sun ', toggle: false, time1: '15:00', time2: '16:00' }]);
 
     const updateToggle = (item, index) => {
 
@@ -46,42 +52,49 @@ function WorkingHours({ route, navigation }) {
                     toggle: !item.toggle
                 }
             }
+            else{
             return {
                 ...newItem,
                 toggle: newItem.toggle
             }
+        }
         })
 
         //console.log(newData);
 
         setToggles(newData);
+        
 
 
     }
+    useEffect(()=>{
+        //  console.log(toggles);
+    })
 
     const handlePicker1 = (dateTime, item) => {
-        console.log("Selected Value= ", dateTime);
-        console.log("selected item", item);
+       
         var selectedTime = moment(dateTime).format('HH:mm');
-        console.log("formatted time= ", selectedTime);
-        //setTime(selectedTime);
+        console.log(item,selectedTime);
+       
         setShow1(false);
-        console.log("item id= ", item.id);
+       
 
 
         const newData = toggles.map(newItem => {
 
-            if (newItem.id === item.id) {
-                console.log("newItem id= ", newItem.id);
+            if (newItem.id === item) {
+                
                 return {
                     ...newItem,
                     time1: selectedTime
                 }
             }
+            else{
             return {
                 ...newItem,
                 time1: newItem.time1
             }
+        }
         })
 
         // console.log(newData);
@@ -99,27 +112,30 @@ function WorkingHours({ route, navigation }) {
     };
 
     const handlePicker2 = (dateTime, item) => {
-        console.log("Selected Value= ", dateTime);
+        // console.log("Selected Value= ", dateTime);
         //console.log("item id= ", item.id);
         var selectedTime = moment(dateTime).format('HH:mm');
         //console.log("formatted time= ", selectedTime);
         //setTime(selectedTime);
+        console.log(item,selectedTime);
         setShow2(false);
 
 
 
         const newData = toggles.map(newItem => {
 
-            if (newItem.id === item.id) {
+            if (newItem.id === item) {
                 return {
                     ...newItem,
                     time2: selectedTime
                 }
             }
+            else{
             return {
                 ...newItem,
                 time2: newItem.time2
             }
+        }
         })
 
         //console.log(newData);
@@ -157,26 +173,37 @@ function WorkingHours({ route, navigation }) {
             //add data into databse
 
 
-            console.log("Created!")
+            // console.log("Created!")
             await auth.createUserWithEmailAndPassword(Email, Password)
                 .then((user) => {
-                    console.log("userrrrrr=", user);
-                    console.log("created")
+                     db.collection("service_provider").doc(firebase.auth().currentUser.uid)
+                    .set({
+                      email: firebase.auth().currentUser.email,
+                      businessName:businessName,
+                      Username:Username,
+                      SubCat:SubCat, 
+                      TeamSize:TeamSize, 
+                      Region:Region, 
+                      BusinessEmail:BusinessEmail, 
+                      Contact:Contact,
+                      area:area,
+                      location:location,
+                      working_hour:toggles
+                    }).then(
+                        ()=>{
+                            return user.user.updateProfile({
+                                displayName: Username
+                              })
+                        }
+                    )
+                    
                 })
                 .catch(error => {
                     alert(error.message)
 
 
                 })
-            await auth.currentUser.updateProfile({
-               
-                displayName: Username,
-            }).then(() => {
-                console.log("updated");
-            }).catch((error) => {
-                console.log("error: ", error)
-            });
-
+           
             setModalVisible(true);
             navigation.navigate('Dashboard')
 
@@ -238,51 +265,28 @@ function WorkingHours({ route, navigation }) {
 
                                 />
 
-                                {/* <SwitchToggle
-                        switchOn={toggle[item.id]}
-                        onPress={() => updateToggle(item.id,toggle[item.id])}
-                        containerStyle={{
-                            marginTop: 16,
-                            width: 50,
-                            height: 20,
-                            borderRadius: 25,
-                            padding: 2,
-
-                        }}
-                        circleStyle={{
-                            width: 20,
-                            height: 20,
-                            borderRadius: 20,
-
-                        }}
-                    /> */}
-                                {/* <ToggleSwitch
-                        key={key}
-                        isOn={item.toggle}
-                        onColor="green"
-                        offColor="grey"
-                        label={item.day}
-                        labelStyle={{ color: "black", fontWeight: "900", marginRight:20}}
-                        size="large"
-                        onToggle={() => updateToggle(item.id,isOn)}
-                    /> */}
-
+                                
                                 <View style={styles.timePickerView}>
 
                                     <TouchableOpacity
                                         style={styles.timePicker}
-                                        onPress={() => setShow1(true)}
+                                        onPress={() => {setShow1(true);
+                                        setCurrent(item.id)
+                                        }}
                                     >
                                         <Text>{item.time1}</Text>
                                     </TouchableOpacity>
-
+                                  
                                     <TouchableOpacity
                                         style={styles.timePicker}
-                                        onPress={() => setShow2(true)}
+                                        onPress={() => {setShow2(true);
+                                            setCurrent(item.id)
+                                        
+                                        }}
                                     >
                                         <Text>{item.time2}</Text>
                                     </TouchableOpacity>
-
+                                    
                                 </View>
 
                                 <DateTimePicker
@@ -292,20 +296,20 @@ function WorkingHours({ route, navigation }) {
                                     mode="time"
                                     is24Hour={true}
                                     display="default"
-                                    onConfirm={(e) => handlePicker1(e, item)}
+                                    onConfirm={(e) => handlePicker1(e, current)}
                                     onCancel={hidePicker}
                                 />
-
-                                <DateTimePicker
+                                    <DateTimePicker
                                     isVisible={show2}
                                     testID="dateTimePicker2"
                                     value={item.time2}
                                     mode="time"
                                     is24Hour={true}
                                     display="default"
-                                    onConfirm={(e) => handlePicker2(e, item)}
+                                    onConfirm={(e) => handlePicker2(e, current)}
                                     onCancel={hidePicker}
                                 />
+                               
 
 
                             </View>

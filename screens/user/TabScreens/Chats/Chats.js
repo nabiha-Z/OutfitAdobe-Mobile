@@ -42,7 +42,7 @@ useEffect(() => {
             {chats.map(
                 (item)=>{
                     return(
-                        <TouchableOpacity key={item.to} style={styles.tabContainer} onPress={()=>navigation.navigate("Chat",{uid:item.to,name:item.name})}>
+                        <TouchableOpacity key={item.to} style={styles.tabContainer} onPress={()=>navigation.navigate("user_Chat",{uid:item.to,name:item.name})}>
 
                         <FontAwesome name="circle" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
                         <View style={styles.textContainer}>

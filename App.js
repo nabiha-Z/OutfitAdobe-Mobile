@@ -17,7 +17,12 @@ import SettingScreen from './screens/Vendor/TabScreens/Profile/Settings';
 import CalendarScreen from './screens/Vendor/TabScreens/Profile/Calendar';
 import Location from './screens/Vendor/TabScreens/Profile/Location';
 import Password from './screens/Vendor/TabScreens/Profile/Password';
-
+import user_Password from './screens/user/TabScreens/Profile/Password';
+import user_Contact from './screens/user/TabScreens/Profile/Contact';
+import user_Setting from './screens/user/TabScreens/Profile/Settings';
+import Dashboard_user from './screens/user/Dashboard';
+import Chats from './screens/Vendor/TabScreens/Chats/userChat';
+import user_Chats from './screens/user/TabScreens/Chats/userChat';
 const Stack = createStackNavigator();
 
 function App() {
@@ -26,6 +31,33 @@ function App() {
 
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen}
+          options={({ navigation, route }) => ({
+            title: '',
+            headerStyle: {
+              backgroundColor: '#47A7AB',
+              height: 0
+            },
+          })}
+        />
+        <Stack.Screen name="Dashboard_user" component={Dashboard_user}
+          options={({ navigation, route }) => ({
+            title: '',
+            headerStyle: {
+              backgroundColor: '#47A7AB',
+              height: 0
+            },
+          })}
+        />
+         <Stack.Screen name="Chat" component={Chats}
+          options={({ navigation, route }) => ({
+            title: '',
+            headerStyle: {
+              backgroundColor: '#47A7AB',
+              height: 0
+            },
+          })}
+        />
+         <Stack.Screen name="user_Chat" component={user_Chats}
           options={({ navigation, route }) => ({
             title: '',
             headerStyle: {
@@ -132,8 +164,28 @@ function App() {
             },
           })}
         />
+         <Stack.Screen name="user_ContactScreen" component={user_Contact}
+          options={({ navigation, route }) => ({
+            title: 'Contact Center',
+            headerTitleStyle: {
+              color: 'black',
+              textAlign: 'center',
+              left: 50,
+            },
+          })}
+        />
 
         <Stack.Screen name="SettingScreen" component={SettingScreen}
+          options={({ navigation, route }) => ({
+            title: '',
+            headerStyle: {
+              height: 0,
+
+            },
+          })}
+
+        />
+        <Stack.Screen name="user_SettingScreen" component={user_Setting}
           options={({ navigation, route }) => ({
             title: '',
             headerStyle: {
@@ -176,6 +228,21 @@ function App() {
         />
 
         <Stack.Screen name="Password" component={Password}
+          options={({ navigation, route }) => ({
+            title: 'Change Password',
+            headerStyle: {
+              height: 100,
+            },
+            headerTitleStyle: {
+
+              color: 'black',
+              textAlign: 'center',
+              left: 30,
+            },
+          })}
+
+        />
+        <Stack.Screen name="user_Password" component={user_Password}
           options={({ navigation, route }) => ({
             title: 'Change Password',
             headerStyle: {

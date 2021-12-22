@@ -3,14 +3,16 @@ import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-nativ
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 
 export default function Contact({ route, navigation }) {
-    const [oldPass, setOldPass] = useState("");
-    const [newPass, setNewPass] = useState("");
+    const [oldPass, setOldPass] = useState(null);
+    const [newPass, setNewPass] = useState(null);
     const [errors, setErrors] = useState("");
-    const [confirmPass, setConfirmPass] = useState("");
+    const [confirmPass, setConfirmPass] = useState(null);
 
 
 
-   
+    const change = () => {
+
+    }
     return (
         <View style={styles.container}>
 

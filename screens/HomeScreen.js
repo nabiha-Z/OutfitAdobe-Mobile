@@ -3,10 +3,11 @@ import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'reac
 import Icon from '@expo/vector-icons/AntDesign';
 
 import { LinearGradient } from 'expo-linear-gradient';
-const FIREBASE_API_ENDPOINT =
-    'https://onequeue-912fa-default-rtdb.firebaseio.com/';
-function HomeScreen({ route, navigation }) {
+import {firebaseConfig} from '../Firebase/FirebaseConfig';
+import firebase from "firebase/app";
 
+function HomeScreen({ route, navigation }) {
+    firebase.initializeApp(firebaseConfig);
 
     return (
         <View style={{ backgroundColor: '#A59393', height: '100%' }}>
@@ -29,7 +30,7 @@ function HomeScreen({ route, navigation }) {
                 }}>
                 Welcome to One Queue
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('VendorLogin')}><Text style={styles.Txt}>Become a vendor</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('VendorSignup')}><Text style={styles.Txt}>Become a vendor</Text></TouchableOpacity>
             <View style={[styles.emailBtn, styles.elevation]}>
                 <Text onPress={() => navigation.navigate('LoginScreen')}>Continue with email</Text>
             </View>

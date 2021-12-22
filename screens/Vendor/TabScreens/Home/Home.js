@@ -1,6 +1,6 @@
 
 import React from 'react';
-
+import firebase from "firebase/app";
 // import all the components we are going to use
 import {
   SafeAreaView,
@@ -22,9 +22,13 @@ import {
 } from 'react-native-chart-kit';
 
 const MyBezierLineChart = () => {
+  const auth=firebase.auth();
+  const user=auth.currentUser.displayName;
+  console.log(user);
   return (
     <>
       {/* <Text style={styles.header}>Bezier Line Chart</Text> */}
+      <Text style={{fontSize:20,textAlign:'center'}}>Hi, {user}</Text>
       <LineChart
   data={{
     // labels: ['January', 'February', 'March', 'April'],

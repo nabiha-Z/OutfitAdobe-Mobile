@@ -27,21 +27,7 @@ function SignupScreen({ route, navigation }) {
   const db =firebase.firestore();
 
 
-  // const writeData = () =>{
-  //   try {
-  //     const docRef = await addDoc(collection(db, "users"), {
-  //       first: "Ada",
-  //       last: "Lovelace",
-  //       born: 1815
-  //     });
-  //     console.log("Document written with ID: ", docRef.id);
-  //   } catch (e) {
-  //     console.error("Error adding document: ", e);
-  //   }
-
-  // }
-
-
+  
   const addUser = async () => {
     console.log("email=", getEmail);
     var validEmailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z]+(.[a-z]{2,4})*$/;
@@ -66,13 +52,23 @@ function SignupScreen({ route, navigation }) {
 
           await auth.createUserWithEmailAndPassword( getEmail, getPassword)
             .then((user) => {
-              console.log("userrrrrr=", user);
-              console.log("created")
-              setUsername('');
-              setPassword('');
-              setContact('');
-              setEmail('');
-              alert('Account Created');
+
+              db.collection("users").doc(firebase.auth().currentUser.uid)
+                    .set({
+                      email: firebase.auth().currentUser.email,
+                      username:getUsername,
+                      contact:getContact
+                    }).then(
+                      
+                        ()=>{
+                          console.log(getUsername)
+                           user.user.updateProfile({
+                                displayName: getUsername
+                              })
+                        }
+                    
+                    )
+              navigation.navigate('LoginScreen')
             })
             .catch(error => {
               console.log("Error= ", typeof(error.message))
@@ -85,41 +81,7 @@ function SignupScreen({ route, navigation }) {
               
             })
 
-            // console.log("Contact: ", getContact);
-            // console.log("phoneNumber=", auth.currentUser)
-          await auth.currentUser.updateProfile({
-            phoneNumber: getContact,
-            displayName: getUsername,
-          }).then(() => {
-            console.log("");
-          }).catch((error) => {
-            console.log("error: ", error)
-          });
-
-          console.log("userAuth: ", auth.currentUser);
-          //   var user = {
-          //     name: getUsername,
-          //     phone: getContact,
-          //     uid: userAuth.uid,
-          //     email: userAuth.email
-          // }
-          // .then((userCredential) => {
-
-          //   console.log("created");
-          //   const user = userCredential.user;
-          //   console.log("user=", user)
-          //   
-          //   navigation.navigate('LoginScreen');
-          // })
-          // .catch(error => {
-          //   console.log('error= ', error.message);
-
-          // })
-          // fetch(`${FIREBASE_API_ENDPOINT}/users.json`, requestOptions)
-          //   .then((response) => response.text())
-          //   .then((result) => console.log(result))
-          //   .catch((error) => console.log('error', error));
-
+           
         } else {
           alert("This account already exists")
         }
