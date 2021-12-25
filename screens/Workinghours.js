@@ -67,13 +67,11 @@ if(Region==null){
 
 
     }
-    useEffect(()=>{
-        //  console.log(toggles);
-    })
+   
 
     const handlePicker1 = (dateTime, item) => {
        
-        var selectedTime = moment(dateTime).format('HH:mm');
+        var selectedTime = nt(dateTime).format('HH:mmmome');
         console.log(item,selectedTime);
        
         setShow1(false);
@@ -100,23 +98,12 @@ if(Region==null){
         // console.log(newData);
 
         setToggles(newData);
-        // console.log("AFTERRR = ", toggles)
-
-        // if(selectedDate != undefined){
-        //     const selectedTime = selectedDate;
-
-        //     setTime(selectedTime);
-        // }
-        // setShow(Platform.OS === 'ios');
-        // console.log("time=", time);
     };
 
     const handlePicker2 = (dateTime, item) => {
         // console.log("Selected Value= ", dateTime);
         //console.log("item id= ", item.id);
         var selectedTime = moment(dateTime).format('HH:mm');
-        //console.log("formatted time= ", selectedTime);
-        //setTime(selectedTime);
         console.log(item,selectedTime);
         setShow2(false);
 
@@ -137,11 +124,7 @@ if(Region==null){
             }
         }
         })
-
-        //console.log(newData);
-
         setToggles(newData);
-        //console.log("AFTERRR = ", toggles)
 
 
     };
@@ -170,10 +153,7 @@ if(Region==null){
         } else {
            
             setErrors("");
-            //add data into databse
-
-
-            // console.log("Created!")
+            
             await auth.createUserWithEmailAndPassword(Email, Password)
                 .then((user) => {
                      db.collection("service_provider").doc(firebase.auth().currentUser.uid)

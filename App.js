@@ -21,8 +21,10 @@ import user_Password from './screens/user/TabScreens/Profile/Password';
 import user_Contact from './screens/user/TabScreens/Profile/Contact';
 import user_Setting from './screens/user/TabScreens/Profile/Settings';
 import Dashboard_user from './screens/user/Dashboard';
+import BookingScreen from './screens/user/BookingScreen';
 import Chats from './screens/Vendor/TabScreens/Chats/userChat';
 import user_Chats from './screens/user/TabScreens/Chats/userChat';
+
 const Stack = createStackNavigator();
 
 function App() {
@@ -48,7 +50,7 @@ function App() {
             },
           })}
         />
-         <Stack.Screen name="Chat" component={Chats}
+        <Stack.Screen name="Chat" component={Chats}
           options={({ navigation, route }) => ({
             title: '',
             headerStyle: {
@@ -57,7 +59,7 @@ function App() {
             },
           })}
         />
-         <Stack.Screen name="user_Chat" component={user_Chats}
+        <Stack.Screen name="user_Chat" component={user_Chats}
           options={({ navigation, route }) => ({
             title: '',
             headerStyle: {
@@ -164,7 +166,7 @@ function App() {
             },
           })}
         />
-         <Stack.Screen name="user_ContactScreen" component={user_Contact}
+        <Stack.Screen name="user_ContactScreen" component={user_Contact}
           options={({ navigation, route }) => ({
             title: 'Contact Center',
             headerTitleStyle: {
@@ -253,6 +255,16 @@ function App() {
               color: 'black',
               textAlign: 'center',
               left: 30,
+            },
+          })}
+
+        />
+        <Stack.Screen name="bookingscreen" component={BookingScreen}
+          options={({ navigation, route }) => ({
+            title: '',
+            headerStyle: {
+              height: 0,
+
             },
           })}
 

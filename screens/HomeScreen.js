@@ -7,8 +7,9 @@ import {firebaseConfig} from '../Firebase/FirebaseConfig';
 import firebase from "firebase/app";
 
 function HomeScreen({ route, navigation }) {
+    if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
-
+    }
     return (
         <View style={{ backgroundColor: '#A59393', height: '100%' }}>
             <LinearGradient
