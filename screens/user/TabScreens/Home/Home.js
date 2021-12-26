@@ -20,21 +20,21 @@ import legal from "../../../../images/legal1.jpg";
 export default function Home({ route, navigation }) {
   const auth = firebase.auth();
   const [searchTxt, setSearchField] = useState("");
-  
   const [searchVisible, setsearchVisible] = useState(false);
   const [isSelected, setSelected] = useState(false);
 
   const [images, setimages] = useState([view1, view2, view4, view5]);
   const [categories, setcategories] = useState([{ title: "Education", count: 5, img: education }, { title: "Health", count: 5, img: health }, { title: "Legal", count: 5, img: legal }, { title: "Beauty", count: 5, img: beauty }])
-
-  const [Items, setItems] = useState([{ id:1, title: "Service-1", price: 3000, location: 'Newyork', img: view1, fav:false}, { id:2, title: "Service-2", price: 4000, location: 'Denmark', img: view2, fav:false}])
+  const [Items, setItems] = useState([{ id: 1, title: "Service-1", price: 3000, location: 'Newyork', imgs: [view1,view2,view4], fav: false }, { id: 2, title: "Service-2", price: 4000, location: 'Denmark', imgs: [view2,view5,view1], fav: false }, { id: 3, title: "Service-3", price: 5000, location: 'Moscow', imgs: [view4,view2,view5], fav: false}, { id: 2, title: "Service-4", price: 30000, location: 'Dubai', imgs: [view5,view2,view4], fav: false } ])
+  
   console.log(auth.currentUser.displayName);
   const SCREEN_WIDTH = Dimensions.get('window').width;
   console.log("width:", SCREEN_WIDTH)
+  
   navigation.setOptions({
     headerLeft: null
   })
-  
+
 
   const favourite = (item) => {
 
@@ -47,14 +47,14 @@ export default function Home({ route, navigation }) {
         console.log("f:", !f)
         return {
           ...element,
-         fav:!element.fav
+          fav: !element.fav
         };
       }
       return {
         ...element,
-        fav:element.fav
+        fav: element.fav
       };
-    
+
     });
     setItems(newData);
     console.log("fav:", newData.fav)
@@ -109,18 +109,18 @@ export default function Home({ route, navigation }) {
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}>
-            {images.map((item, key) =>
+            {Items.map((item, key) =>
             (
-              <TouchableOpacity  onPress={() => navigation.navigate('bookingscreen')} activeOpacity={0.7}>
-              <ImagedCarouselCard
-                text="Sevice Title"
-                width={200}
-                height={280}
-                shadowColor="#051934"
-                source={item}
-                style={{ margin: 10 }}
-               
-              />
+              <TouchableOpacity onPress={() => navigation.navigate('details', {details:item})} activeOpacity={0.7} key={key}>
+                <ImagedCarouselCard
+                  text="Sevice Title"
+                  width={200}
+                  height={280}
+                  shadowColor="#051934"
+                  source={item.imgs[0]}
+                  style={{ margin: 10 }}
+
+                />
               </TouchableOpacity>
             )
             )}
@@ -167,7 +167,7 @@ export default function Home({ route, navigation }) {
                 width={Math.round(SCREEN_WIDTH * 0.9)}
                 height={380}
                 shadowColor="#051934"
-                source={item.img}
+                source={item.imgs[0]}
                 borderRadius={10}
                 style={{ margin: 10, alignSelf: 'center', zIndex: 1 }}
                 overlayBackgroundColor="rgba(5, 15, 32,0.0)"
@@ -179,7 +179,7 @@ export default function Home({ route, navigation }) {
                 marginTop: -28,
                 borderTopWidth: 0,
                 margin: -2,
-                marginBottom:20
+                marginBottom: 20
               }}>
                 <View style={styles.description}>
                   <Text style={styles.subheading}>{item.title}</Text>
@@ -210,10 +210,10 @@ export default function Home({ route, navigation }) {
                 </View>
 
                 <View style={styles.btnView}>
-                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#BAC7CE', margin: 6 }]}>
+                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#BAC7CE', margin: 6 }]} onPress={() => navigation.navigate('details', {details:item})}>
                     <Text style={{ color: 'white' }}>View Details</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', margin: 6 }]}>
+                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', margin: 6 }]} onPress={()=>navigation.navigate('bookingscreen',{item:item})}>
                     <Text style={{ color: 'white' }}>Book</Text>
                   </TouchableOpacity>
                 </View>
@@ -223,7 +223,9 @@ export default function Home({ route, navigation }) {
 
         </View>
 
+        <View style={{ padding: 40 }}>
 
+        </View>
       </ScrollView>
     </View>
   );
@@ -303,11 +305,11 @@ const styles = StyleSheet.create({
     marginTop: 26
 
   },
-  btnView:{
-    flexDirection: 'row', 
-    justifyContent: 'flex-end', 
+  btnView: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
     marginRight: 5,
-    marginBottom:10
+    marginBottom: 10
   },
   btn: {
     borderRadius: 7,

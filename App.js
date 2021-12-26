@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, } from 'react-native';
+import { StyleSheet, TouchableOpacity, Button, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Ionicons, MaterialIcons} from '@expo/vector-icons';
 import HomeScreen from './screens/HomeScreen';
 import SignupScreen from './screens/SignupScreen';
 import VendorLogin from './screens/VendorLogin';
@@ -21,6 +22,7 @@ import user_Password from './screens/user/TabScreens/Profile/Password';
 import user_Contact from './screens/user/TabScreens/Profile/Contact';
 import user_Setting from './screens/user/TabScreens/Profile/Settings';
 import Dashboard_user from './screens/user/Dashboard';
+import Details from './screens/user/Details';
 import BookingScreen from './screens/user/BookingScreen';
 import Chats from './screens/Vendor/TabScreens/Chats/userChat';
 import user_Chats from './screens/user/TabScreens/Chats/userChat';
@@ -266,6 +268,22 @@ function App() {
               height: 0,
 
             },
+          })}
+
+        />
+        <Stack.Screen name="details" component={Details}
+          options={({ navigation, route }) => ({
+            title: '',
+            headerStyle: {
+              height: 0,
+
+            },
+          //   headerLeft: () =>{(
+          //     <TouchableOpacity onPress={()=>{navigation.pop()}} style={{margin:15, zIndex:2}}>
+          //         <Ionicons name="arrow-back" size={30}></Ionicons>
+          //     </TouchableOpacity>
+          // )}
+            
           })}
 
         />
