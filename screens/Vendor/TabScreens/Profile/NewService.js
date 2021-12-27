@@ -7,14 +7,14 @@ import firebase from 'firebase/app';
 import storage from 'firebase/storage'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import uuid from 'uuid';
-function NewStaff({ navigation }) {
+function NewService({ navigation }) {
 
 
     const auth=firebase.auth();
     const db=firebase.firestore();
     const [time2, setTime2] = useState("20:00");
     const [getName, setName] = useState(null);
-    const [getContact, setContact] = useState(null);
+    const [getDetail, setDetail] = useState(null);
     const [error, setError] = useState("");
     const [time1, setTime1] = useState("9:00");
     const [show1, setShow1] = useState(false);
@@ -22,17 +22,16 @@ function NewStaff({ navigation }) {
     const [image, setImage] = useState(null);
     const [fileurl,setfileurl]=useState('');
     const uploadImage = async (uri) => {
-       db.collection('staffs').add({
+       db.collection('services').add({
            name:getName,
-           contact:getContact,
+           detail:getDetail,
            time1:time1,
            time2:time2,
-           store:auth.currentUser.uid,
-           service:''
+           store:auth.currentUser.uid
        }).then(
            data=>{
-               Alert.alert('Staff Added Successfully');
-               navigation.navigate('StaffDetails');
+               Alert.alert('Service Added Successfully');
+               navigation.navigate('ServiceDetails');
            }
        )
       };
@@ -88,27 +87,27 @@ function NewStaff({ navigation }) {
         <View style={styles.container}>
             <Text
                 style={styles.heading}>
-                Add a new Staff
+                Add a new Service
             </Text>
             <Text
                 style={styles.desc}>
-                This will add a new staff in your business whom users can ask services from
+                This will add a new service of your business
             </Text>
 
-            <Text style={styles.label}>Full Name:</Text>
+            <Text style={styles.label}>Name:</Text>
             <TextInput
                 style={styles.inputField}
-                placeholder='Enter Full Name'
+                placeholder='Enter Service Name'
                 value={getName}
                 onChangeText={text => setName(text)}
             />
 
-            <Text style={styles.label}>Contact:</Text>
+            <Text style={styles.label}>Detail:</Text>
             <TextInput
                 style={styles.inputField}
-                placeholder='Enter Contact Detail'
-                value={getContact}
-                onChangeText={text => setContact(text)}
+                placeholder='Detail'
+                value={getDetail}
+                onChangeText={text => setDetail(text)}
             />
             <Text style={styles.label}>Select your timings</Text>
 
@@ -278,4 +277,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default NewStaff;
+export default NewService;

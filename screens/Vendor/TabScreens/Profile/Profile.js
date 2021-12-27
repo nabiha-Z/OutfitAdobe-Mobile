@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
 import firebase from 'firebase/app'
 import firebaseConfig from '../../../../Firebase/FirebaseConfig';
 import { StackActions } from '@react-navigation/native';
@@ -57,7 +56,7 @@ export default function Profile({ route, navigation }) {
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.tabContainer}>
+                <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate("ServiceDetails")}>
                 <Image source={service} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Services</Text>
@@ -67,7 +66,7 @@ export default function Profile({ route, navigation }) {
 
                 
 
-                <TouchableOpacity style={styles.tabContainer}>
+                <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate("ProductDetails")}> 
                 <Image source={inventory} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Inventory</Text>
@@ -155,7 +154,7 @@ const styles = StyleSheet.create({
     },
     imgLabel: {
         fontWeight: 'bold',
-        fontSize: 30,
+        fontSize: 20,
         color: '#3F3E40',
 
     }

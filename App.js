@@ -24,7 +24,10 @@ import Dashboard_user from './screens/user/Dashboard';
 import BookingScreen from './screens/user/BookingScreen';
 import Chats from './screens/Vendor/TabScreens/Chats/userChat';
 import user_Chats from './screens/user/TabScreens/Chats/userChat';
-
+import ServicesDetails from './screens/Vendor/TabScreens/Profile/Services';
+import NewService from './screens/Vendor/TabScreens/Profile/NewService';
+import InventoryDetails from './screens/Vendor/TabScreens/Profile/Inventory';
+import NewInventory from './screens/Vendor/TabScreens/Profile/NewInventory';
 const Stack = createStackNavigator();
 
 function App() {
@@ -149,6 +152,52 @@ function App() {
         <Stack.Screen name="AddStaff" component={AddStaff}
           options={({ navigation, route }) => ({
             title: 'New Staff',
+            headerTitleStyle: {
+              color: 'black',
+              textAlign: 'center',
+              left: 70,
+            },
+          })}
+        />
+          <Stack.Screen name="ProductDetails" component={InventoryDetails}
+          options={({ navigation, route }) => ({
+            title: 'Product Details',
+            headerStyle: {
+              height: 100
+            },
+            headerTitleStyle: {
+              color: 'black',
+              textAlign: 'center',
+              left: 60,
+            },
+          })}
+        />
+        <Stack.Screen name="AddProduct" component={NewInventory}
+          options={({ navigation, route }) => ({
+            title: 'New Product',
+            headerTitleStyle: {
+              color: 'black',
+              textAlign: 'center',
+              left: 70,
+            },
+          })}
+        />
+        <Stack.Screen name="ServiceDetails" component={ServicesDetails}
+          options={({ navigation, route }) => ({
+            title: 'Service Details',
+            headerStyle: {
+              height: 100
+            },
+            headerTitleStyle: {
+              color: 'black',
+              textAlign: 'center',
+              left: 60,
+            },
+          })}
+        />
+        <Stack.Screen name="AddService" component={NewService}
+          options={({ navigation, route }) => ({
+            title: 'New Service',
             headerTitleStyle: {
               color: 'black',
               textAlign: 'center',

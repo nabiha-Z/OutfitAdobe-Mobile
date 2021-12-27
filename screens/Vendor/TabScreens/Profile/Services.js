@@ -6,14 +6,14 @@ import firebase from "firebase/app";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 
 
-export default function StaffDetails({ route, navigation }) {
+export default function ServicesDetails({ route, navigation }) {
 const auth=firebase.auth();
 const db=firebase.firestore();
 
     const [staffs, setStaffs] = useState([]);
     const [check,setcheck]=useState(true);
     const deleteStaff=(uid)=>{
-         db.collection('staffs').doc(uid).delete().then(
+         db.collection('services').doc(uid).delete().then(
              (data)=>{
                  check?setcheck(false):setcheck(true);
                  Alert.alert("Staff Deleted Successfully");
@@ -22,7 +22,7 @@ const db=firebase.firestore();
          )
     }
 useEffect(()=>{
- db.collection('staffs').get().then(
+ db.collection('services').get().then(
      
      (data)=>{
          var temp=[];
@@ -47,10 +47,10 @@ useEffect(()=>{
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.heading}>Current Staff Details</Text>
+                <Text style={styles.heading}>Current Services Details</Text>
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('AddStaff')
+                        navigation.navigate('AddService')
                     }
                     }
                     style={styles.addButton}
@@ -67,7 +67,7 @@ useEffect(()=>{
                         <AntDesign name="user" size={28} style={{ marginRight: 20, top: 4 }} />
                         <View style={styles.textContainer}>
                             <Text style={styles.mainText}>{item.name}</Text>
-                            <Text style={styles.subText}>Contact : {item.contact}</Text>
+                            <Text style={styles.subText}>Detail : {item.detail}</Text>
                             <Text style={styles.subText}>From : {item.time1} to {item.time2}</Text>
                         </View>
                         <TouchableOpacity

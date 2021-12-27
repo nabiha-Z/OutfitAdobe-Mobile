@@ -7,32 +7,29 @@ import firebase from 'firebase/app';
 import storage from 'firebase/storage'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import uuid from 'uuid';
-function NewStaff({ navigation }) {
+function NewInventory({ navigation }) {
 
 
     const auth=firebase.auth();
     const db=firebase.firestore();
-    const [time2, setTime2] = useState("20:00");
     const [getName, setName] = useState(null);
-    const [getContact, setContact] = useState(null);
+    const [getDesc, setDesc] = useState(null);
+    const [getPrice,setPrice]=useState(null);
     const [error, setError] = useState("");
-    const [time1, setTime1] = useState("9:00");
-    const [show1, setShow1] = useState(false);
-    const [show2, setShow2] = useState(false);
+    
+    
     const [image, setImage] = useState(null);
     const [fileurl,setfileurl]=useState('');
     const uploadImage = async (uri) => {
-       db.collection('staffs').add({
+       db.collection('products').add({
            name:getName,
-           contact:getContact,
-           time1:time1,
-           time2:time2,
-           store:auth.currentUser.uid,
-           service:''
+           desc:getDesc,
+           price:getPrice,
+           store:auth.currentUser.uid
        }).then(
            data=>{
-               Alert.alert('Staff Added Successfully');
-               navigation.navigate('StaffDetails');
+               Alert.alert('Product Added Successfully');
+               navigation.navigate('ProductDetails');
            }
        )
       };
@@ -47,26 +44,11 @@ function NewStaff({ navigation }) {
         })();
     }, []);
 
-    const handlePicker1 = (dateTime) => {
-        console.log("Selected Value= ", dateTime);
-        var selectedTime = moment(dateTime).format('HH:mm');
-        console.log("formatted time= ", selectedTime);
-        setTime1(selectedTime);
-        setShow1(false);
-    }
+  
 
-    const handlePicker2 = (dateTime) => {
-        console.log("Selected Value= ", dateTime);
-        var selectedTime = moment(dateTime).format('HH:mm');
-        console.log("formatted time= ", selectedTime);
-        setTime2(selectedTime);
-        setShow2(false);
-    }
+   
 
-    const hidePicker = () => {
-        setShow1(false);
-        setShow2(false);
-    }
+    
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -88,68 +70,40 @@ function NewStaff({ navigation }) {
         <View style={styles.container}>
             <Text
                 style={styles.heading}>
-                Add a new Staff
+                Add a new Product
             </Text>
             <Text
                 style={styles.desc}>
-                This will add a new staff in your business whom users can ask services from
+                This will add a new Product
             </Text>
 
-            <Text style={styles.label}>Full Name:</Text>
+            <Text style={styles.label}>Name:</Text>
             <TextInput
                 style={styles.inputField}
-                placeholder='Enter Full Name'
+                placeholder='Enter Product Name'
                 value={getName}
                 onChangeText={text => setName(text)}
             />
 
-            <Text style={styles.label}>Contact:</Text>
+            <Text style={styles.label}>Description:</Text>
             <TextInput
                 style={styles.inputField}
-                placeholder='Enter Contact Detail'
-                value={getContact}
-                onChangeText={text => setContact(text)}
+                placeholder='Enter Product Description'
+                value={getDesc}
+                onChangeText={text => setDesc(text)}
             />
-            <Text style={styles.label}>Select your timings</Text>
-
-            <View style={styles.timePickerView}>
-
-                <TouchableOpacity
-                    style={styles.timePicker}
-                    onPress={() => setShow1(true)}
-                >
-                    <Text>{time1}</Text>
-                </TouchableOpacity>
-                <Text> --</Text>
-                <TouchableOpacity
-                    style={styles.timePicker}
-                    onPress={() => setShow2(true)}
-                >
-                    <Text>{time2}</Text>
-                </TouchableOpacity>
-
-            </View>
-            <DateTimePicker
-                isVisible={show1}
-                testID="dateTimePicker1"
-                value={time1}
-                mode="time"
-                is24Hour={true}
-                display="default"
-                onConfirm={(e) => handlePicker1(e)}
-                onCancel={hidePicker}
+             <Text style={styles.label}>Price:</Text>
+            <TextInput
+                style={styles.inputField}
+                placeholder='Enter Product Price'
+                value={getPrice}
+                onChangeText={text => setPrice(text)}
             />
+           
 
-            <DateTimePicker
-                isVisible={show2}
-                testID="dateTimePicker2"
-                value={time2}
-                mode="time"
-                is24Hour={true}
-                display="default"
-                onConfirm={(e) => handlePicker2(e)}
-                onCancel={hidePicker}
-            />
+           
+           
+          
 
 
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -278,4 +232,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default NewStaff;
+export default NewInventory;
