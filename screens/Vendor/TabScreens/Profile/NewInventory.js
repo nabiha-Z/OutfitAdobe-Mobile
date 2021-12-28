@@ -21,17 +21,29 @@ function NewInventory({ navigation }) {
     const [image, setImage] = useState(null);
     const [fileurl,setfileurl]=useState('');
     const uploadImage = async (uri) => {
-       db.collection('products').add({
-           name:getName,
-           desc:getDesc,
-           price:getPrice,
-           store:auth.currentUser.uid
-       }).then(
-           data=>{
-               Alert.alert('Product Added Successfully');
-               navigation.navigate('ProductDetails');
-           }
-       )
+
+        const response = await fetch(uri);
+        const blob = await response.blob();
+        var imagename=getName+new Date().toString();
+        var ref = firebase.storage().ref().child(imagename);
+        await ref.put(blob);
+        ref.getDownloadURL().then(
+            (data)=>{
+                db.collection('products').add({
+                    name:getName,
+                    desc:getDesc,
+                    price:getPrice,
+                    img:data,
+                    store:auth.currentUser.uid
+                }).then(
+                    data=>{
+                        Alert.alert('Product Added Successfully');
+                        navigation.navigate('ProductDetails');
+                    }
+                )
+            }
+        )
+      
       };
     useEffect(() => {
         (async () => {
@@ -53,14 +65,14 @@ function NewInventory({ navigation }) {
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
-            base64: true,
+            // base64: true,
             aspect: [4, 3]
           });
 
         console.log(result);
 
         if (!result.cancelled) {
-            setImage(result.base64);
+            setImage(result.uri);
         }
     };
 

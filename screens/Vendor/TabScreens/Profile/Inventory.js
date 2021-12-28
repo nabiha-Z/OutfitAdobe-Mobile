@@ -63,8 +63,8 @@ useEffect(()=>{
                 {staffs.map((item, key) => (
 
                     <TouchableOpacity style={styles.tabContainer} key={key}>
-                        
-                        <AntDesign name="user" size={28} style={{ marginRight: 20, top: 4 }} />
+                         <Image style={{width:50,height:50,marginRight:10}} source={{uri:item.img}} />
+                        {/* <AntDesign name="user" size={28} style={{ marginRight: 20, top: 4 }} /> */}
                         <View style={styles.textContainer}>
                             <Text style={styles.mainText}>{item.name}</Text>
                             <Text style={styles.subText}>Desc  : {item.desc}</Text>

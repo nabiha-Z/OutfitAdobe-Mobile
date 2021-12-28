@@ -22,19 +22,33 @@ function NewStaff({ navigation }) {
     const [image, setImage] = useState(null);
     const [fileurl,setfileurl]=useState('');
     const uploadImage = async (uri) => {
-       db.collection('staffs').add({
-           name:getName,
-           contact:getContact,
-           time1:time1,
-           time2:time2,
-           store:auth.currentUser.uid,
-           service:''
-       }).then(
-           data=>{
-               Alert.alert('Staff Added Successfully');
-               navigation.navigate('StaffDetails');
-           }
-       )
+
+        const response = await fetch(uri);
+        const blob = await response.blob();
+        var imagename=getName+new Date().toString();
+        var ref = firebase.storage().ref().child(imagename);
+        await ref.put(blob);
+        ref.getDownloadURL().then(
+            (data)=>{
+                db.collection('staffs').add({
+                    name:getName,
+                    contact:getContact,
+                    time1:time1,
+                    time2:time2,
+                    img:data,
+                    store:auth.currentUser.uid,
+                    service:''
+                }).then(
+                    data=>{
+                        Alert.alert('Staff Added Successfully');
+                        navigation.navigate('StaffDetails');
+                    }
+                )
+            }
+        )
+
+
+       
       };
     useEffect(() => {
         (async () => {
@@ -71,14 +85,14 @@ function NewStaff({ navigation }) {
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
-            base64: true,
+            // base64: true,
             aspect: [4, 3]
           });
 
         console.log(result);
 
         if (!result.cancelled) {
-            setImage(result.base64);
+            setImage(result.uri);
         }
     };
 
