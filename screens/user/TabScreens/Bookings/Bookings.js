@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
-export default function Sales() {
+export default function Bookings() {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.tabContainer}>

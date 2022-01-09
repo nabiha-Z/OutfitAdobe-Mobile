@@ -10,10 +10,12 @@ import { Octicons } from '@expo/vector-icons';
 
 import Home from './TabScreens/Home/Home';
 import Chats from './TabScreens/Chats/Chats';
-import Sales from './TabScreens/Sales/Sales';
+import Bookings from './TabScreens/Bookings/Bookings';
 import Profile from './TabScreens/Profile/Profile';
 import Notification from './TabScreens/Notifications/Notification';
 import firebase from 'firebase/app';
+import { LogBox } from 'react-native';
+import _ from 'lodash';
 function getWidth() {
     let width = Dimensions.get("window").width
 
@@ -24,7 +26,8 @@ function getWidth() {
     return width / 5
 }
 
-
+LogBox.ignoreLogs(['Warning:...']); // ignore specific logs
+LogBox.ignoreAllLogs(); // ignore all logs
 
 export default function Dashboard({ route, navigation }) {
     const auth=firebase.auth();
@@ -103,7 +106,7 @@ export default function Dashboard({ route, navigation }) {
                     }
                 })}></Tab.Screen>
 
-                <Tab.Screen name={"Bookings"} component={Sales} options={{
+                <Tab.Screen name={"Bookings"} component={Bookings} options={{
                     title: "Bookings",
                     headerStyle: {
                         height:110

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Animated, Dimensions, View, Text, StyleSheet, TextInput, ActivityIndicator, TouchableOpacity, Button, Image, ListItem, ScrollView } from 'react-native';
 import { Ionicons, Feather, AntDesign, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import firebase from 'firebase/app';
-import moment from 'moment';
 import { SliderBox } from "react-native-image-slider-box";
-
+import { CheckBox } from "react-native-elements";
+import one from "../../images/health.jpg";
 
 export default function Details({ route, navigation }) {
 
@@ -13,9 +12,42 @@ export default function Details({ route, navigation }) {
     console.log("details:", details)
     const auth = firebase.auth();
     const [isSelected, setSelected] = useState(details.fav);
-    const [staff, setstaff] = useState([{ id: 1, name: "Alex", rating: 4.6, profession: 'Hairstylist', rank:'Senior'}, { id: 2, name: "Zender", rating: 5.0, profession: 'Senior Makeup Artist', rank:'Senior'}, { id: 3, name: "Charles", rating: 4.9, profession: 'Menicure Artist', rank:'Mediocre'}, { id: 4, name: "Adams", rating: 4.0, profession: 'Menicure Artist', rank:'Junior'}, { id: 3, name: "Charles", rating: 4.9, profession: 'Menicure Artist', rank:'Senior' }, { id: 3, name: "Charles", rating: 4.9, profession: 'Menicure Artist', rank:'Senior'}])
+    const [staff, setstaff] = useState([{ id: 1, name: "Alex", rating: 4.6, profession: 'Hairstylist', rank: 'Senior' }, { id: 2, name: "Zender", rating: 5.0, profession: 'Senior Makeup Artist', rank: 'Senior' }, { id: 3, name: "Charles", rating: 4.9, profession: 'Menicure Artist', rank: 'Mediocre' }, { id: 4, name: "Adams", rating: 4.0, profession: 'Menicure Artist', rank: 'Junior' }, { id: 3, name: "Charles", rating: 4.9, profession: 'Menicure Artist', rank: 'Senior' }, { id: 3, name: "Charles", rating: 4.9, profession: 'Menicure Artist', rank: 'Senior' }])
+    const [check, setcheck] = useState(1);
+    const [selctedProd, setselctedProd] = useState()
+    const [products, setProducts] = useState([
+        {
+            id: 0,
+            icon: one,
+            title: "Product 1",
+            price: 500,
+            selected: false,
+        },
+        {
+            id: 1,
+            icon: one,
+            title: "Product 2",
+            price: 400,
+            selected: false,
+        },
+        {
+            id: 2,
+            icon: one,
+            title: "Product 3",
+            price: 300,
+            selected: false,
+        },
+        {
+            id: 3,
+            icon: one,
+            price: 600,
+            title: "Product 4",
+            selected: false,
+        },
+    ]);
     console.log(auth.currentUser.displayName);
     const SCREEN_WIDTH = Dimensions.get('window').width;
+    const SCREEN_HEIGHT = Dimensions.get('window').height;
     console.log("width:", SCREEN_WIDTH);
     navigation.setOptions({
         headerLeft: () => (
@@ -25,10 +57,80 @@ export default function Details({ route, navigation }) {
         )
     })
 
+    if (check == 1) {
+        const newData = products.map((newItem) => {
+
+            newItem.border = '#C8C4C4'
+            newItem.background = 'white'
+            newItem.selected = false
+
+            return newItem
+
+
+        });
+
+        setProducts(newData);
+        setcheck(-1)
+    }
     const favourite = () => {
 
         setSelected(!isSelected)
     }
+
+    const onChange = (item) => {
+      
+        const newData = products.map((newItem) => {
+            if (newItem.id === item.id) {
+                var color, background;
+                if (item.selected === false) {
+                    color = "#EAF3F2";
+                    background = "#EAF3F2";
+                } else {
+                    color = "#C8C4C4";
+                    background = "white";
+                }
+
+             
+                    return {
+                        ...newItem,
+                        border: color,
+                        background: background,
+                        selected: !item.selected,
+                    };
+                
+            }
+                return {
+                    ...newItem,
+                     selected: newItem.selected,
+                };
+            
+
+        });
+
+
+        setProducts(newData);
+
+
+    };
+
+    const nextScreen = (staff) => {
+        const selectedData = [];
+        products.map((item, key) => {
+            if (item.selected == true) {
+                console.log("gfgfdg")
+                selectedData.push({
+                    id: item.id,
+                    price:item.price,
+                    title: item.title,
+                    icon: item.icon,
+                    selected: item.selected,
+                })
+            }
+        })
+
+        navigation.navigate('bookingscreen', { service: details, staff: staff, products: selectedData })
+    }
+
     return (
         <View>
             <SliderBox
@@ -46,19 +148,19 @@ export default function Details({ route, navigation }) {
                 imageLoadingColor="#FAB7A0"
             />
 
-            <ScrollView contentContainerStyle={{ height: 1700, backgroundColor:'white'}}>
+            <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1.6, backgroundColor: 'white' }}>
                 <View style={styles.description}>
-                    <Text style={styles.subheading}>Business Name</Text>
+                    <Text style={styles.subheading}>Service Name</Text>
                     <TouchableOpacity onPress={() => favourite()} style={{ justifyContent: 'center' }}>
                         <Ionicons name="heart" color={isSelected ? '#F75451' : '#D3D3D3'} size={30}></Ionicons>
                     </TouchableOpacity>
                 </View>
-                <Text style={[styles.txt, { marginHorizontal: 20 }]}>Description about the business</Text>
+                <Text style={[styles.txt, { marginHorizontal: 20 }]}>Description about the Service</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginRight: 10 }}>
                     <Text style={[styles.subheading, { marginHorizontal: 20, fontSize: 16, color: '#214279' }]}>$ {details.price}</Text>
-                    <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', width: '30%' }]} onPress={() => navigation.navigate('bookingscreen', { item: details })}>
+                    {/* <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', width: '30%' }]} onPress={() => navigation.navigate('bookingscreen', { item: details })}>
                         <Text style={{ color: 'white' }}>Book</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
                 <View style={{ margin: 15, justifyContent: 'space-between', marginHorizontal: 25 }}>
                     <View style={{ flexDirection: 'row', }}>
@@ -79,60 +181,88 @@ export default function Details({ route, navigation }) {
                     </View>
 
 
-                    <Text style={[styles.heading, { color: '#383939', fontSize: 17 }]}>Services</Text>
+                    <Text style={[styles.heading, { color: '#383939', fontSize: 17 }]}>Products</Text>
 
-                    <TouchableOpacity style={styles.tabContainer}>
-                        <View style={styles.textContainer}>
-                            <Text style={styles.mainText}>Service Name</Text>
-                        </View>
-                        <Text>$500</Text>
-                    </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.tabContainer}>
-                        <View style={styles.textContainer}>
-                            <Text style={styles.mainText}>Service Name</Text>
-                        </View>
-                        <Text>$500</Text>
-                    </TouchableOpacity>
+                    <View style={styles.productsView}>
+                        {products.map((item, key) => (
+                            <>
+                                <View style={styles.checkboxContainer} key={key}>
+                                    <CheckBox
+                                        key={item.id}
+                                        checked={item.selected}
+                                        containerStyle={[styles.ckItem, { zIndex: 1 }]}
+                                        disabled={false}
+                                        onAnimationType="fill"
+                                        offAnimationType="fade"
+                                        boxType="square"
+                                        onPress={() => onChange(item)}
+                                    />
+                                    <View
+                                        style={[
+                                            styles.customCheckbox,
+                                            {
+                                                zIndex: 0,
+                                                borderColor: item.border,
+                                                backgroundColor: item.background,
+                                            },
+                                        ]}
+                                    >
 
-                    <TouchableOpacity style={styles.tabContainer}>
-                        <View style={styles.textContainer}>
-                            <Text style={styles.mainText}>Service Name</Text>
-                        </View>
-                        <Text>$500</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabContainer}>
-                        <View style={styles.textContainer}>
-                            <Text style={styles.mainText}>Service Name</Text>
-                        </View>
-                        <Text>$500</Text>
-                    </TouchableOpacity>
+                                        <Image
+                                            source={item.icon}
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                borderRadius: 30 / 2,
+                                                alignSelf: "center",
+                                            }}
+                                        />
+                                        <View style={styles.textContainer}>
+                                            <Text style={styles.mainText}>{item.title}</Text>
+                                        </View>
+
+                                        <Text>$ {item.price}</Text>
+                                    </View>
+                                </View>
+                            </>
+                        ))}
+                    </View>
 
                 </View>
 
-                <Text style={[styles.heading, { color: '#383939', fontSize: 20, marginHorizontal:20 }]}>Our Staff</Text>
+                <Text style={[styles.heading, { color: '#383939', fontSize: 20, marginHorizontal: 20 }]}>Our Staff</Text>
 
                 <ScrollView
                     horizontal={true}
-                    showsHorizontalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={true}
                     contentContainerStyle={{ height: 160, padding: 10, justifyContent: 'center', alignItems: 'center' }}>
                     {staff.map((item, key) =>
                     (
                         <>
-                            <View style={{justifyContent:'center', alignItems:'center'}}>
-                                <View style={styles.staffView}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: 18, textAlign: 'center', color:'#0F6B7A'}}>{item.name[0].toUpperCase()} </Text>
-                                
-                            </View>
-                           
-                                <View style={styles.ratingView}>
-                                    <AntDesign name="star" color="#EED51F" size={12} />
-                                    <Text style={{ textAlign: 'center', fontSize:12, fontWeight:'bold'}}>{item.rating} </Text>
+                            <TouchableOpacity
+                                style={styles.checkboxContainer}
+                                key={key}
+                                activeOpacity={0.4}
+                                onPress={() => nextScreen(item)}
+                            >
+
+                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={styles.staffView}>
+                                        <Text style={{ fontWeight: 'bold', fontSize: 18, textAlign: 'center', color: '#0F6B7A' }}>{item.name[0].toUpperCase()} </Text>
+
+                                    </View>
+
+                                    <View style={styles.ratingView}>
+                                        <AntDesign name="star" color="#EED51F" size={12} />
+                                        <Text style={{ textAlign: 'center', fontSize: 12, fontWeight: 'bold' }}>{item.rating} </Text>
+                                    </View>
+                                    <Text style={{ textAlign: 'center', fontSize: 10, color: '#B8BABB', marginTop: 10 }}>{item.rank} </Text>
+                                    <Text style={{ textAlign: 'center', fontSize: 10, color: '#B8BABB', marginTop: 2 }}>{item.profession} </Text>
+
                                 </View>
-                                <Text style={{ textAlign: 'center', fontSize:10, color:'#B8BABB', marginTop:10}}>{item.rank} </Text>
-                                <Text style={{ textAlign: 'center', fontSize:10, color:'#B8BABB', marginTop:2}}>{item.profession} </Text>
-                                
-                            </View>
+                            </TouchableOpacity>
+
                         </>
                     )
                     )}
@@ -188,7 +318,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     mainText: {
-        marginBottom: 8
+        marginBottom: 8,
+        marginLeft: 8
     },
     subText: {
         fontSize: 11,
@@ -255,7 +386,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 20
     },
     ratingView: {
-        width:60,
+        width: 60,
         height: 15,
         borderRadius: 20,
         padding: 10,
@@ -264,8 +395,45 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
-        borderWidth:1,
-        borderColor:'#E0E3E3'
-        
-    }
+        borderWidth: 1,
+        borderColor: '#E0E3E3'
+
+    },
+    checkboxContainer: {
+        flexDirection: "row",
+        marginBottom: 20,
+        marginRight: 10
+    },
+
+    ckItem: {
+        alignSelf: "center",
+        width: 300,
+        height: 50,
+        opacity: 0,
+        position: "absolute",
+    },
+    productsView: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+    },
+    customCheckbox: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderColor: '#D4D4D7',
+        width: '100%',
+        height: 50,
+        borderRadius: 5,
+        borderColor: "white",
+        backgroundColor: "white",
+        borderColor: "#C8C4C4",
+        flexDirection: 'row',
+    },
+    btnTxt: {
+        fontSize: 11,
+        opacity: 0.6,
+        alignSelf: "center",
+        textAlign: "center",
+        top: 5,
+    },
 });

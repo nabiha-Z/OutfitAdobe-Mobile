@@ -34,7 +34,7 @@ function Vendor({ route, navigation }) {
       navigation.navigate("Dashboard")
     } else {
       console.log("logged out user");
-      navigation.navigate("LoginScreen")
+      navigation.navigate("VendorLogin")
     }
 
   })

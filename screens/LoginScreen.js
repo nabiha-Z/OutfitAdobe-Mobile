@@ -13,7 +13,7 @@ function Vendor({ route, navigation }) {
   const [getEmail, setEmail] = useState(null);
   const [getPassword, setPassword] = useState(null);
   const [users, setUsers] = useState([]);
-  LogBox.ignoreLogs(['Warning:...']); // ignore specific logs
+  LogBox.ignoreLogs(['Warning:...']); // ignore specific logsFF
 LogBox.ignoreAllLogs(); // ignore all logs
 const _console = _.clone(console);
 console.warn = message => {
