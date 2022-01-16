@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 import { AsyncStorage } from 'react-native';
-import { StyleSheet, TextInput, View, YellowBox, Button } from 'react-native'
+import { StyleSheet, TextInput, View, YellowBox, Button,Text } from 'react-native'
 import firebase from "firebase/app";
 import {firebaseConfig} from '../../../../Firebase/FirebaseConfig';
 
@@ -11,13 +11,14 @@ import {firebaseConfig} from '../../../../Firebase/FirebaseConfig';
 
 
 export default function Chats({route, navigation}) {
+   
     const db = firebase.firestore()
 const chatsRef = db.collection('chats')
 const auth=firebase.auth()
 // console.log(chatsRef);
 
     const [user, setUser] = useState({_id:auth.currentUser.uid,name:auth.currentUser.displayName})
-    const [name, setName] = useState('')
+    const [name, setName] = useState(route.params.name)
     const [messages, setMessages] = useState([])
   
    const getAllMessage = async ()=>{

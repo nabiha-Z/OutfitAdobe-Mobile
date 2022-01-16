@@ -28,8 +28,8 @@ const db=firebase.firestore();
   const [images, setimages] = useState([view1, view2, view4, view5]);
   const [categories, setcategories] = useState([{ title: "Education", count: 5, img: education }, { title: "Health", count: 5, img: health }, { title: "Legal", count: 5, img: legal }, { title: "Beauty", count: 5, img: beauty }])
   const [Items, setItems] = useState([])
-  useEffect(async ()=>{
-   await db.collection('services').get().then(
+  useEffect(()=>{
+   db.collection('services').get().then(
         
         (data)=>{
             var temp=[];
@@ -231,7 +231,7 @@ const db=firebase.firestore();
                   <TouchableOpacity style={[styles.btn, { backgroundColor: '#BAC7CE', margin: 6 }]} onPress={() => navigation.navigate('details', {details:item})}>
                     <Text style={{ color: 'white' }}>View Details</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', margin: 6 }]} onPress={()=>navigation.navigate('bookingscreen',{item:item})}>
+                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', margin: 6 }]} onPress={()=>navigation.navigate('details',{details:item})}>
                     <Text style={{ color: 'white' }}>Book</Text>
                   </TouchableOpacity>
                 </View>

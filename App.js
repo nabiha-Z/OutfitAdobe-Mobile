@@ -68,11 +68,12 @@ function App() {
         />
         <Stack.Screen name="user_Chat" component={user_Chats}
           options={({ navigation, route }) => ({
-            title: '',
+            title: route.params.name,
             headerStyle: {
-              backgroundColor: '#47A7AB',
-              height: 0
+              backgroundColor: '#FFFFFF',
+             
             },
+           
           })}
         />
         <Stack.Screen name="LoginScreen" component={LoginScreen}

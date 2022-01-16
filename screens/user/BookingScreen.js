@@ -10,7 +10,7 @@ import { setStatusBarBackgroundColor } from 'expo-status-bar';
 export default function BookingScreen({ route, navigation }) {
 
     const [selectedDate, setselectedDate] = useState("");
-    const [slots, setLots] = useState([' 9-9:30 ', ' 9:30-10:00 ', ' 10-10:30 ', ' 10:30-11:00 '])
+    const [slots, setLots] = useState([' 9:00-9:30 ', ' 9:30-10:00 ', ' 10:00-10:30 ', ' 10:30-11:00 '])
 
     const today = new Date();
     const date = JSON.stringify(today);
@@ -84,7 +84,7 @@ export default function BookingScreen({ route, navigation }) {
                         <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                     </TouchableOpacity> */}
                     {slots.map((item, key) => (
-                        <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate('paymentscreen', { time:item, service:service, staff: staff, products:products })}>
+                        <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate('paymentscreen', { date:selectedDate, time:item, service:service, staff: staff, products:products })}>
                             <View style={styles.textContainer}>
                                 <Text style={styles.mainText}>{item}</Text>
                             </View>

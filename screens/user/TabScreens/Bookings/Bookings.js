@@ -1,21 +1,57 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-
+import firebase from "firebase/app";
 export default function Bookings() {
+    const db=firebase.firestore();
+    const user=firebase.auth().currentUser.uid;
+    const [bookings,setbookings]=useState([]);
+    const [check,setcheck]=useState(true);
+    useEffect(() => {
+        db.collection('bookings').get().then(
+        
+            (data)=>{
+                var temp=[];
+                data.docs.map(
+                    (data1)=>{
+                        if(data1.data().customer_id==user){
+                            temp.push(data1.data());
+                        }
+                      
+                    }
+                   
+                )
+             setbookings(temp);
+            }
+        )
+    }, [check])
+
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.tabContainer}>
+          {
+              bookings.map(
+                  (item)=>{
+                      return(
+                          <>
+                            <TouchableOpacity style={styles.tabContainer}>
 
-                <FontAwesome name="calendar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
-                <View style={styles.textContainer}>
-                    <Text style={styles.mainText}>Hair Cut</Text>
-                    <Text style={styles.subText}>Your booking to etc haircut saloon</Text>
-                </View>
-                <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
-            </TouchableOpacity>
+<FontAwesome name="calendar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
+<View style={styles.textContainer}>
+<Text style={styles.mainText}>{item.service_name}</Text>
+   
+    <Text style={styles.mainText}>time : {item.time}</Text>
+    <Text style={styles.mainText}>price : {item.price} $</Text>
+</View>
 
+<Text style={styles.mainText}>{item.date}</Text>
+</TouchableOpacity>
+
+                          </>
+                      )
+                  }
+              )
+          }
            
 
          

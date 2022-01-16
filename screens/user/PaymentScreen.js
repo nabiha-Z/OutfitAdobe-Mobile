@@ -3,14 +3,36 @@ import { View, Text, StyleSheet, Modal, TouchableOpacity, Image, ScrollView } fr
 import { RadioButton } from 'react-native-paper';
 import { Entypo, Feather, AntDesign } from '@expo/vector-icons';
 import firebase from 'firebase/app';
+import Bookings from './TabScreens/Bookings/Bookings';
 
 export default function PaymentScreen({ route, navigation }) {
+  const auth=firebase.auth();
+  const db=firebase.firestore();
 
-
-    const { time, service, staff, products } = route.params;
+    const { time, service, staff, products,date } = route.params;
+    console.log(products);
+    console.log(service.store);
+    console.log(auth.currentUser.uid);
     const [isModalVisible, setModalVisible] = useState(false);
     const [checked, setChecked] = useState('first');
-
+    var price=parseInt(service.price);
+    const Book=()=>{
+        db.collection('bookings').add({
+            customer_id:auth.currentUser.uid,
+            customer_name:auth.currentUser.displayName,
+            customer_email:auth.currentUser.email,
+            service:service.store,
+            service_name:service.name,
+            price:price,
+            time:time,
+            date:date,
+            staff:staff,
+        }).then(
+            data=>{
+               setModalVisible(true);
+            }
+        )
+    }
     return (
         <View style={styles.container}>
 
@@ -25,14 +47,17 @@ export default function PaymentScreen({ route, navigation }) {
                     <View style={styles.box}>
 
                         <Text style={styles.subheading}>{service.title}</Text>
+                        <Text>Date: {date}</Text>
                         <Text>Date: {time}</Text>
                         <Text>Staff: {staff.name}</Text>
+                        <Text>Products</Text>
                         {products.map((item, key) => (
+                            price=price+parseInt(item.price),
                             <>
                                 <View style={styles.productsView}>
 
                                     <Image
-                                        source={item.icon}
+                                        source={{uri:item.img}}
                                         style={{
                                             width: 30,
                                             height: 30,
@@ -41,16 +66,18 @@ export default function PaymentScreen({ route, navigation }) {
                                         }}
                                     />
                                     <View style={styles.textContainer}>
-                                        <Text style={styles.mainText}>{item.title}</Text>
+                                        <Text style={styles.mainText}>{item.name}</Text>
                                     </View>
 
                                     <Text>$ {item.price}</Text>
+                                   
                                 </View>
                             </>)
 
 
 
                         )}
+                        <Text style={{marginTop:10}}>Total Price = {price} </Text>
                     </View>
 
                     <View style={{ padding: 10, margin: 10 }}>
@@ -67,7 +94,7 @@ export default function PaymentScreen({ route, navigation }) {
                         </View>
                     </View>
 
-                    <TouchableOpacity style={styles.btn} onPress={() => setModalVisible(true)}>
+                    <TouchableOpacity style={styles.btn} onPress={() => Book()}>
                         <Text style={{ color: 'white' }}>Book</Text>
                     </TouchableOpacity>
 

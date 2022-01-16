@@ -14,41 +14,13 @@ export default function Details({ route, navigation }) {
     const auth = firebase.auth();
     const [isSelected, setSelected] = useState(details.fav);
     const [check1,setcheck1]=useState(true);
-    const [staff, setstaff] = useState([{ id: 1, name: "Alex", rating: 4.6, profession: 'Hairstylist', rank: 'Senior' }, { id: 2, name: "Zender", rating: 5.0, profession: 'Senior Makeup Artist', rank: 'Senior' }, { id: 3, name: "Charles", rating: 4.9, profession: 'Menicure Artist', rank: 'Mediocre' }, { id: 4, name: "Adams", rating: 4.0, profession: 'Menicure Artist', rank: 'Junior' }, { id: 3, name: "Charles", rating: 4.9, profession: 'Menicure Artist', rank: 'Senior' }, { id: 3, name: "Charles", rating: 4.9, profession: 'Menicure Artist', rank: 'Senior' }])
+    const [staff, setstaff] = useState([])
     const [check, setcheck] = useState(1);
     const [selctedProd, setselctedProd] = useState()
     const [products, setProducts] = useState([
-        {
-            id: 0,
-            icon: one,
-            title: "Product 1",
-            price: 500,
-            selected: false,
-        },
-        {
-            id: 1,
-            icon: one,
-            title: "Product 2",
-            price: 400,
-            selected: false,
-        },
-        {
-            id: 2,
-            icon: one,
-            title: "Product 3",
-            price: 300,
-            selected: false,
-        },
-        {
-            id: 3,
-            icon: one,
-            price: 600,
-            title: "Product 4",
-            selected: false,
-        },
     ]);
-    useEffect(async()=>{
-     await   db.collection('products').get().then(
+    useEffect(()=>{
+       db.collection('products').get().then(
         
             (data)=>{
                 var temp=[];
@@ -61,11 +33,12 @@ export default function Details({ route, navigation }) {
                     }
                    
                 )
+            
                setProducts(temp);
             }
         )
 
-        await   db.collection('staffs').get().then(
+          db.collection('staffs').get().then(
         
             (data)=>{
                 var temp=[];
@@ -136,8 +109,9 @@ export default function Details({ route, navigation }) {
 
         });
 
-
+        console.log("tempp====",newData);
         setProducts(newData);
+
 
 
     };
@@ -150,8 +124,8 @@ export default function Details({ route, navigation }) {
                 selectedData.push({
                     id: item.id,
                     price:item.price,
-                    title: item.title,
-                    icon: item.icon,
+                    name: item.name,
+                    img: item.img,
                     selected: item.selected,
                 })
             }
@@ -224,7 +198,8 @@ export default function Details({ route, navigation }) {
 </TouchableOpacity>
                     <Text style={[styles.heading, { color: '#383939', fontSize: 17 }]}>Products</Text>
 
-                   
+                    <Text style={[styles.heading, { color: '#383939', fontSize: 15 }]}>Select the products you want to add</Text>
+      
                     <View style={styles.productsView}>
                         {products.map((item, key) => (
                             <>
@@ -273,6 +248,7 @@ export default function Details({ route, navigation }) {
                 </View>
 
                 <Text style={[styles.heading, { color: '#383939', fontSize: 20, marginHorizontal: 20 }]}>Our Staff</Text>
+                <Text style={[styles.heading, { color: '#383939', fontSize: 18, marginHorizontal: 20 }]}>Select the staff for your service</Text>
 
                 <ScrollView
                     horizontal={true}
