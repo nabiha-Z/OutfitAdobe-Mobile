@@ -15,6 +15,7 @@ function NewService({ navigation }) {
     const [time2, setTime2] = useState("20:00");
     const [getName, setName] = useState(null);
     const [getDetail, setDetail] = useState(null);
+    const [getPrice, setPrice] = useState(null);
     const [error, setError] = useState("");
     const [time1, setTime1] = useState("9:00");
     const [show1, setShow1] = useState(false);
@@ -33,6 +34,7 @@ function NewService({ navigation }) {
                     db.collection('services').add({
                         name:getName,
                         detail:getDetail,
+                        price:getPrice,
                         time1:time1,
                         time2:time2,
                         img:data,
@@ -122,6 +124,13 @@ function NewService({ navigation }) {
                 placeholder='Detail'
                 value={getDetail}
                 onChangeText={text => setDetail(text)}
+            />
+            <Text style={styles.label}>Price:</Text>
+            <TextInput
+                style={styles.inputField}
+                placeholder='Price $'
+                value={getPrice}
+                onChangeText={text => setPrice(text)}
             />
             <Text style={styles.label}>Select your timings</Text>
 

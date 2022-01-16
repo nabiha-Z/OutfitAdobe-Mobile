@@ -54,6 +54,7 @@ function App() {
               backgroundColor: '#47A7AB',
               height: 0
             },
+            headerLeft:null
           })}
         />
         <Stack.Screen name="Chat" component={Chats}
@@ -328,11 +329,8 @@ function App() {
               height: 0,
 
             },
-          //   headerLeft: () =>{(
-          //     <TouchableOpacity onPress={()=>{navigation.pop()}} style={{margin:15, zIndex:2}}>
-          //         <Ionicons name="arrow-back" size={30}></Ionicons>
-          //     </TouchableOpacity>
-          // )}
+           
+        
             
           })}
 

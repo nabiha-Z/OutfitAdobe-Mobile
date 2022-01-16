@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, } from 'react-native'
 import firebase from 'firebase/app';
 import firebaseConfig from '../../../../Firebase/FirebaseConfig';
@@ -18,15 +18,33 @@ import beauty from "../../../../images/beauty.jpeg";
 import legal from "../../../../images/legal1.jpg";
 
 export default function Home({ route, navigation }) {
+
+const db=firebase.firestore();
   const auth = firebase.auth();
   const [searchTxt, setSearchField] = useState("");
   const [searchVisible, setsearchVisible] = useState(false);
   const [isSelected, setSelected] = useState(false);
-
+  const [check,setcheck]=useState(true);
   const [images, setimages] = useState([view1, view2, view4, view5]);
   const [categories, setcategories] = useState([{ title: "Education", count: 5, img: education }, { title: "Health", count: 5, img: health }, { title: "Legal", count: 5, img: legal }, { title: "Beauty", count: 5, img: beauty }])
-  const [Items, setItems] = useState([{ id: 1, title: "Service-1", price: 3000, location: 'Newyork', imgs: [view1,view2,view4], fav: false }, { id: 2, title: "Service-2", price: 4000, location: 'Denmark', imgs: [view2,view5,view1], fav: false }, { id: 3, title: "Service-3", price: 5000, location: 'Moscow', imgs: [view4,view2,view5], fav: false}, { id: 2, title: "Service-4", price: 30000, location: 'Dubai', imgs: [view5,view2,view4], fav: false } ])
-  
+  const [Items, setItems] = useState([])
+  useEffect(async ()=>{
+   await db.collection('services').get().then(
+        
+        (data)=>{
+            var temp=[];
+            data.docs.map(
+                (data1)=>{
+                   temp.push(data1.data());
+                    
+                }
+               
+            )
+            setItems(temp);    
+        }
+    )
+
+   },[check])
   console.log(auth.currentUser.displayName);
   const SCREEN_WIDTH = Dimensions.get('window').width;
   console.log("width:", SCREEN_WIDTH)
@@ -67,7 +85,7 @@ export default function Home({ route, navigation }) {
           size={25}
           color="#BFC0C3"
           style={{ marginTop: 25 }} />
-        <Text style={{ color: '#8D94AA', fontSize: 20, marginTop: 25 }}>One Queue</Text>
+        <Text style={{ color: '#8D94AA', fontSize: 20, marginTop: 25 }}>Q Plus</Text>
         {!searchVisible ?
           <TouchableOpacity onPress={() => setsearchVisible(true)}>
             <Ionicons
@@ -113,11 +131,11 @@ export default function Home({ route, navigation }) {
             (
               <TouchableOpacity onPress={() => navigation.navigate('details', {details:item})} activeOpacity={0.7} key={key}>
                 <ImagedCarouselCard
-                  text="Sevice Title"
+                  text={item.name}
                   width={200}
                   height={280}
                   shadowColor="#051934"
-                  source={item.imgs[0]}
+                  source={{uri:item.img}}
                   style={{ margin: 10 }}
 
                 />
@@ -129,11 +147,11 @@ export default function Home({ route, navigation }) {
 
         </View>
 
-        <Text style={styles.heading}>Categories</Text>
+        {/* <Text style={styles.heading}>Categories</Text>
         <Text style={styles.txt}>Find the best services you need by browsing through the categories</Text>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row' }}> */}
 
-          <ScrollView
+          {/* <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}>
             {categories.map((item, key) =>
@@ -155,7 +173,7 @@ export default function Home({ route, navigation }) {
 
           </ScrollView>
 
-        </View>
+        </View> */}
         <Text style={styles.heading}>Our Picks</Text>
 
         <View style={[styles.picksView]}>
@@ -163,11 +181,11 @@ export default function Home({ route, navigation }) {
           (
             <>
               <ImagedCarouselCard
-                text=""
+                text={item.name}
                 width={Math.round(SCREEN_WIDTH * 0.9)}
                 height={380}
                 shadowColor="#051934"
-                source={item.imgs[0]}
+                source={{uri:item.img}}
                 borderRadius={10}
                 style={{ margin: 10, alignSelf: 'center', zIndex: 1 }}
                 overlayBackgroundColor="rgba(5, 15, 32,0.0)"
@@ -182,12 +200,12 @@ export default function Home({ route, navigation }) {
                 marginBottom: 20
               }}>
                 <View style={styles.description}>
-                  <Text style={styles.subheading}>{item.title}</Text>
+                  <Text style={styles.subheading}>{item.name}</Text>
                   <TouchableOpacity onPress={() => favourite(item)} style={{ justifyContent: 'center' }}>
                     <Ionicons name="heart" color={item.fav ? '#F75451' : '#D3D3D3'} size={30}></Ionicons>
                   </TouchableOpacity>
                 </View>
-                <Text style={[styles.txt, { marginLeft: 6 }]}>Description about the service</Text>
+                <Text style={[styles.txt, { marginLeft: 6 }]}>{item.detail}</Text>
                 <Text style={[styles.subheading, { marginLeft: 5, fontSize: 16 }]}>$ {item.price}</Text>
 
                 <View style={{ flexDirection: 'row', margin: 15, justifyContent: 'space-between', marginRight: 20 }}>
@@ -205,7 +223,7 @@ export default function Home({ route, navigation }) {
                       size={17}
                       color="#BFC0C3"
                     />
-                    <Text style={[styles.txt, { marginLeft: 5, fontSize: 15 }]}>Open</Text>
+                    <Text style={[styles.txt, { marginLeft: 5, fontSize: 15 }]}>{item.time1} - {item.time2}</Text>
                   </View>
                 </View>
 
