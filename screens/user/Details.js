@@ -6,6 +6,7 @@ import { SliderBox } from "react-native-image-slider-box";
 import { CheckBox } from "react-native-elements";
 import one from "../../images/health.jpg";
 
+
 export default function Details({ route, navigation }) {
     const db=firebase.firestore();
     const { details } = route.params;
@@ -213,10 +214,17 @@ export default function Details({ route, navigation }) {
                         <Text style={[styles.txt, { marginLeft: 5, fontSize: 15 }]}>{details.time1} - {details.time2}</Text>
                     </View>
 
+                    <TouchableOpacity key={details.store}  onPress={()=>navigation.navigate("user_Chat",{uid:details.store,name:details.name})}>
 
+
+
+    
+<Text  style={{fontSize:20, backgroundColor:'#383939',padding:10,color:'#FFFFFF',textAlign:'center'}}>Click to Chat</Text>
+
+</TouchableOpacity>
                     <Text style={[styles.heading, { color: '#383939', fontSize: 17 }]}>Products</Text>
 
-
+                   
                     <View style={styles.productsView}>
                         {products.map((item, key) => (
                             <>
