@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, Button, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Ionicons, MaterialIcons} from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import HomeScreen from './screens/HomeScreen';
 import SignupScreen from './screens/SignupScreen';
 import VendorLogin from './screens/VendorLogin';
@@ -31,6 +31,7 @@ import ServicesDetails from './screens/Vendor/TabScreens/Profile/Services';
 import NewService from './screens/Vendor/TabScreens/Profile/NewService';
 import InventoryDetails from './screens/Vendor/TabScreens/Profile/Inventory';
 import NewInventory from './screens/Vendor/TabScreens/Profile/NewInventory';
+import BookingDetails from './screens/user/BookingDetails';
 const Stack = createStackNavigator();
 
 function App() {
@@ -54,7 +55,7 @@ function App() {
               backgroundColor: '#47A7AB',
               height: 0
             },
-            headerLeft:null
+            headerLeft: null
           })}
         />
         <Stack.Screen name="Chat" component={Chats}
@@ -71,9 +72,9 @@ function App() {
             title: route.params.name,
             headerStyle: {
               backgroundColor: '#FFFFFF',
-             
+
             },
-           
+
           })}
         />
         <Stack.Screen name="LoginScreen" component={LoginScreen}
@@ -164,7 +165,7 @@ function App() {
             },
           })}
         />
-          <Stack.Screen name="ProductDetails" component={InventoryDetails}
+        <Stack.Screen name="ProductDetails" component={InventoryDetails}
           options={({ navigation, route }) => ({
             title: 'Product Details',
             headerStyle: {
@@ -330,13 +331,24 @@ function App() {
               height: 0,
 
             },
-           
-        
-            
+
+
+
           })}
 
         />
         <Stack.Screen name="paymentscreen" component={PaymentScreen}
+          options={({ navigation, route }) => ({
+            title: '',
+            headerStyle: {
+              height: 0,
+
+            },
+          })}
+
+        />
+
+        <Stack.Screen name="bookingdetails" component={BookingDetails}
           options={({ navigation, route }) => ({
             title: '',
             headerStyle: {

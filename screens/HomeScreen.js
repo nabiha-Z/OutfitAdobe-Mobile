@@ -9,14 +9,14 @@ import firebase from "firebase/app";
 function HomeScreen({ route, navigation }) {
    
     return (
-        <View style={{ backgroundColor: '#A59393', height: '100%' }}>
+        <View style={{ backgroundColor: '#93B8D4', height: '100%' }}>
             <LinearGradient
                 // Background Linear Gradient
-                colors={['rgba(0,0,0,0.8)', 'transparent']}
+                colors={['rgba(12, 13, 15,0.9)', 'transparent']}
                 style={styles.background}
             />
             <Image
-                source={require('../images/logo2.png')}
+                source={require('../images/mainlogo.png')}
                 style={{ width: '100%', height: '30%', marginTop: 90 }}
             />
             <Text
@@ -31,7 +31,7 @@ function HomeScreen({ route, navigation }) {
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('VendorLogin')}><Text style={styles.Txt}>Become a vendor</Text></TouchableOpacity>
             <View style={[styles.emailBtn, styles.elevation]}>
-                <Text onPress={() => navigation.navigate('LoginScreen')}>Continue with email</Text>
+                <Text onPress={() => navigation.navigate('LoginScreen')}>Sign In with email</Text>
             </View>
             <Text style={styles.bottomTxt}> or connect with</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginLeft:5}}>

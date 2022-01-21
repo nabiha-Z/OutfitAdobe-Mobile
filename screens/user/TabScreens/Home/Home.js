@@ -1,5 +1,5 @@
 
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, } from 'react-native'
 import firebase from 'firebase/app';
 import firebaseConfig from '../../../../Firebase/FirebaseConfig';
@@ -19,36 +19,36 @@ import legal from "../../../../images/legal1.jpg";
 
 export default function Home({ route, navigation }) {
 
-const db=firebase.firestore();
+  const db = firebase.firestore();
   const auth = firebase.auth();
   const [searchTxt, setSearchField] = useState("");
   const [searchVisible, setsearchVisible] = useState(false);
   const [isSelected, setSelected] = useState(false);
-  const [check,setcheck]=useState(true);
+  const [check, setcheck] = useState(true);
   const [images, setimages] = useState([view1, view2, view4, view5]);
   const [categories, setcategories] = useState([{ title: "Education", count: 5, img: education }, { title: "Health", count: 5, img: health }, { title: "Legal", count: 5, img: legal }, { title: "Beauty", count: 5, img: beauty }])
   const [Items, setItems] = useState([])
-  useEffect(()=>{
-   db.collection('services').get().then(
-        
-        (data)=>{
-            var temp=[];
-            data.docs.map(
-                (data1)=>{
-                   temp.push(data1.data());
-                    
-                }
-               
-            )
-            setItems(temp);    
-        }
+  useEffect(() => {
+    db.collection('services').get().then(
+
+      (data) => {
+        var temp = [];
+        data.docs.map(
+          (data1) => {
+            temp.push(data1.data());
+
+          }
+
+        )
+        setItems(temp);
+      }
     )
 
-   },[check])
+  }, [check])
   console.log(auth.currentUser.displayName);
   const SCREEN_WIDTH = Dimensions.get('window').width;
   console.log("width:", SCREEN_WIDTH)
-  
+
   navigation.setOptions({
     headerLeft: null
   })
@@ -85,7 +85,10 @@ const db=firebase.firestore();
           size={25}
           color="#BFC0C3"
           style={{ marginTop: 25 }} />
-        <Text style={{ color: '#8D94AA', fontSize: 20, marginTop: 25 }}>Q Plus</Text>
+        <Image
+          source={require('../../../../images/mainlogo.png')}
+          style={{ width: '100%', height: '40%', marginTop: 90 }}
+        />
         {!searchVisible ?
           <TouchableOpacity onPress={() => setsearchVisible(true)}>
             <Ionicons
@@ -129,13 +132,13 @@ const db=firebase.firestore();
             showsHorizontalScrollIndicator={false}>
             {Items.map((item, key) =>
             (
-              <TouchableOpacity onPress={() => navigation.navigate('details', {details:item})} activeOpacity={0.7} key={key}>
+              <TouchableOpacity onPress={() => navigation.navigate('details', { details: item })} activeOpacity={0.7} key={key}>
                 <ImagedCarouselCard
                   text={item.name}
-                  width={200}
-                  height={280}
+                  width={180}
+                  height={240}
                   shadowColor="#051934"
-                  source={{uri:item.img}}
+                  source={{ uri: item.img }}
                   style={{ margin: 10 }}
 
                 />
@@ -147,11 +150,11 @@ const db=firebase.firestore();
 
         </View>
 
-        {/* <Text style={styles.heading}>Categories</Text>
+        <Text style={styles.heading}>Categories</Text>
         <Text style={styles.txt}>Find the best services you need by browsing through the categories</Text>
-        <View style={{ flexDirection: 'row' }}> */}
+        <View style={{ flexDirection: 'row' }}>
 
-          {/* <ScrollView
+          <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}>
             {categories.map((item, key) =>
@@ -173,7 +176,7 @@ const db=firebase.firestore();
 
           </ScrollView>
 
-        </View> */}
+        </View>
         <Text style={styles.heading}>Our Picks</Text>
 
         <View style={[styles.picksView]}>
@@ -185,7 +188,7 @@ const db=firebase.firestore();
                 width={Math.round(SCREEN_WIDTH * 0.9)}
                 height={380}
                 shadowColor="#051934"
-                source={{uri:item.img}}
+                source={{ uri: item.img }}
                 borderRadius={10}
                 style={{ margin: 10, alignSelf: 'center', zIndex: 1 }}
                 overlayBackgroundColor="rgba(5, 15, 32,0.0)"
@@ -209,14 +212,14 @@ const db=firebase.firestore();
                 <Text style={[styles.subheading, { marginLeft: 5, fontSize: 16 }]}>$ {item.price}</Text>
 
                 <View style={{ flexDirection: 'row', margin: 15, justifyContent: 'space-between', marginRight: 20 }}>
-                  <View style={{ flexDirection: 'row', }}>
+                  {/* <View style={{ flexDirection: 'row', }}>
                     <Ionicons
                       name="location"
                       size={17}
                       color="#BFC0C3"
                     />
                     <Text style={[styles.txt, { marginLeft: 5, fontSize: 15 }]}>{item.location}</Text>
-                  </View>
+                  </View> */}
                   <View style={{ flexDirection: 'row' }}>
                     <MaterialCommunityIcons
                       name="clock"
@@ -228,11 +231,11 @@ const db=firebase.firestore();
                 </View>
 
                 <View style={styles.btnView}>
-                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#BAC7CE', margin: 6 }]} onPress={() => navigation.navigate('details', {details:item})}>
+                  {/* <TouchableOpacity style={[styles.btn, { backgroundColor: '#BAC7CE', margin: 6 }]} onPress={() => navigation.navigate('details', {details:item})}>
                     <Text style={{ color: 'white' }}>View Details</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', margin: 6 }]} onPress={()=>navigation.navigate('details',{details:item})}>
-                    <Text style={{ color: 'white' }}>Book</Text>
+                  </TouchableOpacity> */}
+                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', margin: 6 }]} onPress={() => navigation.navigate('details', { details: item })}>
+                    <Text style={{ color: 'white' }}>View Details</Text>
                   </TouchableOpacity>
                 </View>
               </View>

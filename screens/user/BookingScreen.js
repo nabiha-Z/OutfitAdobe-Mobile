@@ -23,7 +23,7 @@ export default function BookingScreen({ route, navigation }) {
     var formattedDate = moment(currentDate).format('DD-MM-YY');
 
     console.log("date:", selectedDate)
-    const {service, staff, products} = route.params;
+    const { service, staff, products } = route.params;
 
     useEffect(() => {
 
@@ -39,7 +39,7 @@ export default function BookingScreen({ route, navigation }) {
         <View style={styles.container}>
 
             <View style={styles.topView}>
-
+                
                 <Text style={styles.heading}>{staff.name}</Text>
                 <Text style={{ color: 'white' }}>{staff.profession}</Text>
                 <View style={styles.ratingView}>
@@ -84,7 +84,7 @@ export default function BookingScreen({ route, navigation }) {
                         <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                     </TouchableOpacity> */}
                     {slots.map((item, key) => (
-                        <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate('paymentscreen', { date:selectedDate, time:item, service:service, staff: staff, products:products })}>
+                        <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate('paymentscreen', { date: selectedDate, time: item, service: service, staff: staff, products: products })}>
                             <View style={styles.textContainer}>
                                 <Text style={styles.mainText}>{item}</Text>
                             </View>
@@ -92,7 +92,7 @@ export default function BookingScreen({ route, navigation }) {
                         </TouchableOpacity>
                     ))}
 
-                  
+
 
                     <View style={{ padding: 20 }}>
 
@@ -154,8 +154,8 @@ const styles = StyleSheet.create({
         marginBottom: 8
     },
     subText: {
-        fontSize: 11,
-        color: '#909193',
+        fontSize: 15,
+        color: '#498CAD',
         lineHeight: 15,
     },
     ratingView: {

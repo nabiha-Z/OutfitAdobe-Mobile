@@ -168,7 +168,8 @@ if(Region==null){
                       Contact:Contact,
                       area:area,
                       location:location,
-                      working_hour:toggles
+                      working_hour:toggles, 
+                      id:firebase.auth().currentUser.uid
                     }).then(
                         ()=>{
                             return user.user.updateProfile({

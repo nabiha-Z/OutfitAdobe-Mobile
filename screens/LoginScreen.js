@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import firebase from 'firebase/app';
 import { LogBox } from 'react-native';
 import _ from 'lodash';
-import {firebaseConfig} from '../Firebase/FirebaseConfig';
+import { firebaseConfig } from '../Firebase/FirebaseConfig';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 
@@ -14,75 +14,85 @@ function Vendor({ route, navigation }) {
   const [getPassword, setPassword] = useState(null);
   const [users, setUsers] = useState([]);
   LogBox.ignoreLogs(['Warning:...']); // ignore specific logsFF
-LogBox.ignoreAllLogs(); // ignore all logs
-const _console = _.clone(console);
-console.warn = message => {
-if (message.indexOf('Setting a timer') <= -1) {
-   _console.warn(message);
-   }
-};
+  LogBox.ignoreAllLogs(); // ignore all logs
+  const _console = _.clone(console);
+  console.warn = message => {
+    if (message.indexOf('Setting a timer') <= -1) {
+      _console.warn(message);
+    }
+  };
 
-  if(!firebase.apps.length){
-  firebase.initializeApp(firebaseConfig);
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+    console.log("connected");
   }
 
   const auth = firebase.auth();
-  const db =firebase.firestore(); 
+  const db = firebase.firestore();
 
   auth.onAuthStateChanged(user => {
 
-    if(user){
-      console.log(user.uid)
-      const data=db.collection('service_provider').where(firebase.firestore.FieldPath.documentId(), '==', user.uid).get().then(
-        (a)=>{
-          if(a.docs.length==1){
-            console.log("if")
-            navigation.navigate("Dashboard")
-          }
-          else{
-            console.log("else")
+    if (user) {
+      console.log("current: ", user.uid)
+      navigation.navigate("Dashboard_user")
+      const data = db.collection('service_provider').where(firebase.firestore.FieldPath.documentId(), '==', user.uid).get().then(
+        (a) => {
+          console.log("if")
+          if (a.docs.length == 1) {
+
             navigation.navigate("Dashboard_user")
           }
-        
+          else {
+            console.log("else")
+            //navigation.navigate("Dashboard_user")
+          }
+
         }
       )
-     
-      
-    }else{
+
+
+    } else {
       // console.log("logged out user");
       navigation.navigate("LoginScreen")
     }
-    
+
   })
 
 
 
 
-  const authenticateUser =  () => {
+  const authenticateUser = () => {
     if (getEmail != null && getPassword != null) {
       auth.signInWithEmailAndPassword(getEmail, getPassword)
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
           const uid = user.uid
-         console.log(uid)
-          const data=db.collection('service_provider').where(firebase.firestore.FieldPath.documentId(), '==', uid).get().then(
-            (a)=>{
-              console.log(a.docs.length)
-              if( a.docs.length == 1 ){
+          console.log("logged in user :", uid)
+          navigation.navigate("Dashboard_user")
+          const data = db.collection('service_provider').where(firebase.firestore.FieldPath.documentId(), '==', uid).get().then(
+            (a) => {
+              console.log("length", a.docs.length)
+              if (a.docs.length == 1) {
                 console.log("if")
-                navigation.navigate("Dashboard")
-              }
-              else{
-                console.log("else")
+                alert("if")
+                setEmail("");
+                setPassword("");
                 navigation.navigate("Dashboard_user")
               }
-            
+              else {
+                console.log("else")
+                //alert("else")
+                //navigation.navigate("Dashboard_user")
+              }
+
             }
           )
+            .catch((error) => {
+              console.log("error found: ", error.message);
+            })
           // alert("Logged in");
-          setEmail("");
-          setPassword("");
+
           // navigation.navigate("Dashboard")
           // ...
         })
@@ -98,7 +108,7 @@ if (message.indexOf('Setting a timer') <= -1) {
     }
   };
 
- 
+
 
   return (
     <View style={styles.container}>
@@ -154,7 +164,7 @@ if (message.indexOf('Setting a timer') <= -1) {
           <Text style={{ color: 'white' }}>Sign in</Text>
         </TouchableOpacity>
       </View>
-     
+
       <Text
         onPress={() => navigation.navigate('SignupScreen')}
         style={{

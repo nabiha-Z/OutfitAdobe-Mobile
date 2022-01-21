@@ -31,7 +31,7 @@ function Vendor({ route, navigation }) {
 
     if (user) {
       console.log("logged in ");
-      navigation.navigate("Dashboard")
+      //navigation.navigate("Dashboard")
     } else {
       console.log("logged out user");
       navigation.navigate("VendorLogin")

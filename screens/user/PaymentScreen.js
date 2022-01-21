@@ -6,32 +6,77 @@ import firebase from 'firebase/app';
 import Bookings from './TabScreens/Bookings/Bookings';
 
 export default function PaymentScreen({ route, navigation }) {
-  const auth=firebase.auth();
-  const db=firebase.firestore();
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    const { time, service, staff, products,date } = route.params;
-    console.log(products);
-    console.log(service.store);
-    console.log(auth.currentUser.uid);
+    //console.log("params:", route.params);
+    const { time, service, staff, products, date } = route.params;
+    console.log("productsss:", products);
+    // console.log(auth.currentUser.uid);
     const [isModalVisible, setModalVisible] = useState(false);
     const [checked, setChecked] = useState('first');
-    var price=parseInt(service.price);
-    const Book=()=>{
-        db.collection('bookings').add({
-            customer_id:auth.currentUser.uid,
-            customer_name:auth.currentUser.displayName,
-            customer_email:auth.currentUser.email,
-            service:service.store,
-            service_name:service.name,
-            price:price,
-            time:time,
-            date:date,
-            staff:staff,
-        }).then(
-            data=>{
-               setModalVisible(true);
+    const [provider, setprovider] = useState([]);
+    const [prods, setProds] = useState([]);
+    var price = parseInt(service.price);
+    const Book = () => {
+
+        const ref = Math.floor(100000 + Math.random() * 900000);
+        //console.log("ref:", ref);
+        setProds(products);
+        db.collection('service_provider').get().then(
+
+            (data) => {
+                var temp = [], temp2 = [];
+
+
+                data.docs.map(
+                    (data1) => {
+                        
+                        if (data1.id == staff.store) {
+                            temp.push(data1.data());
+                            
+                        }
+
+                    }
+
+                )
+               console.log("products:", products[0]);
+               products.map((item,key) =>{
+
+                var prod = {};
+               prod.name =products[0].name;
+               prod.img = products[0].img;
+               prod.price = products[0].price;
+               console.log("prod: ", prod);
+               temp2.push(prod);
+               })
+               
+                db.collection('bookings').add({
+                    customer_id: auth.currentUser.uid,
+                    customer_name: auth.currentUser.displayName,
+                    customer_email: auth.currentUser.email,
+                    service: service.store,
+                    refno: ref,
+                    provider: temp,
+                    service_name: service.name,
+                    service_img:service.img,
+                    products:temp2,
+                    payment:"COD",
+                    price: price,
+                    time: time,
+                    date: date,
+                    staff: staff,
+        
+                }).then(
+                    data => {
+                        setModalVisible(true);
+                    }
+                )
+                
             }
         )
+
+        
     }
     return (
         <View style={styles.container}>
@@ -46,18 +91,18 @@ export default function PaymentScreen({ route, navigation }) {
 
                     <View style={styles.box}>
 
-                        <Text style={styles.subheading}>{service.title}</Text>
+                        <Text style={styles.subheading}>{service.detail}</Text>
                         <Text>Date: {date}</Text>
                         <Text>Date: {time}</Text>
                         <Text>Staff: {staff.name}</Text>
                         <Text>Products</Text>
                         {products.map((item, key) => (
-                            price=price+parseInt(item.price),
+                            price = price + parseInt(item.price),
                             <>
-                                <View style={styles.productsView}>
+                                <View style={styles.productsView} key={key}>
 
                                     <Image
-                                        source={{uri:item.img}}
+                                        source={{ uri: item.img }}
                                         style={{
                                             width: 30,
                                             height: 30,
@@ -70,27 +115,27 @@ export default function PaymentScreen({ route, navigation }) {
                                     </View>
 
                                     <Text>$ {item.price}</Text>
-                                   
+
                                 </View>
                             </>)
 
 
 
                         )}
-                        <Text style={{marginTop:10}}>Total Price = {price} </Text>
+                        <Text style={{ marginTop: 10 }}>Total Price = {price} </Text>
                     </View>
 
                     <View style={{ padding: 10, margin: 10 }}>
                         <Text style={styles.subheading}>
                             Payment Method
                         </Text>
-                        <View style={{flexDirection:'row'}}>
-                        <RadioButton
-                            value="first"
-                            status={checked === 'first' ? 'checked' : 'unchecked'}
-                            onPress={() => setChecked('first')}
-                        />
-                        <Text style={styles.txt}> COD </Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <RadioButton
+                                value="first"
+                                status={checked === 'first' ? 'checked' : 'unchecked'}
+                                onPress={() => setChecked('first')}
+                            />
+                            <Text style={styles.txt}> COD </Text>
                         </View>
                     </View>
 
@@ -122,7 +167,7 @@ export default function PaymentScreen({ route, navigation }) {
 
                             }}
                         >
-                            <Text style={{ fontSize: 17, color: 'white' }}>View</Text>
+                            <Text style={{ fontSize: 17, color: '#145A32' }}>View</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -140,7 +185,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#212F3D',
         padding: 10,
         justifyContent: 'flex-end',
-        height: 150,
+        height: 190,
         color: 'white',
 
     },
@@ -241,7 +286,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 16,
         width: 120,
-        backgroundColor: '#3E3737',
+        backgroundColor: '#ABEBC6',
         alignItems: 'center',
         alignContent: 'center',
 
@@ -251,8 +296,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center'
     },
-    txt:{
-        fontWeight:'bold',
-        margin:7
+    txt: {
+        fontWeight: 'bold',
+        margin: 7
     }
 });

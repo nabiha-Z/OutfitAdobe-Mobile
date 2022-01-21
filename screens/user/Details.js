@@ -8,57 +8,57 @@ import one from "../../images/health.jpg";
 
 
 export default function Details({ route, navigation }) {
-    const db=firebase.firestore();
+    const db = firebase.firestore();
     const { details } = route.params;
     console.log("details:", details)
     const auth = firebase.auth();
     const [isSelected, setSelected] = useState(details.fav);
-    const [check1,setcheck1]=useState(true);
+    const [check1, setcheck1] = useState(true);
     const [staff, setstaff] = useState([])
     const [check, setcheck] = useState(1);
-    const [selctedProd, setselctedProd] = useState()
+    const [error, setError] = useState("");
     const [products, setProducts] = useState([
     ]);
-    useEffect(()=>{
-       db.collection('products').get().then(
-        
-            (data)=>{
-                var temp=[];
+    useEffect(() => {
+        db.collection('products').get().then(
+
+            (data) => {
+                var temp = [];
                 data.docs.map(
-                    (data1)=>{
-                        if(data1.data().store==details.store){
+                    (data1) => {
+                        if (data1.data().store == details.store) {
                             temp.push(data1.data());
                         }
-                      
+
                     }
-                   
+
                 )
-            
-               setProducts(temp);
+
+                setProducts(temp);
             }
         )
 
-          db.collection('staffs').get().then(
-        
-            (data)=>{
-                var temp=[];
+        db.collection('staffs').get().then(
+
+            (data) => {
+                var temp = [];
                 data.docs.map(
-                    (data1)=>{
-                        if(data1.data().store==details.store){
+                    (data1) => {
+                        if (data1.data().store == details.store) {
                             temp.push(data1.data());
                         }
-                      
+
                     }
-                   
+
                 )
-             setstaff(temp);
+                setstaff(temp);
             }
         )
-    
-       },[check1])
+
+    }, [check1])
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
-    
+
     if (check == 1) {
         const newData = products.map((newItem) => {
 
@@ -80,7 +80,7 @@ export default function Details({ route, navigation }) {
     }
 
     const onChange = (item) => {
-      
+
         const newData = products.map((newItem) => {
             if (newItem.id === item.id) {
                 var color, background;
@@ -92,24 +92,24 @@ export default function Details({ route, navigation }) {
                     background = "white";
                 }
 
-             
-                    return {
-                        ...newItem,
-                        border: color,
-                        background: background,
-                        selected: !item.selected,
-                    };
-                
-            }
+
                 return {
                     ...newItem,
-                     selected: newItem.selected,
+                    border: color,
+                    background: background,
+                    selected: !item.selected,
                 };
-            
+
+            }
+            return {
+                ...newItem,
+                selected: newItem.selected,
+            };
+
 
         });
 
-        console.log("tempp====",newData);
+        console.log("tempp====", newData);
         setProducts(newData);
 
 
@@ -118,29 +118,37 @@ export default function Details({ route, navigation }) {
 
     const nextScreen = (staff) => {
         const selectedData = [];
+        var count = 0;
         products.map((item, key) => {
             if (item.selected == true) {
-                console.log("gfgfdg")
+                setError("");
                 selectedData.push({
                     id: item.id,
-                    price:item.price,
+                    price: item.price,
                     name: item.name,
                     img: item.img,
                     selected: item.selected,
                 })
+                count++;
             }
         })
+        if(count === 0){
+            setError("Please choose a product")
+            
+        }else{
+            navigation.navigate('bookingscreen', { service: details, staff: staff, products: selectedData })
+        }
 
-        navigation.navigate('bookingscreen', { service: details, staff: staff, products: selectedData })
+        
     }
 
     return (
         <View
-        style={{marginTop:70}}
+            style={{ marginTop: 70 }}
         >
-           
+
             <SliderBox
-            
+
                 images={[details.img]}
                 sliderBoxHeight={SCREEN_WIDTH * 0.9}
                 dotColor="#FAB7A0"
@@ -152,11 +160,11 @@ export default function Details({ route, navigation }) {
                     padding: 0,
                     margin: 0
                 }}
-               
+
                 imageLoadingColor="#FAB7A0"
             />
 
-            <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1.6, backgroundColor: 'white' }}>
+            <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1.5, backgroundColor: 'white' }}>
                 <View style={styles.description}>
                     <Text style={styles.subheading}>{details.name}</Text>
                     <TouchableOpacity onPress={() => favourite()} style={{ justifyContent: 'center' }}>
@@ -169,6 +177,13 @@ export default function Details({ route, navigation }) {
                     {/* <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', width: '30%' }]} onPress={() => navigation.navigate('bookingscreen', { item: details })}>
                         <Text style={{ color: 'white' }}>Book</Text>
                     </TouchableOpacity> */}
+                     <TouchableOpacity
+                        style={{ flexDirection: 'row', backgroundColor: 'rgba(135, 199, 199,0.7)', padding: 10, borderRadius:10}}
+                        key={details.store} onPress={() => navigation.navigate("user_Chat", { uid: details.store, name: details.name })}
+                    >
+                        <Ionicons name="chatbubble-outline" color='white' size={20} />
+                        <Text style={{ color: 'white' }}> Chat Now</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={{ margin: 15, justifyContent: 'space-between', marginHorizontal: 25 }}>
                     <View style={{ flexDirection: 'row', }}>
@@ -188,18 +203,19 @@ export default function Details({ route, navigation }) {
                         <Text style={[styles.txt, { marginLeft: 5, fontSize: 15 }]}>{details.time1} - {details.time2}</Text>
                     </View>
 
-                    <TouchableOpacity key={details.store}  onPress={()=>navigation.navigate("user_Chat",{uid:details.store,name:details.name})}>
+                   
+                    {/* <TouchableOpacity > */}
 
 
 
-    
-<Text  style={{fontSize:20, backgroundColor:'#383939',padding:10,color:'#FFFFFF',textAlign:'center'}}>Click to Chat</Text>
 
-</TouchableOpacity>
-                    <Text style={[styles.heading, { color: '#383939', fontSize: 17 }]}>Products</Text>
+                    {/* <Text style={{ fontSize: 20, backgroundColor: '#383939', padding: 10, color: '#FFFFFF', textAlign: 'center' }}>Click to Chat</Text> */}
 
-                    <Text style={[styles.heading, { color: '#383939', fontSize: 15 }]}>Select the products you want to add</Text>
-      
+                    {/* </TouchableOpacity> */}
+                    <Text style={[styles.heading, { color: '#383939', fontSize: 20 }]}>Products</Text>
+
+                    <Text style={{ color: '#747676', fontSize: 12,padding: 10, marginTop:-5}}>Select from the below products to add in the serivce</Text>
+
                     <View style={styles.productsView}>
                         {products.map((item, key) => (
                             <>
@@ -226,7 +242,7 @@ export default function Details({ route, navigation }) {
                                     >
 
                                         <Image
-                                            source={{uri:item.img}}
+                                            source={{ uri: item.img }}
                                             style={{
                                                 width: 30,
                                                 height: 30,
@@ -244,16 +260,17 @@ export default function Details({ route, navigation }) {
                             </>
                         ))}
                     </View>
+                    <Text style={styles.errorMsg}>{error}</Text>
 
                 </View>
 
                 <Text style={[styles.heading, { color: '#383939', fontSize: 20, marginHorizontal: 20 }]}>Our Staff</Text>
-                <Text style={[styles.heading, { color: '#383939', fontSize: 18, marginHorizontal: 20 }]}>Select the staff for your service</Text>
+                <Text style={ { color: '#747676', fontSize: 13, padding:10,  marginHorizontal: 15, marginTop:-5}}>Select the staff for your service</Text>
 
                 <ScrollView
                     horizontal={true}
                     showsHorizontalScrollIndicator={true}
-                    contentContainerStyle={{ height: 160, padding: 10, justifyContent: 'center', alignItems: 'center' }}>
+                    contentContainerStyle={{ height: 160, marginHorizontal: 25, justifyContent: 'center', alignItems: 'center' }}>
                     {staff.map((item, key) =>
                     (
                         <>
@@ -268,11 +285,11 @@ export default function Details({ route, navigation }) {
                                     <View style={styles.staffView}>
                                         {/* <Text style={{ fontWeight: 'bold', fontSize: 18, textAlign: 'center', color: '#0F6B7A' }}>{item.name[0].toUpperCase()} </Text> */}
                                         <Image
-                                            source={{uri:item.img}}
+                                            source={{ uri: item.img }}
                                             style={{
-                                                width: 60,
-                                                height: 60,
-                                                borderRadius: 30,
+                                                width: 70,
+                                                height: 70,
+                                                borderRadius: 40,
                                                 alignSelf: "center",
                                             }}
                                         />
@@ -280,9 +297,9 @@ export default function Details({ route, navigation }) {
 
                                     <View style={styles.ratingView}>
                                         <AntDesign name="star" color="#EED51F" size={12} />
-                                        <Text style={{ textAlign: 'center', fontSize: 12, fontWeight: 'bold' }}>{item.name} </Text>
+                                        <Text style={{ textAlign: 'center', fontSize: 12, fontWeight: 'bold' }}>{item.rating} </Text>
                                     </View>
-                                    <Text style={{ textAlign: 'center', fontSize: 14, color: '#000000', marginTop: 10, fontWeight: 'bold'}}>{item.name} </Text>
+                                    <Text style={{ textAlign: 'center', fontSize: 14, color: '#000000', marginTop: 10, fontWeight: 'bold' }}>{item.name} </Text>
                                     <Text style={{ textAlign: 'center', fontSize: 10, color: '#B8BABB', marginTop: 2 }}>{item.service} </Text>
 
                                 </View>
@@ -293,9 +310,9 @@ export default function Details({ route, navigation }) {
                     )}
 
                 </ScrollView>
-                <Text>fsdfsd</Text>
+                
             </ScrollView>
-            
+
         </View>
     )
 }
@@ -454,4 +471,9 @@ const styles = StyleSheet.create({
         textAlign: "center",
         top: 5,
     },
+    errorMsg: {
+        color:'#E32F0F',
+        fontSize:13,
+        marginHorizontal:10
+    }
 });
