@@ -1,45 +1,91 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import moment from 'moment';
 import firebase from 'firebase/app';
 import storage from 'firebase/storage'
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import uuid from 'uuid';
 function NewStaff({ navigation }) {
 
 
-    const auth=firebase.auth();
-    const db=firebase.firestore();
+    const auth = firebase.auth();
+    const db = firebase.firestore();
     const [time2, setTime2] = useState("20:00");
     const [getName, setName] = useState(null);
     const [getContact, setContact] = useState(null);
+    const [skill, setSkill] = useState(null);
     const [error, setError] = useState("");
     const [time1, setTime1] = useState("9:00");
     const [show1, setShow1] = useState(false);
     const [show2, setShow2] = useState(false);
     const [image, setImage] = useState(null);
-    const [fileurl,setfileurl]=useState('');
+    const [visible, setVisible] = useState(false);
+    const [fileurl, setfileurl] = useState('');
+
+    useEffect(() => {
+        db.collection('services').get().then(
+
+            (data) => {
+                var temp = [];
+                data.docs.map(
+                    (data1) => {
+                        if (data1.data().store == auth.currentUser.uid) {
+                            var a = data1.data();
+                            a.uid = data1.id;
+                            console.log(a);
+                            temp.push(a);
+
+                        }
+
+                    }
+
+                )
+                setServices(temp);
+            }
+        )
+    }, [])
+
+    const toggleDropdown = () => {
+        setVisible(!visible);
+    };
+
+    const renderDropdown = () => {
+        if (visible) {
+            return (
+                <View style={styles.dropdown}>
+                    {service.map((item) => (
+                        <Text >
+                    {item.name}
+                    </Text>
+                    ))}
+                
+                </View>
+            );
+        }
+    };
+
     const uploadImage = async (uri) => {
 
         const response = await fetch(uri);
         const blob = await response.blob();
-        var imagename=getName+new Date().toString();
+        var imagename = getName + new Date().toString();
         var ref = firebase.storage().ref().child(imagename);
         await ref.put(blob);
         ref.getDownloadURL().then(
-            (data)=>{
+            (data) => {
                 db.collection('staffs').add({
-                    name:getName,
-                    contact:getContact,
-                    time1:time1,
-                    time2:time2,
-                    img:data,
-                    store:auth.currentUser.uid,
-                    service:''
+                    name: getName,
+                    contact: getContact,
+                    time1: time1,
+                    time2: time2,
+                    img: data,
+                    store: auth.currentUser.uid,
+                    service: '',
+                    rating: "4.0",
+                    profession: profession
                 }).then(
-                    data=>{
+                    data => {
                         Alert.alert('Staff Added Successfully');
                         navigation.navigate('StaffDetails');
                     }
@@ -48,8 +94,8 @@ function NewStaff({ navigation }) {
         )
 
 
-       
-      };
+
+    };
     useEffect(() => {
         (async () => {
             if (Platform.OS !== 'web') {
@@ -87,7 +133,7 @@ function NewStaff({ navigation }) {
             allowsEditing: true,
             // base64: true,
             aspect: [4, 3]
-          });
+        });
 
         console.log(result);
 
@@ -96,7 +142,7 @@ function NewStaff({ navigation }) {
         }
     };
 
-   
+
 
     return (
         <View style={styles.container}>
@@ -124,6 +170,22 @@ function NewStaff({ navigation }) {
                 value={getContact}
                 onChangeText={text => setContact(text)}
             />
+
+            <Text style={styles.label}>Skill:</Text>
+            <TextInput
+                style={styles.inputField}
+                placeholder='Enter your profession'
+                value={skill}
+                onChangeText={text => setSkill(text)}
+            />
+            <TouchableOpacity
+                style={styles.button}
+                onPress={toggleDropdown}
+            >
+                {renderDropdown()}
+                <Text style={styles.buttonText}>{label}</Text>
+                <MaterialIcons  name='keyboard-arrow-down' size={20}/>
+            </TouchableOpacity>
             <Text style={styles.label}>Select your timings</Text>
 
             <View style={styles.timePickerView}>
@@ -176,11 +238,11 @@ function NewStaff({ navigation }) {
                     <TouchableOpacity style={styles.selectedImgBtn} onPress={() => setImage(null)}>
                         <Image source={{ uri: image }} style={styles.selectedImage} />
                     </TouchableOpacity>)}
-            
+
             </View>
 
             <TouchableOpacity
-                onPress={()=>uploadImage(image)}
+                onPress={() => uploadImage(image)}
                 style={styles.addButton}
             >
                 <Text style={{ color: '#D7D9D9' }}>Add</Text>
@@ -272,14 +334,14 @@ const styles = StyleSheet.create({
         shadowColor: '#0B1A34',
     },
     selectedImgBtn: {
-        backgroundColor: '#E1E7F1', 
-        width: 40, 
-        height: 40, 
-        zIndex: 2, 
-        padding: 10, 
+        backgroundColor: '#E1E7F1',
+        width: 40,
+        height: 40,
+        zIndex: 2,
+        padding: 10,
         borderRadius: 40 / 2,
-        marginTop:20,
-        marginLeft:10
+        marginTop: 20,
+        marginLeft: 10
     },
     selectedImage: {
         width: 30,
@@ -289,7 +351,25 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         top: 5
 
-    }
+    },
+    button: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#efefef',
+        height: 50,
+        width: '90%',
+        paddingHorizontal: 10,
+        zIndex: 1,
+      },
+      buttonText: {
+        flex: 1,
+        textAlign: 'center',
+      },
+      dropdown: {
+        position: 'absolute',
+        backgroundColor: '#fff',
+        top: 50,
+      },
 });
 
 export default NewStaff;

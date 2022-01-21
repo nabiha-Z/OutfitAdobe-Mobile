@@ -84,10 +84,10 @@ export default function Home({ route, navigation }) {
           name="location"
           size={25}
           color="#BFC0C3"
-          style={{ marginTop: 25 }} />
+          style={{ marginTop: 5 }} />
         <Image
           source={require('../../../../images/mainlogo.png')}
-          style={{ width: '100%', height: '40%', marginTop: 90 }}
+          style={{ width: '40%', height: '60%', marginTop: 0 }}
         />
         {!searchVisible ?
           <TouchableOpacity onPress={() => setsearchVisible(true)}>
@@ -95,7 +95,7 @@ export default function Home({ route, navigation }) {
               name="search"
               size={25}
               color="#BFC0C3"
-              style={{ marginTop: 25 }}
+              style={{ marginTop: 5 }}
             />
           </TouchableOpacity>
           : <Text>       </Text>}
@@ -266,12 +266,14 @@ const styles = StyleSheet.create({
   },
   topBar: {
     backgroundColor: 'white',
-    height: 90,
+    height: 80,
     padding: 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    margin: 10
+    margin: 10,
+    borderBottomWidth:1,
+    borderBottomColor:'#D6D8D9'
 
   },
   searchContainer: {
