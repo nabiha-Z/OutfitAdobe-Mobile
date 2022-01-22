@@ -39,7 +39,7 @@ export default function Profile({ route, navigation }) {
 
             <View style={{ alignItems: 'center' }}>
                 <View style={[styles.imgContainer, { backgroundColor: colors[Math.floor(Math.random() * 5) + 0] }]}>
-                    <Text style={styles.imgLabel}>{auth.currentUser.displayName}</Text>
+                    <Text style={styles.imgLabel}>{auth.currentUser.displayName[0]}</Text>
                 </View>
                 <Text style={styles.imgLabel}>{auth.currentUser.displayName}</Text>
                 <Text style={{ color: '#6791DA', marginBottom: 40 }}>My Profile</Text>

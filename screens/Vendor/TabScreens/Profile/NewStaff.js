@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
+import { Alert, View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import moment from 'moment';
 import firebase from 'firebase/app';
-import storage from 'firebase/storage'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 function NewStaff({ navigation }) {
 
@@ -21,9 +20,20 @@ function NewStaff({ navigation }) {
     const [show2, setShow2] = useState(false);
     const [image, setImage] = useState(null);
     const [visible, setVisible] = useState(false);
-    const [fileurl, setfileurl] = useState('');
+    const [service, setService] = useState([]);
 
     useEffect(() => {
+
+        (async () => {
+            if (Platform.OS !== 'web') {
+                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                if (status !== 'granted') {
+                    alert('Sorry, we need camera roll permissions to make this work!');
+                }
+            }
+        })
+
+
         db.collection('services').get().then(
 
             (data) => {
@@ -33,37 +43,46 @@ function NewStaff({ navigation }) {
                         if (data1.data().store == auth.currentUser.uid) {
                             var a = data1.data();
                             a.uid = data1.id;
-                            console.log(a);
+
                             temp.push(a);
+                            console.log("temp:", temp[0].name)
 
                         }
 
                     }
 
                 )
-                setServices(temp);
+                setService(temp);
             }
         )
+
+
+
     }, [])
 
-    const toggleDropdown = () => {
-        setVisible(!visible);
-    };
+    // const toggleDropdown = () => {
+    //     setVisible(!visible);
+    // };
 
-    const renderDropdown = () => {
-        if (visible) {
-            return (
-                <View style={styles.dropdown}>
-                    {service.map((item) => (
-                        <Text >
-                    {item.name}
-                    </Text>
-                    ))}
-                
-                </View>
-            );
-        }
-    };
+    // const renderDropdown = () => {
+    //     if (visible) {
+    //         return (
+    //             <>
+    //                 <View style={styles.dropdown}>
+    //                     {service.map((item) => (
+    //                         <TouchableOpacity style={styles.dropdownItems} activeOpacity={0.3}>
+
+    //                             <Text style={{ color: '#6C6E6E' }}>
+    //                                 {item.name}
+    //                             </Text>
+    //                         </TouchableOpacity>
+    //                     ))}
+
+    //                 </View>
+    //             </>
+    //         );
+    //     }
+    // };
 
     const uploadImage = async (uri) => {
 
@@ -81,31 +100,19 @@ function NewStaff({ navigation }) {
                     time2: time2,
                     img: data,
                     store: auth.currentUser.uid,
-                    service: '',
+                    service: service[1].name,
                     rating: "4.0",
-                    profession: profession
+                    profession: skill
                 }).then(
                     data => {
                         Alert.alert('Staff Added Successfully');
-                        navigation.navigate('StaffDetails');
+                        navigation.navigate('Profile');
                     }
                 )
             }
         )
-
-
-
     };
-    useEffect(() => {
-        (async () => {
-            if (Platform.OS !== 'web') {
-                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-                if (status !== 'granted') {
-                    alert('Sorry, we need camera roll permissions to make this work!');
-                }
-            }
-        })();
-    }, []);
+
 
     const handlePicker1 = (dateTime) => {
         console.log("Selected Value= ", dateTime);
@@ -146,108 +153,107 @@ function NewStaff({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Text
-                style={styles.heading}>
-                Add a new Staff
-            </Text>
-            <Text
-                style={styles.desc}>
-                This will add a new staff in your business whom users can ask services from
-            </Text>
+            <ScrollView contentContainerStyle={{ padding: 20 }}>
+                <Text
+                    style={styles.heading}>
+                    Add a new Staff
+                </Text>
+                <Text
+                    style={styles.desc}>
+                    This will add a new staff in your business whom users can ask services from
+                </Text>
 
-            <Text style={styles.label}>Full Name:</Text>
-            <TextInput
-                style={styles.inputField}
-                placeholder='Enter Full Name'
-                value={getName}
-                onChangeText={text => setName(text)}
-            />
+                <Text style={styles.label}>Full Name:</Text>
+                <TextInput
+                    style={styles.inputField}
+                    placeholder='Enter Full Name'
+                    value={getName}
+                    onChangeText={text => setName(text)}
+                />
 
-            <Text style={styles.label}>Contact:</Text>
-            <TextInput
-                style={styles.inputField}
-                placeholder='Enter Contact Detail'
-                value={getContact}
-                onChangeText={text => setContact(text)}
-            />
+                <Text style={styles.label}>Contact:</Text>
+                <TextInput
+                    style={styles.inputField}
+                    placeholder='Enter Contact Detail'
+                    value={getContact}
+                    onChangeText={text => setContact(text)}
+                    maxLength={11}
+                />
 
-            <Text style={styles.label}>Skill:</Text>
-            <TextInput
-                style={styles.inputField}
-                placeholder='Enter your profession'
-                value={skill}
-                onChangeText={text => setSkill(text)}
-            />
-            <TouchableOpacity
-                style={styles.button}
-                onPress={toggleDropdown}
-            >
-                {renderDropdown()}
-                <Text style={styles.buttonText}>{label}</Text>
-                <MaterialIcons  name='keyboard-arrow-down' size={20}/>
-            </TouchableOpacity>
-            <Text style={styles.label}>Select your timings</Text>
+                <Text style={styles.label}>Skill:</Text>
+                <TextInput
+                    style={styles.inputField}
+                    placeholder='Enter your profession'
+                    value={skill}
+                    onChangeText={text => setSkill(text)}
+                />
 
-            <View style={styles.timePickerView}>
+
+
+                <Text style={styles.label}>Select your timings</Text>
+
+                <View style={styles.timePickerView}>
+
+                    <TouchableOpacity
+                        style={styles.timePicker}
+                        onPress={() => setShow1(true)}
+                    >
+                        <Text>{time1}</Text>
+                    </TouchableOpacity>
+                    <Text> --</Text>
+                    <TouchableOpacity
+                        style={styles.timePicker}
+                        onPress={() => setShow2(true)}
+                    >
+                        <Text>{time2}</Text>
+                    </TouchableOpacity>
+
+                </View>
+                <DateTimePicker
+                    isVisible={show1}
+                    testID="dateTimePicker1"
+                    value={time1}
+                    mode="time"
+                    is24Hour={true}
+                    display="default"
+                    onConfirm={(e) => handlePicker1(e)}
+                    onCancel={hidePicker}
+                />
+
+                <DateTimePicker
+                    isVisible={show2}
+                    testID="dateTimePicker2"
+                    value={time2}
+                    mode="time"
+                    is24Hour={true}
+                    display="default"
+                    onConfirm={(e) => handlePicker2(e)}
+                    onCancel={hidePicker}
+                />
+
+
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <TouchableOpacity style={styles.imageBtn} onPress={pickImage} >
+                        <Entypo name="arrow-up" size={15} color="white" style={{}} />
+                        <Text style={{ color: 'white', textAlign: 'center', margin: 0 }}>Choose Image</Text>
+                    </TouchableOpacity>
+
+                    {image && (
+                        <TouchableOpacity style={styles.selectedImgBtn} onPress={() => setImage(null)}>
+                            <Image source={{ uri: image }} style={styles.selectedImage} />
+                        </TouchableOpacity>)}
+
+                </View>
+
 
                 <TouchableOpacity
-                    style={styles.timePicker}
-                    onPress={() => setShow1(true)}
+                    onPress={() => uploadImage(image)}
+                    style={styles.addButton}
                 >
-                    <Text>{time1}</Text>
-                </TouchableOpacity>
-                <Text> --</Text>
-                <TouchableOpacity
-                    style={styles.timePicker}
-                    onPress={() => setShow2(true)}
-                >
-                    <Text>{time2}</Text>
+                    <Text style={{ color: '#D7D9D9' }}>Add</Text>
                 </TouchableOpacity>
 
-            </View>
-            <DateTimePicker
-                isVisible={show1}
-                testID="dateTimePicker1"
-                value={time1}
-                mode="time"
-                is24Hour={true}
-                display="default"
-                onConfirm={(e) => handlePicker1(e)}
-                onCancel={hidePicker}
-            />
-
-            <DateTimePicker
-                isVisible={show2}
-                testID="dateTimePicker2"
-                value={time2}
-                mode="time"
-                is24Hour={true}
-                display="default"
-                onConfirm={(e) => handlePicker2(e)}
-                onCancel={hidePicker}
-            />
-
-
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity style={styles.imageBtn} onPress={pickImage} >
-                    <Entypo name="arrow-up" size={15} color="white" style={{}} />
-                    <Text style={{ color: 'white', textAlign: 'center', margin: 0 }}>Choose Image</Text>
-                </TouchableOpacity>
-
-                {image && (
-                    <TouchableOpacity style={styles.selectedImgBtn} onPress={() => setImage(null)}>
-                        <Image source={{ uri: image }} style={styles.selectedImage} />
-                    </TouchableOpacity>)}
-
-            </View>
-
-            <TouchableOpacity
-                onPress={() => uploadImage(image)}
-                style={styles.addButton}
-            >
-                <Text style={{ color: '#D7D9D9' }}>Add</Text>
-            </TouchableOpacity>
-
+            </ScrollView>
 
         </View>
     );
@@ -258,7 +264,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        padding: 20,
+        paddingBottom: 20
 
     },
     heading: {
@@ -356,20 +362,36 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#efefef',
-        height: 50,
-        width: '90%',
+        height: 40,
+        width: '50%',
         paddingHorizontal: 10,
         zIndex: 1,
-      },
-      buttonText: {
+        borderRadius: 10,
+        marginTop: 10
+    },
+    buttonText: {
         flex: 1,
         textAlign: 'center',
-      },
-      dropdown: {
+    },
+    dropdown: {
         position: 'absolute',
-        backgroundColor: '#fff',
-        top: 50,
-      },
+        backgroundColor: '#F4F6F7',
+        top: 40,
+        padding: 10,
+        justifyContent: 'center',
+        width: 290,
+        zIndex: 2,
+        borderRadius: 10
+    },
+    dropdownItems: {
+        textAlign: 'center',
+        borderBottomWidth: 1,
+        borderColor: '#B6B9BA',
+        paddingBottom: 10,
+        margin: 10,
+        zIndex: 2,
+        color: 'grey'
+    }
 });
 
 export default NewStaff;

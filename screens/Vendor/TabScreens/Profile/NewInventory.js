@@ -38,7 +38,7 @@ function NewInventory({ navigation }) {
                 }).then(
                     data=>{
                         Alert.alert('Product Added Successfully');
-                        navigation.navigate('ProductDetails');
+                        navigation.navigate('Profile');
                     }
                 )
             }

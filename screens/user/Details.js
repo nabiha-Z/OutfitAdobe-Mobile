@@ -28,6 +28,7 @@ export default function Details({ route, navigation }) {
                     (data1) => {
                         if (data1.data().store == details.store) {
                             temp.push(data1.data());
+                           
                         }
 
                     }
@@ -44,8 +45,9 @@ export default function Details({ route, navigation }) {
                 var temp = [];
                 data.docs.map(
                     (data1) => {
-                        if (data1.data().store == details.store) {
+                        if (data1.data().store == details.store && data1.data().service === details.name) {
                             temp.push(data1.data());
+                            console.log("temp:", temp[0].profession)
                         }
 
                     }

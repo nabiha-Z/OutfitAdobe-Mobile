@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, Image, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
 import moment from 'moment';
 import firebase from "firebase/app";
-import {firebaseConfig} from '../Firebase/FirebaseConfig';
+import { firebaseConfig } from '../Firebase/FirebaseConfig';
 import { DataTable } from 'react-native-paper';
 import SwitchToggle from "react-native-switch-toggle";
 import DateTimePicker from 'react-native-modal-datetime-picker';

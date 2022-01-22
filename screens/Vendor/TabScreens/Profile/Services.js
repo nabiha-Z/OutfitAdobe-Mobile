@@ -12,7 +12,7 @@ const db=firebase.firestore();
 
     const [staffs, setStaffs] = useState([]);
     const [check,setcheck]=useState(true);
-    const deleteStaff=(uid)=>{
+    const deleteService=(uid)=>{
          db.collection('services').doc(uid).delete().then(
              (data)=>{
                  check?setcheck(false):setcheck(true);
@@ -22,6 +22,7 @@ const db=firebase.firestore();
          )
     }
 useEffect(()=>{
+    console.log("current u :", auth.currentUser.uid)
  db.collection('services').get().then(
      
      (data)=>{
@@ -42,7 +43,7 @@ useEffect(()=>{
          setStaffs(temp);
      }
  )
-},[check])
+},[])
 
     return (
         <View style={styles.container}>
@@ -59,11 +60,11 @@ useEffect(()=>{
                 </TouchableOpacity>
 
             </View>
-            <ScrollView style={{ height: 10, marginHorizontal: -10 }}>
+            <ScrollView style={{ height: 10, marginHorizontal: 10 }}>
                 {staffs.map((item, key) => (
 
                     <TouchableOpacity style={styles.tabContainer} key={key}>
-                        <Image style={{width:50,height:50,marginRight:10}} source={{uri:item.img}} />
+                        <Image style={styles.img} source={{uri:item.img}} />
                         {/* <AntDesign name="user" size={28} style={{ marginRight: 20, top: 4 }} /> */}
                         <View style={styles.textContainer}>
                             <Text style={styles.mainText}>{item.name}</Text>
@@ -71,9 +72,9 @@ useEffect(()=>{
                             <Text style={styles.subText}>From : {item.time1} to {item.time2}</Text>
                         </View>
                         <TouchableOpacity
-                        onPress={()=>deleteStaff(item.uid)}
+                        onPress={()=>deleteService(item.uid)}
                         >
-                        <AntDesign name="delete" size={28} style={{top: 4,color:'#D71212' }} />
+                        <AntDesign name="delete" size={20} style={{top: 4,color:'#D71212' }} />
                         </TouchableOpacity>
 
                     </TouchableOpacity>
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
     },
     subText: {
         fontSize: 14,
-        color: '#000000',
+        color: '#717273',
         lineHeight: 20,
     },
     addButton: {
@@ -135,7 +136,8 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         marginLeft: 20,
-        marginBottom: 20
+        marginBottom: 20,
+        marginHorizontal:10
 
     },
     mainText: {
@@ -143,6 +145,12 @@ const styles = StyleSheet.create({
         color: '#020202',
         fontWeight: 'bold'
     },
+    img: {
+        width:50,
+        height:50,
+        marginRight:10,
+        borderRadius:25
+    }
     
 
 })

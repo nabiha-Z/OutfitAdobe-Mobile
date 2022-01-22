@@ -9,6 +9,7 @@ export default function PaymentScreen({ route, navigation }) {
     const db = firebase.firestore();
     const [isModalVisible, setModalVisible] = useState(false);
     const [isModalVisible2, setModalVisible2] = useState(false);
+    const [check, setcheck] = useState(true);
 
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -16,7 +17,7 @@ export default function PaymentScreen({ route, navigation }) {
     // console.log("params:", route.params);
     const { booking } = route.params;
     console.log("bookings:", booking.provider[0].businessName);
-    //console.log("Booking price: ", booking)
+    console.log("Booking id: ", booking.bid)
 
 
 
@@ -25,8 +26,19 @@ export default function PaymentScreen({ route, navigation }) {
         setModalVisible(true);
     }
 
-    const cancelBooking = () => {
-        setModalVisible2(true)
+    const deleteStaff = (uid) => {
+       
+    }
+    const cancelBooking = (bid) => {
+        db.collection('bookings').doc(bid).delete().then(
+            (data) => {
+                check ? setcheck(false) : setcheck(true);
+                setModalVisible2(true)
+                //Alert.alert("Product Deleted Successfully");
+
+            }
+        )
+       
     }
 
     return (
@@ -139,7 +151,7 @@ export default function PaymentScreen({ route, navigation }) {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={[styles.ModalBtn, { backgroundColor: '#E03D3D' }]}
-                                onPress={() => { cancelBooking() }}
+                                onPress={() => { cancelBooking(booking.bid) }}
                             >
                                 <Text style={{ fontSize: 17, color: 'white' }}>Cancel</Text>
                             </TouchableOpacity>
@@ -336,8 +348,9 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end'
     },
     serviceImg: {
-        marginTop: 25,
-        width: '30%'
+        marginTop: 65,
+        width: '30%',
+        marginLeft:-80
     },
     blackTxt: {
         fontWeight: 'bold',

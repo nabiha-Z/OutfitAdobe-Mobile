@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import firebaseConfig from '../Firebase/FirebaseConfig';
+import { firebaseConfig } from '../Firebase/FirebaseConfig';
 import Icon from '@expo/vector-icons/AntDesign';
 import firebase from 'firebase';
 import { LogBox } from 'react-native';
@@ -27,11 +27,42 @@ function Vendor({ route, navigation }) {
   }
 
   const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  useEffect(() => {
+    db.collection('service_provider').get().then(
+
+      (data) => {
+        var temp = [];
+        data.docs.map(
+          (data1) => {
+            temp.push(data1.data());
+
+          }
+        )
+
+        setvendors(temp);
+      }
+    )
+  }, [])
   auth.onAuthStateChanged(user => {
 
     if (user) {
       console.log("logged in ");
-      //navigation.navigate("Dashboard")
+      const data = db.collection('service_provider').where(firebase.firestore.FieldPath.documentId(), '==', user.uid).get().then(
+        (a) => {
+          console.log("if")
+          if (a.docs.length == 1) {
+            navigation.navigate("Dashboard")
+          }
+          else {
+            console.log("else")
+            //navigation.navigate("Dashboard_user")
+          }
+
+        }
+      )
+
     } else {
       console.log("logged out user");
       navigation.navigate("VendorLogin")
@@ -41,21 +72,36 @@ function Vendor({ route, navigation }) {
 
   const authenticateUser = () => {
     if (getEmail != null && getPassword != null) {
-      users.map((item) => {
-        if (item.email == getEmail) {
-          if (item.password === getPassword) {
-            alert('Loged in');
-            setEmail("");
-            setPassword("");
+      auth.signInWithEmailAndPassword(getEmail, getPassword)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          const uid = user.uid
+          console.log("logged in user :", uid)
+          const data = db.collection('service_provider').where(firebase.firestore.FieldPath.documentId(), '==', user.uid).get().then(
+            (a) => {
+              console.log("if")
+              if (a.docs.length == 1) {
+                setEmail("");
+                setPassword("");
+                navigation.navigate("Dashboard")
+              }
+              else {
+                console.log("else")
+                //navigation.navigate("Dashboard_user")
+              }
+            })
 
-          } else {
-            alert('Incorrect Password');
-          }
-        } else {
-          alert('Check your Email or Signup now.');
-          //message.success('Check your Email or Signup now.');
-        }
-      });
+
+
+
+
+
+        }).catch((error) => {
+          const err = error.message;
+          alert(err);
+        })
+
     } else {
       alert('Fill the fields');
       //message.error('Fill the fields');

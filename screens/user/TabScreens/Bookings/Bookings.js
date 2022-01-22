@@ -15,16 +15,20 @@ export default function Bookings({ route, navigation }) {
 
             (data) => {
                 var temp = [];
+
+
                 
                 data.docs.map(
                     (data1) => {
                         console.log("datttaaa:", data1.id)
                         if (data1.data().customer_id == user) {
-                            temp.push(data1.data());
+                            const a=data1.data();
+                            a.bid = data1.id;
+                            console.log("id:", a.bid)
+                            temp.push(a);
                         }
 
                     }
-
                 )
                 setbookings(temp);
             }

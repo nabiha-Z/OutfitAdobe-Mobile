@@ -34,8 +34,8 @@ function Vendor({ route, navigation }) {
 
     if (user) {
       console.log("current: ", user.uid)
-      navigation.navigate("Dashboard_user")
-      const data = db.collection('service_provider').where(firebase.firestore.FieldPath.documentId(), '==', user.uid).get().then(
+      
+      const data = db.collection('users').where(firebase.firestore.FieldPath.documentId(), '==', user.uid).get().then(
         (a) => {
           console.log("if")
           if (a.docs.length == 1) {
@@ -44,7 +44,6 @@ function Vendor({ route, navigation }) {
           }
           else {
             console.log("else")
-            //navigation.navigate("Dashboard_user")
           }
 
         }
@@ -69,15 +68,15 @@ function Vendor({ route, navigation }) {
           const user = userCredential.user;
           const uid = user.uid
           console.log("logged in user :", uid)
-          navigation.navigate("Dashboard_user")
-          const data = db.collection('service_provider').where(firebase.firestore.FieldPath.documentId(), '==', uid).get().then(
+          const data = db.collection('users').where(firebase.firestore.FieldPath.documentId(), '==', uid).get().then(
             (a) => {
               console.log("length", a.docs.length)
               if (a.docs.length == 1) {
                 console.log("if")
-                alert("if")
+                //alert("if")
                 setEmail("");
                 setPassword("");
+                //console.log("a: ",a.docs)
                 navigation.navigate("Dashboard_user")
               }
               else {

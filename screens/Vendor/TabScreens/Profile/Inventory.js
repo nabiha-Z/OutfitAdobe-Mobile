@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView,Image, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import firebase from "firebase/app";
@@ -7,42 +7,43 @@ import { useSafeAreaFrame } from "react-native-safe-area-context";
 
 
 export default function InventoryDetails({ route, navigation }) {
-const auth=firebase.auth();
-const db=firebase.firestore();
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    const [staffs, setStaffs] = useState([]);
-    const [check,setcheck]=useState(true);
-    const deleteStaff=(uid)=>{
-         db.collection('products').doc(uid).delete().then(
-             (data)=>{
-                 check?setcheck(false):setcheck(true);
-                 Alert.alert("Product Deleted Successfully");
+    const [Inventory, setInventory] = useState([]);
+    const [check, setcheck] = useState(true);
+    const deleteStaff = (uid) => {
+        db.collection('products').doc(uid).delete().then(
+            (data) => {
+                check ? setcheck(false) : setcheck(true);
+                Alert.alert("Product Deleted Successfully");
 
-             }
-         )
+            }
+        )
     }
-useEffect(()=>{
- db.collection('products').get().then(
-     
-     (data)=>{
-         var temp=[];
-         data.docs.map(
-             (data1)=>{
-                 if(data1.data().store==auth.currentUser.uid){
-                     var a=data1.data();
-                     a.uid=data1.id;
-                     console.log(a);
-                      temp.push(a);
-                      
-                 }
-                 
-             }
-            
-         )
-         setStaffs(temp);
-     }
- )
-},[check])
+    useEffect(() => {
+        db.collection('products').get().then(
+
+            (data) => {
+                var temp = [];
+                data.docs.map(
+                    (data1) => {
+                        if (data1.data().store == auth.currentUser.uid) {
+                            var a = data1.data();
+                            a.uid = data1.id;
+                            console.log(a);
+                            temp.push(a);
+
+                        }
+
+                    }
+
+                )
+
+                setInventory(temp);
+            }
+        )
+    }, [])
 
     return (
         <View style={styles.container}>
@@ -59,11 +60,11 @@ useEffect(()=>{
                 </TouchableOpacity>
 
             </View>
-            <ScrollView style={{ height: 10, marginHorizontal: -10 }}>
-                {staffs.map((item, key) => (
+            <ScrollView style={{ height: 10, marginHorizontal: 10 }}>
+                {Inventory.map((item, key) => (
 
                     <TouchableOpacity style={styles.tabContainer} key={key}>
-                         <Image style={{width:50,height:50,marginRight:10}} source={{uri:item.img}} />
+                        <Image style={styles.img} source={{ uri: item.img }} />
                         {/* <AntDesign name="user" size={28} style={{ marginRight: 20, top: 4 }} /> */}
                         <View style={styles.textContainer}>
                             <Text style={styles.mainText}>{item.name}</Text>
@@ -71,13 +72,14 @@ useEffect(()=>{
                             <Text style={styles.subText}>Price :{item.price}</Text>
                         </View>
                         <TouchableOpacity
-                        onPress={()=>deleteStaff(item.uid)}
+                            onPress={() => deleteStaff(item.uid)}
                         >
-                        <AntDesign name="delete" size={28} style={{top: 4,color:'#D71212' }} />
+                            <AntDesign name="delete" size={20} style={{ top: 4, color: '#D71212' }} />
                         </TouchableOpacity>
 
                     </TouchableOpacity>
                 ))}
+
 
 
 
@@ -143,6 +145,12 @@ const styles = StyleSheet.create({
         color: '#020202',
         fontWeight: 'bold'
     },
-    
+    img: {
+        width:50,
+        height:50,
+        marginRight:10,
+        borderRadius:25
+    }
+
 
 })

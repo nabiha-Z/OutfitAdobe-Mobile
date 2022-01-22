@@ -42,7 +42,7 @@ function NewService({ navigation }) {
                     }).then(
                         data=>{
                             Alert.alert('Service Added Successfully');
-                            navigation.navigate('ServiceDetails');
+                            navigation.navigate('Profile');
                         }
                     )
                 }

@@ -13,6 +13,7 @@ import { CheckBox } from "react-native-elements";
 import { RadioButton } from "react-native-paper";
 
 
+
 import hair from "../images/hair.png";
 import spa from "../images/spa.png";
 import beard from "../images/beard.png";
