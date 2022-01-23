@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
+import {
+    Alert, View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView,
+    Modal
+} from 'react-native';
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import moment from 'moment';
 import firebase from 'firebase/app';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-function NewStaff({ navigation }) {
 
+import { CheckBox } from "react-native-elements";
+import SelectDropdown from 'react-native-select-dropdown';
+
+function NewStaff({ navigation }) {
 
     const auth = firebase.auth();
     const db = firebase.firestore();
@@ -14,13 +20,15 @@ function NewStaff({ navigation }) {
     const [getName, setName] = useState(null);
     const [getContact, setContact] = useState(null);
     const [skill, setSkill] = useState(null);
-    const [error, setError] = useState("");
+    const [errors, setError] = useState("");
     const [time1, setTime1] = useState("9:00");
     const [show1, setShow1] = useState(false);
     const [show2, setShow2] = useState(false);
     const [image, setImage] = useState(null);
-    const [visible, setVisible] = useState(false);
     const [service, setService] = useState([]);
+    const [selectedService, setSelected] = useState(null);
+    const [isModalVisible, setModalVisible] = useState(false);
+
 
     useEffect(() => {
 
@@ -33,7 +41,6 @@ function NewStaff({ navigation }) {
             }
         })
 
-
         db.collection('services').get().then(
 
             (data) => {
@@ -42,11 +49,7 @@ function NewStaff({ navigation }) {
                     (data1) => {
                         if (data1.data().store == auth.currentUser.uid) {
                             var a = data1.data();
-                            a.uid = data1.id;
-
-                            temp.push(a);
-                            console.log("temp:", temp[0].name)
-
+                            temp.push(a.name);
                         }
 
                     }
@@ -55,62 +58,42 @@ function NewStaff({ navigation }) {
                 setService(temp);
             }
         )
-
-
-
     }, [])
 
-    // const toggleDropdown = () => {
-    //     setVisible(!visible);
-    // };
-
-    // const renderDropdown = () => {
-    //     if (visible) {
-    //         return (
-    //             <>
-    //                 <View style={styles.dropdown}>
-    //                     {service.map((item) => (
-    //                         <TouchableOpacity style={styles.dropdownItems} activeOpacity={0.3}>
-
-    //                             <Text style={{ color: '#6C6E6E' }}>
-    //                                 {item.name}
-    //                             </Text>
-    //                         </TouchableOpacity>
-    //                     ))}
-
-    //                 </View>
-    //             </>
-    //         );
-    //     }
-    // };
 
     const uploadImage = async (uri) => {
 
-        const response = await fetch(uri);
-        const blob = await response.blob();
-        var imagename = getName + new Date().toString();
-        var ref = firebase.storage().ref().child(imagename);
-        await ref.put(blob);
-        ref.getDownloadURL().then(
-            (data) => {
-                db.collection('staffs').add({
-                    name: getName,
-                    contact: getContact,
-                    time1: time1,
-                    time2: time2,
-                    img: data,
-                    store: auth.currentUser.uid,
-                    service: service[1].name,
-                    rating: "4.0",
-                    profession: skill
-                }).then(
-                    data => {
-                        Alert.alert('Staff Added Successfully');
-                        navigation.navigate('Profile');
-                    }
-                )
-            }
-        )
+        if (getName !== null && getContact !== null & selectedService != null && profession != null) {
+
+            setError("")
+            const response = await fetch(uri);
+            const blob = await response.blob();
+            var imagename = getName + new Date().toString();
+            var ref = firebase.storage().ref().child(imagename);
+            await ref.put(blob);
+            ref.getDownloadURL().then(
+                (data) => {
+                    db.collection('staffs').add({
+                        name: getName,
+                        contact: getContact,
+                        time1: time1,
+                        time2: time2,
+                        img: data,
+                        store: auth.currentUser.uid,
+                        service: selectedService,
+                        rating: "4.0",
+                        profession: skill
+                    }).then(
+                        data => {
+                            Alert.alert('Staff Added Successfully');
+                            navigation.navigate('Profile');
+                        }
+                    )
+                }
+            )
+        } else {
+            setError("Fill out all fields")
+        }
     };
 
 
@@ -149,7 +132,65 @@ function NewStaff({ navigation }) {
         }
     };
 
+    // const closeModal = () => {
+    //     setSelected([]);
+    //     setModalVisible(false);
+    // };
 
+
+    // const addServices = (item) => {
+
+    //     console.log("checked:", item.checked);
+    //     var color, background;
+    //     const newData = service.map((newItem) => {
+    //         if (newItem.checked === true && newItem.sid != item.sid) {
+
+    //             color = "#C8C4C4";
+    //             background = "white";
+    //             console.log("checked true color:", item.background)
+    //             return {
+    //                 ...newItem,
+    //                 border: color,
+    //                 background: background,
+    //                 checked: !item.selected,
+    //             };
+    //         }
+
+    //         if (newItem.sid === item.sid) {
+    //             console.log("djfksdjfksdjfkj")
+    //             if (item.checked === false) {
+    //                 color = "#EAF3F2";
+    //                 background = "#EAF3F2";
+                   
+
+    //             } else {
+    //                 color = "#C8C4C4";
+    //                 background = "white";
+    //             }
+    //             console.log("selected color: ", background);
+    //             console.log("checkedcolor:", item.background)
+
+    //             return {
+    //                 ...newItem,
+    //                 border: color,
+    //                 background: background,
+    //                 checked: !item.checked,
+    //             };
+    //         }
+    //         return {
+    //             ...newItem,
+    //             checked: newItem.checked,
+    //         };
+    //     });
+
+    //     setSelected(newData);
+    //     console.log("sssss: ", selectedService)
+    // }
+
+
+    // const confirmed = () => {
+    //     setModalVisible(false);
+    // };
 
     return (
         <View style={styles.container}>
@@ -163,6 +204,7 @@ function NewStaff({ navigation }) {
                     This will add a new staff in your business whom users can ask services from
                 </Text>
 
+                <Text style={styles.errorsTxt}>{errors}</Text>
                 <Text style={styles.label}>Full Name:</Text>
                 <TextInput
                     style={styles.inputField}
@@ -188,7 +230,87 @@ function NewStaff({ navigation }) {
                     onChangeText={text => setSkill(text)}
                 />
 
+                {/* <TouchableOpacity
+                    style={styles.button}
+                    activeOpacity={0.5}
+                    onPress={() => { setModalVisible(true) }}>
+                    <Text style={styles.buttonText}>Choose Services</Text>
+                </TouchableOpacity> */}
+               <SelectDropdown
+                    data={service}
+                    onSelect={(selectedItem, index) => {
+                        setSelected(selectedItem)
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
 
+                        return selectedItem
+                    }}
+                    rowTextForSelection={(item, index) => {
+                        return item
+                    }}
+                    defaultButtonText="Click for options"
+                    buttonStyle={selectedService != null ? [styles.button, { backgroundColor: 'white' }] : styles.button}
+                    dropdownStyle={styles.dropdown}
+                    rowTextStyle={styles.dropdownItems}
+                    buttonTextStyle={selectedService != null ? [styles.buttonText, { color: '#12555C' }] : styles.buttonText}
+                />
+                {/* <Modal animationType="slide" transparent={true} visible={isModalVisible}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            {service.map((item, key) => (
+
+                                <View style={styles.checkboxContainer} key={key}>
+                                    <CheckBox
+                                        key={item.id}
+                                        checked={item.checked}
+                                        containerStyle={[styles.ckItem, { zIndex: 1 }]}
+                                        disabled={false}
+                                        onAnimationType="fill"
+                                        offAnimationType="fade"
+                                        boxType="square"
+                                        onPress={() => addServices(item)}
+                                    />
+                                    <View style={[
+                                        styles.customCheckbox,
+                                        {
+                                            zIndex: 0,
+                                            borderColor: item.border,
+                                            backgroundColor: item.background,
+
+                                        }
+                                    ]}>
+                                        <Text>
+                                            {item.name}
+                                        </Text>
+                                    </View>
+                                </View>
+                            )
+
+                            )}
+
+
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                }}
+                            >
+                                <TouchableOpacity
+                                    style={[styles.ModalBtn, { backgroundColor: "white", borderWidth: 1, borderColor: '#CBCECE' }]}
+                                    onPress={() => closeModal()}
+                                >
+                                    <Text style={{ fontSize: 17, color: "black" }}>Close</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.ModalBtn]}
+                                    onPress={() => confirmed()}
+                                >
+                                    <Text style={{ fontSize: 17, color: "white" }}>Done</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal> */}
 
                 <Text style={styles.label}>Select your timings</Text>
 
@@ -283,6 +405,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 15,
         marginTop: 10
+
     },
     inputField: {
         borderBottomWidth: 2,
@@ -361,37 +484,93 @@ const styles = StyleSheet.create({
     button: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#efefef',
-        height: 40,
-        width: '50%',
+        backgroundColor: '#253530',
+        height: 35,
+        width: '65%',
         paddingHorizontal: 10,
         zIndex: 1,
-        borderRadius: 10,
-        marginTop: 10
+        borderRadius: 5,
+        marginTop: 10,
+        borderWidth: 1,
+        borderColor: '#253530',
+
     },
     buttonText: {
-        flex: 1,
         textAlign: 'center',
+        color: 'white',
+        fontSize: 15
     },
     dropdown: {
-        position: 'absolute',
         backgroundColor: '#F4F6F7',
-        top: 40,
         padding: 10,
         justifyContent: 'center',
-        width: 290,
-        zIndex: 2,
-        borderRadius: 10
+        alignContent: 'center',
+        width: 300,
+        borderRadius: 10,
+        height: 300
     },
     dropdownItems: {
         textAlign: 'center',
-        borderBottomWidth: 1,
-        borderColor: '#B6B9BA',
-        paddingBottom: 10,
+        color: '#414244'
+    },
+    checkboxContainer: {
+        flexDirection: "row",
+        marginBottom: 20,
+    },
+    centeredView: {
+        backgroundColor: 'white',
+        justifyContent: "center",
+        alignItems: "center",
+        margin: 30,
+    },
+    modalView: {
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 20,
+        justifyContent: "center",
+        alignItems: "center",
+        shadowColor: "#000",
+        height: "70%",
+        width: "100%",
+    },
+    ModalBtn: {
         margin: 10,
-        zIndex: 2,
-        color: 'grey'
-    }
+        marginTop: 20,
+        borderRadius: 10,
+        padding: 16,
+        width: 120,
+        backgroundColor: "#152139",
+        alignItems: "center",
+        alignContent: "center",
+    },
+    modalText: {
+        color: "black",
+        fontSize: 20,
+        textAlign: "center",
+    },
+    errorsTxt: {
+        marginTop: 5,
+        fontSize: 12,
+        color: "red",
+    },
+    customCheckbox: {
+        padding: 10,
+        borderWidth: 1,
+        width: "100%",
+        height: 40,
+        borderRadius: 5,
+        borderColor: "white",
+        backgroundColor: "white",
+        borderColor: "#C8C4C4",
+    },
+    ckItem: {
+        alignSelf: "center",
+        width: 80,
+        height: 90,
+        opacity: 0,
+        position: "absolute",
+    },
+
 });
 
 export default NewStaff;
