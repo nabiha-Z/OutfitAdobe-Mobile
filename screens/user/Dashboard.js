@@ -92,7 +92,7 @@ export default function Dashboard({ route, navigation }) {
                             <FontAwesome5
                                 name="home"
                                 size={20}
-                                color={focused ? '#71AED9' : 'gray'}
+                                color={focused ? '#FFD933' : 'gray'}
                             ></FontAwesome5>
                         </View>
                     )
@@ -124,7 +124,7 @@ export default function Dashboard({ route, navigation }) {
                             position: 'absolute',
                             top: 20
                         }}>
-                            <Octicons name="calendar" size={22} color={focused ? '#71AED9' : 'gray'} />
+                            <Octicons name="calendar" size={22} color={focused ? '#FFD933' : 'gray'} />
                            
                             
                         </View>
@@ -157,7 +157,7 @@ export default function Dashboard({ route, navigation }) {
                             // centring Tab Button...
                             width: 55,
                             height: 55,
-                            backgroundColor: '#71AED9',
+                            backgroundColor: '#ffd933',
                             borderRadius: 30,
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -200,7 +200,7 @@ export default function Dashboard({ route, navigation }) {
                             <FontAwesome5
                                 name="bell"
                                 size={20}
-                                color={focused ? '#71AED9' : 'gray'}
+                                color={focused ? '#FFD933' : 'gray'}
                             ></FontAwesome5>
                         </View>
                     )
@@ -235,11 +235,11 @@ export default function Dashboard({ route, navigation }) {
                             <Ionicons
                                 name="chatbox" 
                                 size={20}
-                                color={focused ? '#71AED9' : 'gray'} />
+                                color={focused ? '#FFD933' : 'gray'} />
                             {/* <FontAwesome5
                                 name="comment"
                                 size={20}
-                                color={focused ? '#71AED9' : 'gray'}
+                                color={focused ? '#FFD933' : 'gray'}
                             ></FontAwesome5> */}
                         </View>
                     )
@@ -258,7 +258,7 @@ export default function Dashboard({ route, navigation }) {
             <Animated.View style={{
                 width: getWidth() - 20,
                 height: 2,
-                backgroundColor: '#71AED9',
+                backgroundColor: '#FFD933',
                 position: 'absolute',
                 bottom: 80,
                 // Horizontal Padding = 20...

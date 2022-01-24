@@ -14,10 +14,7 @@ export default function Bookings({ route, navigation }) {
         db.collection('bookings').get().then(
 
             (data) => {
-                var temp = [];
-
-
-                
+                var temp = [];    
                 data.docs.map(
                     (data1) => {
                         console.log("datttaaa:", data1.id)

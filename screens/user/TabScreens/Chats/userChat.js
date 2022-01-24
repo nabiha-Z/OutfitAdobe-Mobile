@@ -41,19 +41,7 @@ setMessages(m)
         
     }, [messages])
 
-    const appendMessages = useCallback(
-        (messages) => {
-            setMessages((previousMessages) => GiftedChat.append(previousMessages, messages))
-        },
-        [messages]
-    )
 
-    async function readUser() {
-        const user = await AsyncStorage.getItem('user')
-        if (user) {
-            setUser(JSON.parse(user))
-        }
-    }
     async function handleSend(message) {
         const msg=message[0];
         const mymsg={

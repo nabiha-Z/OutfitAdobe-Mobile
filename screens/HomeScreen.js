@@ -3,47 +3,47 @@ import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'reac
 import Icon from '@expo/vector-icons/AntDesign';
 
 import { LinearGradient } from 'expo-linear-gradient';
-import {firebaseConfig} from '../Firebase/FirebaseConfig';
+import { firebaseConfig } from '../Firebase/FirebaseConfig';
 import firebase from "firebase/app";
 
 function HomeScreen({ route, navigation }) {
-   
+
     return (
-        <View style={{ backgroundColor: '#93B8D4', height: '100%' }}>
-            <LinearGradient
+        <View style={{ backgroundColor: 'white', height: '100%' }}>
+            {/* <LinearGradient
                 // Background Linear Gradient
                 colors={['rgba(12, 13, 15,0.9)', 'transparent']}
                 style={styles.background}
-            />
+            /> */}
             <Image
                 source={require('../images/mainlogo.png')}
                 style={{ width: '100%', height: '30%', marginTop: 90 }}
             />
             <Text
-                style={{
-                    textAlign: 'center',
-                    marginTop: 0,
-                    color: '#FFFFFF',
-                    fontSize: 25,
-                    fontWeight: 'bold'
-                }}>
+                style={styles.heading}>
                 Welcome to One Queue
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('VendorLogin')}><Text style={styles.Txt}>Become a vendor</Text></TouchableOpacity>
-            <View style={[styles.emailBtn, styles.elevation]}>
-                <Text onPress={() => navigation.navigate('LoginScreen')}>Sign In with email</Text>
-            </View>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('VendorLogin')}
+                activeOpacity={0.6}>
+                <Text style={styles.txt}>Become a vendor</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+            activeOpacity={0.6}
+            style={[styles.emailBtn, styles.elevation]}>
+                <Text onPress={() => navigation.navigate('LoginScreen')} style={{ color: '#31302A' }}>Sign In with email</Text>
+            </TouchableOpacity>
             <Text style={styles.bottomTxt}> or connect with</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', marginLeft:5}}>
-               <TouchableOpacity style={styles.bottomView}>
-               
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginLeft: 5 }}>
+                <TouchableOpacity style={styles.bottomView}>
+
                     <Icon name='google' style={styles.icons} />
 
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.bottomView}>
                     <Image
                         source={require('../images/apple.png')}
-                        style={[styles.icons,{ width: '10%', height: '25%', alignSelf: 'center', padding: 16,}]}
+                        style={[styles.icons, { width: '10%', height: '25%', alignSelf: 'center', padding: 16, }]}
                     />
 
                 </TouchableOpacity>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         height: '90%',
     },
     emailBtn: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#ffd933',
         padding: 15,
         width: '70%',
         alignItems: 'center',
@@ -85,13 +85,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     bottomTxt: {
-        color: '#FFFFFF',
+        color: '#525251',
         margin: 10,
         alignSelf: 'center'
 
     },
-    Txt: {
-        color: '#FFFFFF',
+    txt: {
+        color: '#525251',
         margin: 10,
         alignSelf: 'center',
         textDecorationLine: 'underline',
@@ -102,6 +102,12 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         padding: 10,
         margin: 10
+    },
+    heading: {
+        fontWeight: 'bold',
+        fontSize: 25,
+        color: '#363635',
+        textAlign: 'center'
     }
 
 

@@ -10,25 +10,37 @@ import one from "../../images/health.jpg";
 export default function Details({ route, navigation }) {
     const db = firebase.firestore();
     const { details } = route.params;
-    console.log("details:", details)
+    //console.log("details:", details);
+
     const auth = firebase.auth();
     const [isSelected, setSelected] = useState(details.fav);
     const [check1, setcheck1] = useState(true);
     const [staff, setstaff] = useState([])
     const [check, setcheck] = useState(1);
     const [error, setError] = useState("");
-    const [products, setProducts] = useState([
-    ]);
+    const [products, setProducts] = useState([]);
     useEffect(() => {
         db.collection('products').get().then(
 
             (data) => {
-                var temp = [];
+                var temp = [], service = [];
                 data.docs.map(
                     (data1) => {
-                        if (data1.data().store == details.store) {
-                            temp.push(data1.data());
-                           
+                        var info = data1.data();
+                        if (info.store == details.store) {
+                            service = info.service;
+                            service.map((item) => {
+                                if (item.name == details.name) {
+                                    var a = info;
+                                    a.pid = data1.id;
+                                    a.boder="#C8C4C4";
+                                    a.background="white"
+                                    a.selected = false;
+                                    temp.push(a);
+                                }
+                            })
+
+
                         }
 
                     }
@@ -36,46 +48,39 @@ export default function Details({ route, navigation }) {
                 )
 
                 setProducts(temp);
+
             }
         )
 
         db.collection('staffs').get().then(
 
             (data) => {
-                var temp = [];
+                var temp = [], service = [];
                 data.docs.map(
                     (data1) => {
-                        if (data1.data().store == details.store && data1.data().service === details.name) {
-                            temp.push(data1.data());
-                            console.log("temp:", temp[0].profession)
+                        var info = data1.data();
+                        if (info.store == details.store) {
+                            service = info.service;
+                            service.map((item) => {
+                                if (item.name == details.name) {
+                                    //console.log("Found:", info)
+                                    temp.push(info);
+                                }
+                            })
                         }
 
                     }
 
                 )
                 setstaff(temp);
+                //console.log("serrrerere:", staff);
             }
         )
 
-    }, [check1])
+    }, [])
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-    if (check == 1) {
-        const newData = products.map((newItem) => {
-
-            newItem.border = '#C8C4C4'
-            newItem.background = 'white'
-            newItem.selected = false
-
-            return newItem
-
-
-        });
-
-        setProducts(newData);
-        setcheck(-1)
-    }
     const favourite = () => {
 
         setSelected(!isSelected)
@@ -84,7 +89,7 @@ export default function Details({ route, navigation }) {
     const onChange = (item) => {
 
         const newData = products.map((newItem) => {
-            if (newItem.id === item.id) {
+            if (newItem.pid === item.pid) {
                 var color, background;
                 if (item.selected === false) {
                     color = "#EAF3F2";
@@ -134,14 +139,14 @@ export default function Details({ route, navigation }) {
                 count++;
             }
         })
-        if(count === 0){
+        if (count === 0) {
             setError("Please choose a product")
-            
-        }else{
+
+        } else {
             navigation.navigate('bookingscreen', { service: details, staff: staff, products: selectedData })
         }
 
-        
+
     }
 
     return (
@@ -166,7 +171,7 @@ export default function Details({ route, navigation }) {
                 imageLoadingColor="#FAB7A0"
             />
 
-            <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1.5, backgroundColor: 'white' }}>
+            <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1.6, backgroundColor: 'white' }}>
                 <View style={styles.description}>
                     <Text style={styles.subheading}>{details.name}</Text>
                     <TouchableOpacity onPress={() => favourite()} style={{ justifyContent: 'center' }}>
@@ -179,8 +184,8 @@ export default function Details({ route, navigation }) {
                     {/* <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', width: '30%' }]} onPress={() => navigation.navigate('bookingscreen', { item: details })}>
                         <Text style={{ color: 'white' }}>Book</Text>
                     </TouchableOpacity> */}
-                     <TouchableOpacity
-                        style={{ flexDirection: 'row', backgroundColor: 'rgba(135, 199, 199,0.7)', padding: 10, borderRadius:10}}
+                    <TouchableOpacity
+                        style={{ flexDirection: 'row', backgroundColor: 'rgba(135, 199, 199,0.7)', padding: 10, borderRadius: 10 }}
                         key={details.store} onPress={() => navigation.navigate("user_Chat", { uid: details.store, name: details.name })}
                     >
                         <Ionicons name="chatbubble-outline" color='white' size={20} />
@@ -205,18 +210,9 @@ export default function Details({ route, navigation }) {
                         <Text style={[styles.txt, { marginLeft: 5, fontSize: 15 }]}>{details.time1} - {details.time2}</Text>
                     </View>
 
-                   
-                    {/* <TouchableOpacity > */}
-
-
-
-
-                    {/* <Text style={{ fontSize: 20, backgroundColor: '#383939', padding: 10, color: '#FFFFFF', textAlign: 'center' }}>Click to Chat</Text> */}
-
-                    {/* </TouchableOpacity> */}
                     <Text style={[styles.heading, { color: '#383939', fontSize: 20 }]}>Products</Text>
 
-                    <Text style={{ color: '#747676', fontSize: 12,padding: 10, marginTop:-5}}>Select from the below products to add in the serivce</Text>
+                    <Text style={{ color: '#747676', fontSize: 12, padding: 10, marginTop: -5 }}>Select from the below products to add in the serivce</Text>
 
                     <View style={styles.productsView}>
                         {products.map((item, key) => (
@@ -267,14 +263,14 @@ export default function Details({ route, navigation }) {
                 </View>
 
                 <Text style={[styles.heading, { color: '#383939', fontSize: 20, marginHorizontal: 20 }]}>Our Staff</Text>
-                <Text style={ { color: '#747676', fontSize: 13, padding:10,  marginHorizontal: 15, marginTop:-5}}>Select the staff for your service</Text>
+                <Text style={{ color: '#747676', fontSize: 13, padding: 10, marginHorizontal: 15, marginTop: -5 }}>Select the staff for your service</Text>
 
                 <ScrollView
                     horizontal={true}
                     showsHorizontalScrollIndicator={true}
                     contentContainerStyle={{ height: 160, marginHorizontal: 25, justifyContent: 'center', alignItems: 'center' }}>
-                    {staff.map((item, key) =>
-                    (
+                    {staff.map((item, key) => (
+
                         <>
                             <TouchableOpacity
                                 style={styles.checkboxContainer}
@@ -285,7 +281,7 @@ export default function Details({ route, navigation }) {
 
                                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                     <View style={styles.staffView}>
-                                        {/* <Text style={{ fontWeight: 'bold', fontSize: 18, textAlign: 'center', color: '#0F6B7A' }}>{item.name[0].toUpperCase()} </Text> */}
+
                                         <Image
                                             source={{ uri: item.img }}
                                             style={{
@@ -296,23 +292,25 @@ export default function Details({ route, navigation }) {
                                             }}
                                         />
                                     </View>
-
                                     <View style={styles.ratingView}>
                                         <AntDesign name="star" color="#EED51F" size={12} />
                                         <Text style={{ textAlign: 'center', fontSize: 12, fontWeight: 'bold' }}>{item.rating} </Text>
+
                                     </View>
                                     <Text style={{ textAlign: 'center', fontSize: 14, color: '#000000', marginTop: 10, fontWeight: 'bold' }}>{item.name} </Text>
-                                    <Text style={{ textAlign: 'center', fontSize: 10, color: '#B8BABB', marginTop: 2 }}>{item.service} </Text>
-
+                                    <Text style={{ textAlign: 'center', fontSize: 10, color: '#B8BABB', marginTop: 2 }}>{item.profession} </Text>
                                 </View>
+
                             </TouchableOpacity>
 
                         </>
                     )
+
                     )}
 
+
                 </ScrollView>
-                
+
             </ScrollView>
 
         </View>
@@ -474,8 +472,8 @@ const styles = StyleSheet.create({
         top: 5,
     },
     errorMsg: {
-        color:'#E32F0F',
-        fontSize:13,
-        marginHorizontal:10
+        color: '#E32F0F',
+        fontSize: 13,
+        marginHorizontal: 10
     }
 });

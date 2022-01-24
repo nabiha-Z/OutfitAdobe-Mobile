@@ -91,7 +91,7 @@ function NewInventory({ navigation }) {
                         price: getPrice,
                         img: data,
                         store: auth.currentUser.uid,
-                        service: selectedService
+                        service: tempArr
                     }).then(
                         data => {
                             Alert.alert('Product Added Successfully');
