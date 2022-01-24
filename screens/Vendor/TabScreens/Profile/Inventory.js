@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Alert, Modal } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import firebase from "firebase/app";
@@ -12,11 +12,15 @@ export default function InventoryDetails({ route, navigation }) {
 
     const [Inventory, setInventory] = useState([]);
     const [check, setcheck] = useState(true);
-    const deleteStaff = (uid) => {
-        db.collection('products').doc(uid).delete().then(
+    const [tempId, setId] = useState(null);
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const deleteStaff = (pid) => {
+        db.collection('products').doc(pid).delete().then(
             (data) => {
                 check ? setcheck(false) : setcheck(true);
-                Alert.alert("Product Deleted Successfully");
+                setModalVisible(false)
+                Alert.alert("Staff Deleted Successfully");
 
             }
         )
@@ -72,7 +76,10 @@ export default function InventoryDetails({ route, navigation }) {
                             <Text style={styles.subText}>Price :{item.price}</Text>
                         </View>
                         <TouchableOpacity
-                            onPress={() => deleteStaff(item.uid)}
+                            onPress={() => {
+                                setId(item.uid)
+                                setModalVisible(true)
+                            }}
                         >
                             <AntDesign name="delete" size={20} style={{ top: 4, color: '#D71212' }} />
                         </TouchableOpacity>
@@ -84,6 +91,36 @@ export default function InventoryDetails({ route, navigation }) {
 
 
             </ScrollView>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isModalVisible == true}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+
+                        <Text style={[styles.modalText, { fontSize: 24 }]}>Are you sure you want to delete the staff?</Text>
+
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <TouchableOpacity
+                                style={[styles.ModalBtn]}
+                                onPress={() => { setModalVisible(false) }}
+                            >
+                                <Text style={{ fontSize: 17, color: '#145A32' }}>Close</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.ModalBtn, { backgroundColor: '#E03D3D' }]}
+                                onPress={() => { deleteStaff(tempId) }}
+                            >
+                                <Text style={{ fontSize: 17, color: 'white' }}>Delete</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
+                </View>
+            </Modal>
         </View>
     )
 }
@@ -146,10 +183,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     img: {
-        width:50,
-        height:50,
-        marginRight:10,
-        borderRadius:25
+        width: 50,
+        height: 50,
+        marginRight: 10,
+        borderRadius: 25
     }
 
 

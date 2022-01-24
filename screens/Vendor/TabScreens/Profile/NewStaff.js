@@ -8,9 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import moment from 'moment';
 import firebase from 'firebase/app';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-
 import { CheckBox } from "react-native-elements";
-import SelectDropdown from 'react-native-select-dropdown';
 
 function NewStaff({ navigation }) {
 
@@ -21,12 +19,14 @@ function NewStaff({ navigation }) {
     const [getContact, setContact] = useState(null);
     const [skill, setSkill] = useState(null);
     const [errors, setError] = useState("");
+    const [serviceError, setServiceError] = useState("");
     const [time1, setTime1] = useState("9:00");
     const [show1, setShow1] = useState(false);
     const [show2, setShow2] = useState(false);
     const [image, setImage] = useState(null);
     const [service, setService] = useState([]);
-    const [selectedService, setSelected] = useState(null);
+    const [selectedServices, setSelected] = useState([]);
+    const [temp2, setTemp2] = useState([])
     const [isModalVisible, setModalVisible] = useState(false);
 
 
@@ -44,28 +44,59 @@ function NewStaff({ navigation }) {
         db.collection('services').get().then(
 
             (data) => {
-                var temp = [];
+                var temp = [], temparr = [];
                 data.docs.map(
                     (data1) => {
                         if (data1.data().store == auth.currentUser.uid) {
                             var a = data1.data();
-                            temp.push(a.name);
+                            a.sid = data1.id;
+                            var obj = {};
+                            obj.name = a.name;
+                            obj.sid = a.sid;
+                            obj.border = "#C8C4C4";
+                            obj.background = "white";
+                            obj.checked = false;
+                            temp.push(obj);
+                            temparr.push(a);
                         }
 
                     }
 
                 )
                 setService(temp);
+                setTemp2(temparr);
             }
+
         )
+        //console.log("service:", service)
+        console.log("selectedSSSS:", selectedServices)
     }, [])
 
 
     const uploadImage = async (uri) => {
 
-        if (getName !== null && getContact !== null & selectedService != null && profession != null) {
+        if (getName !== null && getContact !== null & selectedServices.length != 0 && skill != null && image != null) {
 
-            setError("")
+
+            setError("");
+            setServiceError("");
+            var tempArr = [];
+
+            temp2.map((item) => {
+
+                selectedServices.map((element) => {
+                    if (element.sid === item.sid) {
+
+                        console.log("founddd")
+                        tempArr.push(item);
+                    }
+                })
+            })
+            console.log("tempArr:", tempArr);
+            setSelected(tempArr);
+
+            console.log("final:", selectedServices)
+
             const response = await fetch(uri);
             const blob = await response.blob();
             var imagename = getName + new Date().toString();
@@ -80,8 +111,8 @@ function NewStaff({ navigation }) {
                         time2: time2,
                         img: data,
                         store: auth.currentUser.uid,
-                        service: selectedService,
-                        rating: "4.0",
+                        service: tempArr,
+                        rating: "3.5",
                         profession: skill
                     }).then(
                         data => {
@@ -91,24 +122,25 @@ function NewStaff({ navigation }) {
                     )
                 }
             )
+        } else if (selectedServices.length == 0) {
+            setServiceError("Select atleast one service");
         } else {
             setError("Fill out all fields")
         }
+
+
     };
 
 
     const handlePicker1 = (dateTime) => {
-        console.log("Selected Value= ", dateTime);
+
         var selectedTime = moment(dateTime).format('HH:mm');
-        console.log("formatted time= ", selectedTime);
         setTime1(selectedTime);
         setShow1(false);
     }
 
     const handlePicker2 = (dateTime) => {
-        console.log("Selected Value= ", dateTime);
         var selectedTime = moment(dateTime).format('HH:mm');
-        console.log("formatted time= ", selectedTime);
         setTime2(selectedTime);
         setShow2(false);
     }
@@ -125,73 +157,63 @@ function NewStaff({ navigation }) {
             aspect: [4, 3]
         });
 
-        console.log(result);
-
         if (!result.cancelled) {
             setImage(result.uri);
         }
     };
 
-    // const closeModal = () => {
-    //     setSelected([]);
-    //     setModalVisible(false);
-    // };
+    const closeModal = () => {
+        console.log("selected:", selectedServices)
+        setModalVisible(false);
+    };
 
 
-    // const addServices = (item) => {
-
-    //     console.log("checked:", item.checked);
-    //     var color, background;
-    //     const newData = service.map((newItem) => {
-    //         if (newItem.checked === true && newItem.sid != item.sid) {
-
-    //             color = "#C8C4C4";
-    //             background = "white";
-    //             console.log("checked true color:", item.background)
-    //             return {
-    //                 ...newItem,
-    //                 border: color,
-    //                 background: background,
-    //                 checked: !item.selected,
-    //             };
-    //         }
-
-    //         if (newItem.sid === item.sid) {
-    //             console.log("djfksdjfksdjfkj")
-    //             if (item.checked === false) {
-    //                 color = "#EAF3F2";
-    //                 background = "#EAF3F2";
-                   
-
-    //             } else {
-    //                 color = "#C8C4C4";
-    //                 background = "white";
-    //             }
-    //             console.log("selected color: ", background);
-    //             console.log("checkedcolor:", item.background)
-
-    //             return {
-    //                 ...newItem,
-    //                 border: color,
-    //                 background: background,
-    //                 checked: !item.checked,
-    //             };
-    //         }
-    //         return {
-    //             ...newItem,
-    //             checked: newItem.checked,
-    //         };
-    //     });
-
-    //     setSelected(newData);
-    //     console.log("sssss: ", selectedService)
-    // }
 
 
-    // const confirmed = () => {
-    //     setModalVisible(false);
-    // };
+    const addServices = (item) => {
+        var color, background;
+        const newData = service.map((newItem) => {
 
+            if (newItem.sid === item.sid) {
+                if (item.checked === false) {
+                    color = "#EAF3F2";
+                    background = "#EAF3F2";
+
+
+                } else {
+                    color = "#C8C4C4";
+                    background = "white";
+                }
+
+                return {
+                    ...newItem,
+                    border: color,
+                    background: background,
+                    checked: !item.checked,
+                };
+            }
+            return {
+                ...newItem,
+                checked: newItem.checked,
+            };
+        });
+
+        setService(newData);
+    }
+
+
+    const confirmed = () => {
+        var tempArr = [];
+
+        service.map((item, key) => {
+            if (item.checked === true) {
+                tempArr.push(item);
+            }
+        })
+
+        setSelected(tempArr);
+        setModalVisible(false);
+    };
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ padding: 20 }}>
@@ -215,6 +237,7 @@ function NewStaff({ navigation }) {
 
                 <Text style={styles.label}>Contact:</Text>
                 <TextInput
+                    keyboardType="numeric"
                     style={styles.inputField}
                     placeholder='Enter Contact Detail'
                     value={getContact}
@@ -230,13 +253,8 @@ function NewStaff({ navigation }) {
                     onChangeText={text => setSkill(text)}
                 />
 
-                {/* <TouchableOpacity
-                    style={styles.button}
-                    activeOpacity={0.5}
-                    onPress={() => { setModalVisible(true) }}>
-                    <Text style={styles.buttonText}>Choose Services</Text>
-                </TouchableOpacity> */}
-               <SelectDropdown
+
+                {/* <SelectDropdown
                     data={service}
                     onSelect={(selectedItem, index) => {
                         setSelected(selectedItem)
@@ -249,19 +267,30 @@ function NewStaff({ navigation }) {
                         return item
                     }}
                     defaultButtonText="Click for options"
-                    buttonStyle={selectedService != null ? [styles.button, { backgroundColor: 'white' }] : styles.button}
+                    buttonStyle={selectedServices != null ? [styles.button, { backgroundColor: 'white' }] : styles.button}
                     dropdownStyle={styles.dropdown}
                     rowTextStyle={styles.dropdownItems}
-                    buttonTextStyle={selectedService != null ? [styles.buttonText, { color: '#12555C' }] : styles.buttonText}
-                />
-                {/* <Modal animationType="slide" transparent={true} visible={isModalVisible}>
+                    buttonTextStyle={selectedServices != null ? [styles.buttonText, { color: '#12555C' }] : styles.buttonText}
+                /> */}
+
+                <TouchableOpacity
+                   style={selectedServices.length != 0 ? [styles.button, { backgroundColor: 'white' }] : styles.button}
+                    activeOpacity={0.5}
+                    onPress={() => { setModalVisible(true) }}>
+                    <Text style={selectedServices.length != 0 ? [styles.buttonText, { color: '#FAD842' }] : styles.buttonText}>{selectedServices.length!=0?selectedServices[0].name:"Select Service(s)"}</Text>
+                </TouchableOpacity>
+                <Text style={styles.errorsTxt}>{serviceError}</Text>
+
+                <Modal animationType="slide" transparent={true} visible={isModalVisible}>
                     <View style={styles.centeredView}>
+
                         <View style={styles.modalView}>
+                            <Text style={[styles.heading, { marginBottom: 20 }]}>Services</Text>
                             {service.map((item, key) => (
 
                                 <View style={styles.checkboxContainer} key={key}>
                                     <CheckBox
-                                        key={item.id}
+                                        key={item.sid}
                                         checked={item.checked}
                                         containerStyle={[styles.ckItem, { zIndex: 1 }]}
                                         disabled={false}
@@ -270,6 +299,7 @@ function NewStaff({ navigation }) {
                                         boxType="square"
                                         onPress={() => addServices(item)}
                                     />
+
                                     <View style={[
                                         styles.customCheckbox,
                                         {
@@ -310,7 +340,7 @@ function NewStaff({ navigation }) {
                             </View>
                         </View>
                     </View>
-                </Modal> */}
+                </Modal>
 
                 <Text style={styles.label}>Select your timings</Text>
 
@@ -516,12 +546,14 @@ const styles = StyleSheet.create({
     checkboxContainer: {
         flexDirection: "row",
         marginBottom: 20,
+
     },
     centeredView: {
-        backgroundColor: 'white',
+        backgroundColor: 'rgba(16, 17, 17,0.3)',
         justifyContent: "center",
         alignItems: "center",
-        margin: 30,
+        height: '100%',
+        padding: 20
     },
     modalView: {
         backgroundColor: "white",
@@ -530,7 +562,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         shadowColor: "#000",
-        height: "70%",
+        height: "50%",
         width: "100%",
     },
     ModalBtn: {
@@ -565,7 +597,7 @@ const styles = StyleSheet.create({
     },
     ckItem: {
         alignSelf: "center",
-        width: 80,
+        width: '100%',
         height: 90,
         opacity: 0,
         position: "absolute",

@@ -10,8 +10,8 @@ import uuid from 'uuid';
 function NewService({ navigation }) {
 
 
-    const auth=firebase.auth();
-    const db=firebase.firestore();
+    const auth = firebase.auth();
+    const db = firebase.firestore();
     const [time2, setTime2] = useState("20:00");
     const [getName, setName] = useState(null);
     const [getDetail, setDetail] = useState(null);
@@ -21,36 +21,36 @@ function NewService({ navigation }) {
     const [show1, setShow1] = useState(false);
     const [show2, setShow2] = useState(false);
     const [image, setImage] = useState(null);
-    const [fileurl,setfileurl]=useState('');
+    const [fileurl, setfileurl] = useState('');
     const uploadImage = async (uri) => {
-       console.log("heloo");
-            const response = await fetch(uri);
-            const blob = await response.blob();
-            var imagename=getName+new Date().toString();
-            var ref = firebase.storage().ref().child(imagename);
-            await ref.put(blob);
-            ref.getDownloadURL().then(
-                (data)=>{
-                    db.collection('services').add({
-                        name:getName,
-                        detail:getDetail,
-                        price:getPrice,
-                        time1:time1,
-                        time2:time2,
-                        img:data,
-                        store:auth.currentUser.uid
-                    }).then(
-                        data=>{
-                            Alert.alert('Service Added Successfully');
-                            navigation.navigate('Profile');
-                        }
-                    )
-                }
-            )
-            
-          
-       
-      };
+        console.log("heloo");
+        const response = await fetch(uri);
+        const blob = await response.blob();
+        var imagename = getName + new Date().toString();
+        var ref = firebase.storage().ref().child(imagename);
+        await ref.put(blob);
+        ref.getDownloadURL().then(
+            (data) => {
+                db.collection('services').add({
+                    name: getName,
+                    detail: getDetail,
+                    price: getPrice,
+                    time1: time1,
+                    time2: time2,
+                    img: data,
+                    store: auth.currentUser.uid
+                }).then(
+                    data => {
+                        Alert.alert('Service Added Successfully');
+                        navigation.navigate('Profile');
+                    }
+                )
+            }
+        )
+
+
+
+    };
     useEffect(() => {
         (async () => {
             if (Platform.OS !== 'web') {
@@ -88,7 +88,7 @@ function NewService({ navigation }) {
             allowsEditing: true,
             // base64: true,
             aspect: [4, 3]
-          });
+        });
 
         console.log(result);
 
@@ -97,7 +97,7 @@ function NewService({ navigation }) {
         }
     };
 
-   
+
 
     return (
         <View style={styles.container}>
@@ -127,6 +127,7 @@ function NewService({ navigation }) {
             />
             <Text style={styles.label}>Price:</Text>
             <TextInput
+                keyboardType='numeric'
                 style={styles.inputField}
                 placeholder='Price $'
                 value={getPrice}
@@ -184,11 +185,11 @@ function NewService({ navigation }) {
                     <TouchableOpacity style={styles.selectedImgBtn} onPress={() => setImage(null)}>
                         <Image source={{ uri: image }} style={styles.selectedImage} />
                     </TouchableOpacity>)}
-            
+
             </View>
 
             <TouchableOpacity
-                onPress={()=>uploadImage(image)}
+                onPress={() => uploadImage(image)}
                 style={styles.addButton}
             >
                 <Text style={{ color: '#D7D9D9' }}>Add</Text>
@@ -280,14 +281,14 @@ const styles = StyleSheet.create({
         shadowColor: '#0B1A34',
     },
     selectedImgBtn: {
-        backgroundColor: '#E1E7F1', 
-        width: 40, 
-        height: 40, 
-        zIndex: 2, 
-        padding: 10, 
+        backgroundColor: '#E1E7F1',
+        width: 40,
+        height: 40,
+        zIndex: 2,
+        padding: 10,
         borderRadius: 40 / 2,
-        marginTop:20,
-        marginLeft:10
+        marginTop: 20,
+        marginLeft: 10
     },
     selectedImage: {
         width: 30,

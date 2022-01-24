@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Alert, Modal } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import firebase from "firebase/app";
@@ -12,10 +12,14 @@ export default function StaffDetails({ route, navigation }) {
 
     const [staffs, setStaffs] = useState([]);
     const [check, setcheck] = useState(true);
+    const [tempId, setId] = useState(null);
+    const [isModalVisible, setModalVisible] = useState(false);
+
     const deleteStaff = (uid) => {
         db.collection('staffs').doc(uid).delete().then(
             (data) => {
                 check ? setcheck(false) : setcheck(true);
+                setModalVisible(false)
                 Alert.alert("Staff Deleted Successfully");
 
             }
@@ -38,13 +42,11 @@ export default function StaffDetails({ route, navigation }) {
                         }
 
                     }
-                    
-
                 )
                 setStaffs(temp);
             }
         )
-    }, [])
+    }, [check])
 
     return (
         <View style={styles.container}>
@@ -69,11 +71,15 @@ export default function StaffDetails({ route, navigation }) {
                         {/* <AntDesign name="user" size={28} style={{ marginRight: 20, top: 4 }} /> */}
                         <View style={styles.textContainer}>
                             <Text style={styles.mainText}>{item.name}</Text>
+                            <Text style={[styles.subText,{color:'#FFD933'}]}>{item.profession}</Text>
                             <Text style={styles.subText}>Contact : {item.contact}</Text>
                             <Text style={styles.subText}>From : {item.time1} to {item.time2}</Text>
                         </View>
                         <TouchableOpacity
-                            onPress={() => deleteStaff(item.uid)}
+                            onPress={() => {
+                                setId(item.uid)
+                                setModalVisible(true)
+                            }}
                         >
                             <AntDesign name="delete" size={20} style={{ top: 4, color: '#D71212' }} />
                         </TouchableOpacity>
@@ -84,6 +90,36 @@ export default function StaffDetails({ route, navigation }) {
 
 
             </ScrollView>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isModalVisible == true}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+
+                        <Text style={[styles.modalText, { fontSize: 24 }]}>Are you sure you want to delete the staff?</Text>
+
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <TouchableOpacity
+                                style={[styles.ModalBtn]}
+                                onPress={() => { setModalVisible(false) }}
+                            >
+                                <Text style={{ fontSize: 17, color: '#145A32' }}>Close</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.ModalBtn, { backgroundColor: '#E03D3D' }]}
+                                onPress={() => { deleteStaff(tempId) }}
+                            >
+                                <Text style={{ fontSize: 17, color: 'white' }}>Delete</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
+                </View>
+            </Modal>
         </View>
     )
 }
@@ -146,11 +182,84 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     img: {
-        width:50,
-        height:50,
-        marginRight:10,
-        borderRadius:25
-    }
+        width: 50,
+        height: 50,
+        marginRight: 10,
+        borderRadius: 25
+    },
+    centeredView: {
+        borderTopWidth: 1,
+        borderColor: '#908D8D',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+        margin: 10,
+        borderRadius: 20
+
+    },
+    modalView: {
+
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(12, 12, 12,0.6)',
+        padding: 20,
+        alignItems: "center",
+        shadowColor: "#000",
+        height: '60%',
+        width: '100%',
+        flexWrap: 'wrap',
+        borderRadius: 10
+    },
+    ModalBtn: {
+        margin: 10,
+        marginTop: 20,
+        borderRadius: 10,
+        padding: 16,
+        width: 120,
+        backgroundColor: '#F4F3F3',
+        alignItems: 'center',
+        alignContent: 'center',
+
+    },
+    modalText: {
+        color: 'white',
+        fontSize: 20,
+        marginHorizontal:15
+    },
+    txt: {
+        color: 'white',
+        fontSize: 12
+    },
+    confirmed: {
+        backgroundColor: '#54B8EA',
+        padding: 5,
+        color: 'white',
+        borderRadius: 20,
+        textAlign: 'center',
+        marginTop: 20,
+        width: '70%'
+    },
+    cancelBtn: {
+        justifyContent: 'center',
+        padding: 10,
+        borderRadius: 10,
+        backgroundColor: 'rgba(165, 167, 167,0.4)',
+        width: '20%',
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    cancelbtnContainer: {
+        alignItems: 'flex-end',
+        alignSelf: 'flex-end'
+    },
+    serviceImg: {
+        marginTop: 65,
+        width: '30%',
+        marginLeft:-80
+    },
+    blackTxt: {
+        fontWeight: 'bold',
+        fontSize: 15,
+    },
 
 
 })

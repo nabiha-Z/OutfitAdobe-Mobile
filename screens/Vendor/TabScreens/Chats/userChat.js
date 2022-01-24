@@ -17,7 +17,6 @@ const auth=firebase.auth()
 // console.log(chatsRef);
 
     const [user, setUser] = useState({_id:auth.currentUser.uid,name:auth.currentUser.displayName})
-    const [name, setName] = useState('')
     const [messages, setMessages] = useState([])
   
    const getAllMessage = async ()=>{

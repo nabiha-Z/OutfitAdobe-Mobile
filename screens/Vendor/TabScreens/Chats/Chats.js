@@ -1,9 +1,8 @@
 import React,{useEffect,useState} from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
-import { StackActions } from '@react-navigation/native';
+import { AntDesign, Ionicons  } from '@expo/vector-icons';
 import firebase from "firebase/app";
+
 export default function Chats({route, navigation}) {
     const [chats,setchats]=useState([])
     const auth=firebase.auth()
@@ -41,15 +40,16 @@ useEffect(() => {
         <View style={styles.container}>
             {chats.map(
                 (item)=>{
+                    console.log("item:", item)
                     return(
                         <TouchableOpacity key={item.to} style={styles.tabContainer} onPress={()=>navigation.navigate("Chat",{uid:item.to,name:item.name})}>
 
-                        <FontAwesome name="circle" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
+                        <Ionicons name="chatbubble-ellipses-outline" size={26} color="#FFD933" style={{ marginRight: 10, top: 10 }} />
                         <View style={styles.textContainer}>
                             <Text style={styles.mainText}>{item.name}</Text>
-                            <Text style={styles.subText}>Click to Chat</Text>
+                            <Text style={styles.subText}>Click to View</Text>
                         </View>
-                        <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
+                        <AntDesign name="arrowright" size={16} color="#909193" style={{ marginHorizontal:40, top: 20 }} />
                     </TouchableOpacity>
                     );
                 }

@@ -25,10 +25,7 @@ export default function PaymentScreen({ route, navigation }) {
 
         setModalVisible(true);
     }
-
-    const deleteStaff = (uid) => {
-       
-    }
+    
     const cancelBooking = (bid) => {
         db.collection('bookings').doc(bid).delete().then(
             (data) => {
