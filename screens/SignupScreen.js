@@ -98,7 +98,7 @@ function SignupScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../images/img4.png')}
+        source={require('../images/draw5.png')}
         style={{ width: '80%', height: '30%', marginTop: -30 }}
       />
       <Text

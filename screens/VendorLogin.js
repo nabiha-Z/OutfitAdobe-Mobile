@@ -111,7 +111,7 @@ function Vendor({ route, navigation }) {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../images/img2.png')}
+        source={require('../images/draw6.png')}
         style={{ width: '100%', height: '40%' }}
       />
       <Text
@@ -158,7 +158,7 @@ function Vendor({ route, navigation }) {
             color: 'white',
           }}
           onPress={authenticateUser}>
-          <Text style={{ color: 'white' }}>Sign in</Text>
+          <Text style={{ color: '#525251' }}>Sign in</Text>
         </TouchableOpacity>
       </View>
       <Text
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 30,
-    backgroundColor: '#3E3737',
+    backgroundColor: '#ffd933',
     paddingVertical: 10,
     borderRadius: 23,
     width: '70%'

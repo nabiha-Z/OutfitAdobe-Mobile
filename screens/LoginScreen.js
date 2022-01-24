@@ -39,26 +39,17 @@ function Vendor({ route, navigation }) {
         (a) => {
           console.log("if")
           if (a.docs.length == 1) {
-
             navigation.navigate("Dashboard_user")
           }
           else {
             console.log("else")
           }
-
         }
       )
-
-
     } else {
-      // console.log("logged out user");
       navigation.navigate("LoginScreen")
     }
-
   })
-
-
-
 
   const authenticateUser = () => {
     if (getEmail != null && getPassword != null) {
@@ -81,7 +72,6 @@ function Vendor({ route, navigation }) {
               }
               else {
                 console.log("else")
-                //alert("else")
                 //navigation.navigate("Dashboard_user")
               }
 
@@ -90,10 +80,6 @@ function Vendor({ route, navigation }) {
             .catch((error) => {
               console.log("error found: ", error.message);
             })
-          // alert("Logged in");
-
-          // navigation.navigate("Dashboard")
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -103,16 +89,13 @@ function Vendor({ route, navigation }) {
         });
     } else {
       alert('Fill the fields');
-      //message.error('Fill the fields');
     }
   };
-
-
 
   return (
     <View style={styles.container}>
       <Image
-        source={require('../images/img5.png')}
+        source={require('../images/draw1.png')}
         style={{ width: '90%', height: '35%' }}
       />
       <Text
@@ -160,7 +143,7 @@ function Vendor({ route, navigation }) {
             color: 'white',
           }}
           onPress={authenticateUser}>
-          <Text style={{ color: 'white' }}>Sign in</Text>
+          <Text style={{ color: '#525251' }}>Sign in</Text>
         </TouchableOpacity>
       </View>
 
@@ -202,7 +185,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 30,
-    backgroundColor: '#3E3737',
+    backgroundColor: '#ffd933',
     paddingVertical: 10,
     borderRadius: 23,
     width: '70%'
