@@ -6,9 +6,8 @@ import moment from 'moment';
 import firebase from 'firebase/app';
 import storage from 'firebase/storage'
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import uuid from 'uuid';
-function NewService({ navigation }) {
 
+function NewService({ navigation }) {
 
     const auth = firebase.auth();
     const db = firebase.firestore();
@@ -21,9 +20,8 @@ function NewService({ navigation }) {
     const [show1, setShow1] = useState(false);
     const [show2, setShow2] = useState(false);
     const [image, setImage] = useState(null);
-    const [fileurl, setfileurl] = useState('');
+
     const uploadImage = async (uri) => {
-        console.log("heloo");
         const response = await fetch(uri);
         const blob = await response.blob();
         var imagename = getName + new Date().toString();
@@ -63,17 +61,13 @@ function NewService({ navigation }) {
     }, []);
 
     const handlePicker1 = (dateTime) => {
-        console.log("Selected Value= ", dateTime);
         var selectedTime = moment(dateTime).format('HH:mm');
-        console.log("formatted time= ", selectedTime);
         setTime1(selectedTime);
         setShow1(false);
     }
 
     const handlePicker2 = (dateTime) => {
-        console.log("Selected Value= ", dateTime);
         var selectedTime = moment(dateTime).format('HH:mm');
-        console.log("formatted time= ", selectedTime);
         setTime2(selectedTime);
         setShow2(false);
     }
@@ -89,9 +83,6 @@ function NewService({ navigation }) {
             // base64: true,
             aspect: [4, 3]
         });
-
-        console.log(result);
-
         if (!result.cancelled) {
             setImage(result.uri);
         }
