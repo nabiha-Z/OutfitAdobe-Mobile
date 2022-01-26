@@ -4,8 +4,6 @@ import { Ionicons, Feather, AntDesign, MaterialIcons, MaterialCommunityIcons } f
 import firebase from 'firebase/app';
 import { SliderBox } from "react-native-image-slider-box";
 import { CheckBox } from "react-native-elements";
-import one from "../../images/health.jpg";
-
 
 export default function Details({ route, navigation }) {
     const db = firebase.firestore();
@@ -150,10 +148,7 @@ export default function Details({ route, navigation }) {
     }
 
     return (
-        <View
-            style={{ marginTop: 70 }}
-        >
-
+        <View>
             <SliderBox
 
                 images={[details.img]}

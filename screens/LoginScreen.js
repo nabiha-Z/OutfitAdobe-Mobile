@@ -33,8 +33,7 @@ function Vendor({ route, navigation }) {
   auth.onAuthStateChanged(user => {
 
     if (user) {
-      console.log("current: ", user.uid)
-      
+
       const data = db.collection('users').where(firebase.firestore.FieldPath.documentId(), '==', user.uid).get().then(
         (a) => {
           console.log("if")

@@ -9,11 +9,7 @@ import { EvilIcons } from '@expo/vector-icons';
 function VendorLocation({ route, navigation }) {
 
     var { categories, businessName, Username, Email, Password, SubCat, TeamSize } = route.params;
-
-    // console.log("subcat = ", SubCat);
-
-    // console.log("name= ", Username)
-    console.log(route.params);
+    //console.log(route.params);
 
     const [isSelected, setSelection] = useState(false);
     const [business, setBusiness] = useState(true);

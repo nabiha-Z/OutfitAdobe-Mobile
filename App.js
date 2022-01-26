@@ -32,6 +32,8 @@ import NewService from './screens/Vendor/TabScreens/Profile/NewService';
 import InventoryDetails from './screens/Vendor/TabScreens/Profile/Inventory';
 import NewInventory from './screens/Vendor/TabScreens/Profile/NewInventory';
 import BookingDetails from './screens/user/BookingDetails';
+import SearchItems from './screens/user/SearchIedtems';
+
 const Stack = createStackNavigator();
 
 function App() {
@@ -328,7 +330,7 @@ function App() {
           options={({ navigation, route }) => ({
             title: '',
             headerStyle: {
-              height: 0,
+              height: 90,
 
             },
 
@@ -349,6 +351,16 @@ function App() {
         />
 
         <Stack.Screen name="bookingdetails" component={BookingDetails}
+          options={({ navigation, route }) => ({
+            title: '',
+            headerStyle: {
+              height: 0,
+
+            },
+          })}
+
+        />
+         <Stack.Screen name="search-screen" component={SearchItems}
           options={({ navigation, route }) => ({
             title: '',
             headerStyle: {

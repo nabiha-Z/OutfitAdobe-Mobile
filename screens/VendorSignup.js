@@ -748,10 +748,11 @@ function VendorSignup({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "white",
     width: "100%",
     padding: 10,
     paddingRight: 30,
@@ -823,6 +824,7 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     flexDirection: "row",
+    marginRight:5,
     marginBottom: 20,
   },
   centeredView: {

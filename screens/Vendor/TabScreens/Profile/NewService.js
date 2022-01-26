@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
+import { Alert, View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Picker } from 'react-native';
+import { Entypo, MaterialIcons} from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import moment from 'moment';
 import firebase from 'firebase/app';
@@ -20,8 +20,13 @@ function NewService({ navigation }) {
     const [show1, setShow1] = useState(false);
     const [show2, setShow2] = useState(false);
     const [image, setImage] = useState(null);
+    const [categories, setCategories] = useState(["Beauty & Wellness", "Medical", "Sports", "Freelancer", "Events", "Entertainment", "Official", "Education"])
+
+    const [selectedValue, setSelectedValue] = useState(categories[0]);
 
     const uploadImage = async (uri) => {
+
+        console.log("selected value:", selectedValue )
         const response = await fetch(uri);
         const blob = await response.blob();
         var imagename = getName + new Date().toString();
@@ -36,9 +41,11 @@ function NewService({ navigation }) {
                     time1: time1,
                     time2: time2,
                     img: data,
-                    store: auth.currentUser.uid
+                    store: auth.currentUser.uid,
+                    category:selectedValue
                 }).then(
                     data => {
+
                         Alert.alert('Service Added Successfully');
                         navigation.navigate('Profile');
                     }
@@ -124,6 +131,39 @@ function NewService({ navigation }) {
                 value={getPrice}
                 onChangeText={text => setPrice(text)}
             />
+
+            <Text style={styles.label}>Select Category</Text>
+            {/* <SelectDropdown
+                    data={service}
+                    onSelect={(selectedItem, index) => {
+                        setSelected(selectedItem)
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+
+                        return selectedItem
+                    }}
+                    rowTextForSelection={(item, index) => {
+                        return item
+                    }}
+                    defaultButtonText="Click for options"
+                    buttonStyle={selectedService != null ? [styles.button, { backgroundColor: 'white' }] : styles.button}
+                    dropdownStyle={styles.dropdown}
+                    rowTextStyle={styles.dropdownItems}
+                    buttonTextStyle={selectedService != null ? [styles.buttonText, { color: '#12555C' }] : styles.buttonText}
+                /> */}
+            <Picker
+                selectedValue={selectedValue}
+                style={{ height: 50, width: 250}}
+                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+            >
+              
+                {categories.map((item, key) => (
+                    
+                    <Picker.Item label={item} value={item} key={key}/>
+                ))}
+                
+            </Picker>
+
             <Text style={styles.label}>Select your timings</Text>
 
             <View style={styles.timePickerView}>
@@ -289,7 +329,39 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         top: 5
 
-    }
+    },
+    button: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#253530',
+        height: 35,
+        width: '65%',
+        paddingHorizontal: 10,
+        zIndex: 1,
+        borderRadius: 5,
+        marginTop: 10,
+        borderWidth: 1,
+        borderColor: '#253530',
+
+    },
+    buttonText: {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 15
+    },
+    dropdown: {
+        backgroundColor: '#F4F6F7',
+        padding: 10,
+        justifyContent: 'center',
+        alignContent: 'center',
+        width: 300,
+        borderRadius: 10,
+        height: 300
+    },
+    dropdownItems: {
+        textAlign: 'center',
+        color: '#414244'
+    },
 });
 
 export default NewService;

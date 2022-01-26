@@ -7,11 +7,6 @@ import { Entypo, Ionicons, EvilIcons, FontAwesome5, MaterialCommunityIcons } fro
 import { TouchableOpacity } from 'react-native';
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
 
-import view1 from "../../../../images/view1.jpg";
-import view2 from "../../../../images/view2.jpg";
-import view4 from "../../../../images/view4.jpg";
-import view5 from "../../../../images/view5.jpg";
-
 import education from "../../../../images/education.jpg";
 import health from "../../../../images/health.jpg";
 import beauty from "../../../../images/beauty.jpeg";
@@ -25,7 +20,6 @@ export default function Home({ route, navigation }) {
   const [searchVisible, setsearchVisible] = useState(false);
   const [isSelected, setSelected] = useState(false);
   const [check, setcheck] = useState(true);
-  const [images, setimages] = useState([view1, view2, view4, view5]);
   const [categories, setcategories] = useState([{ title: "Education", count: 5, img: education }, { title: "Health", count: 5, img: health }, { title: "Legal", count: 5, img: legal }, { title: "Beauty", count: 5, img: beauty }])
   const [Items, setItems] = useState([])
   useEffect(() => {
@@ -47,7 +41,7 @@ export default function Home({ route, navigation }) {
   }, [check])
   console.log(auth.currentUser.displayName);
   const SCREEN_WIDTH = Dimensions.get('window').width;
-  console.log("width:", SCREEN_WIDTH)
+  
 
   navigation.setOptions({
     headerLeft: null
@@ -84,7 +78,7 @@ export default function Home({ route, navigation }) {
           name="location"
           size={25}
           color="#BFC0C3"
-          style={{ marginTop: 5 }} />
+          style={{ marginTop: 10 }} />
         <Image
           source={require('../../../../images/mainlogo.png')}
           style={{ width: '40%', height: '60%', marginTop: 0 }}
@@ -159,18 +153,25 @@ export default function Home({ route, navigation }) {
             showsHorizontalScrollIndicator={false}>
             {categories.map((item, key) =>
             (
-              <ImagedCarouselCard
-                text={item.title}
-                width={100}
-                height={150}
-                shadowColor="#02060D"
-                source={item.img}
-                style={{ margin: 10 }}
-                textStyle={{ fontSize: 15, color: 'white', textAlign: 'center' }}
-                overlayHeight={40}
-                overlayBackgroundColor="rgba(5, 15, 32,0.5)"
+              <>
+                <TouchableOpacity
+                  onPress={() => {navigation.navigate('search-screen', { category: item })}}
+                  activeOpacity={0.4}>
 
-              />
+                  <ImagedCarouselCard
+                    text={item.title}
+                    width={100}
+                    height={150}
+                    shadowColor="#02060D"
+                    source={item.img}
+                    style={{ margin: 10 }}
+                    textStyle={{ fontSize: 15, color: 'white', textAlign: 'center' }}
+                    overlayHeight={40}
+                    overlayBackgroundColor="rgba(5, 15, 32,0.5)"
+
+                  />
+                </TouchableOpacity>
+              </>
             )
             )}
 
@@ -272,8 +273,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: 10,
-    borderBottomWidth:1,
-    borderBottomColor:'#D6D8D9'
+    borderBottomWidth: 1,
+    borderBottomColor: '#D6D8D9'
 
   },
   searchContainer: {
