@@ -16,7 +16,7 @@ export default function Home({ route, navigation }) {
 
   const db = firebase.firestore();
   const auth = firebase.auth();
-  const [searchTxt, setSearchField] = useState("");
+  const [searchTxt, setSearchField] = useState(" ");
   const [searchVisible, setsearchVisible] = useState(false);
   const [isSelected, setSelected] = useState(false);
   const [check, setcheck] = useState(true);
@@ -39,14 +39,7 @@ export default function Home({ route, navigation }) {
     )
 
   }, [check])
-  console.log(auth.currentUser.displayName);
   const SCREEN_WIDTH = Dimensions.get('window').width;
-  
-
-  navigation.setOptions({
-    headerLeft: null
-  })
-
 
   const favourite = (item) => {
 
@@ -54,9 +47,7 @@ export default function Home({ route, navigation }) {
     const newData = Items.map((element) => {
       if (element.id === item.id) {
         var color, background;
-        console.log("fav:", item.fav)
         const f = element.fav;
-        console.log("f:", !f)
         return {
           ...element,
           fav: !element.fav
@@ -69,7 +60,6 @@ export default function Home({ route, navigation }) {
 
     });
     setItems(newData);
-    console.log("fav:", newData.fav)
   }
   return (
     <View style={styles.container}>
@@ -81,7 +71,7 @@ export default function Home({ route, navigation }) {
           style={{ marginTop: 10 }} />
         <Image
           source={require('../../../../images/mainlogo.png')}
-          style={{ width: '40%', height: '60%', marginTop: 0 }}
+          style={{ width: '40%', height: '70%', marginTop: 0 }}
         />
         {!searchVisible ?
           <TouchableOpacity onPress={() => setsearchVisible(true)}>
@@ -96,14 +86,21 @@ export default function Home({ route, navigation }) {
       </View>
       {searchVisible ?
         (<View style={styles.searchContainer}>
-          <TextInput name="searchfield" value={searchTxt} onChange={(txt) => setSearchField(txt)} style={styles.searchField} placeholder='Type your text' />
-          <TouchableOpacity>
-            <Ionicons
-              name="search"
-              size={25}
-              color="#BFC0C3"
-            />
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', margin: 10, marginLeft: -40 }}>
+            <TextInput name="searchfield" value={searchTxt} onChangeText={(txt) => setSearchField(txt)} style={styles.searchField} placeholder='Type your text' />
+ 
+            <TouchableOpacity
+              activeOpacity={0.5}
+              style={styles.searchIcon}
+              onPress={() => { navigation.navigate('search-services', { searchText: searchTxt }) }}
+            >
+              <Ionicons
+                name="search"
+                size={25}
+                color="#2A261B"
+              />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity onPress={() => setsearchVisible(false)}>
             <Entypo
               name="cross"
@@ -112,7 +109,7 @@ export default function Home({ route, navigation }) {
             />
           </TouchableOpacity>
 
-        </View>) : console.log("false")}
+        </View>) : console.log("")}
 
       <ScrollView>
         <Text style={styles.heading}>
@@ -134,6 +131,9 @@ export default function Home({ route, navigation }) {
                   shadowColor="#051934"
                   source={{ uri: item.img }}
                   style={{ margin: 10 }}
+                  textStyle={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}
+                  overlayHeight={50}
+                  overlayBackgroundColor="rgba(0,0,0,0.6)"
 
                 />
               </TouchableOpacity>
@@ -155,8 +155,9 @@ export default function Home({ route, navigation }) {
             (
               <>
                 <TouchableOpacity
-                  onPress={() => {navigation.navigate('search-screen', { category: item })}}
-                  activeOpacity={0.4}>
+                  onPress={() => { navigation.navigate('search-screen', { category: item }) }}
+                  activeOpacity={0.4}
+                  key={key}>
 
                   <ImagedCarouselCard
                     text={item.title}
@@ -165,9 +166,9 @@ export default function Home({ route, navigation }) {
                     shadowColor="#02060D"
                     source={item.img}
                     style={{ margin: 10 }}
-                    textStyle={{ fontSize: 15, color: 'white', textAlign: 'center' }}
+                    textStyle={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}
                     overlayHeight={40}
-                    overlayBackgroundColor="rgba(5, 15, 32,0.5)"
+                    overlayBackgroundColor="rgba(241, 196, 15,0.6)"
 
                   />
                 </TouchableOpacity>
@@ -180,29 +181,24 @@ export default function Home({ route, navigation }) {
         </View>
         <Text style={styles.heading}>Our Picks</Text>
 
-        <View style={[styles.picksView]}>
+        <View style={styles.picksView}>
           {Items.map((item, key) =>
           (
             <>
               <ImagedCarouselCard
                 text={item.name}
-                width={Math.round(SCREEN_WIDTH * 0.9)}
-                height={380}
+                width={Math.round(SCREEN_WIDTH * 0.84)}
+                height={360}
                 shadowColor="#051934"
                 source={{ uri: item.img }}
                 borderRadius={10}
-                style={{ margin: 10, alignSelf: 'center', zIndex: 1 }}
-                overlayBackgroundColor="rgba(5, 15, 32,0.0)"
+                style={{ margin: 10 }}
+                textStyle={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}
+                overlayHeight={50}
+                overlayBackgroundColor="rgba(0,0,0,0.4)"
+                key={key}
               />
-              <View style={{
-                borderWidth: 1,
-                borderColor: '#EBE7E6',
-                borderRadius: 10,
-                marginTop: -28,
-                borderTopWidth: 0,
-                margin: -2,
-                marginBottom: 20
-              }}>
+              <View style={styles.caption}>
                 <View style={styles.description}>
                   <Text style={styles.subheading}>{item.name}</Text>
                   <TouchableOpacity onPress={() => favourite(item)} style={{ justifyContent: 'center' }}>
@@ -213,14 +209,7 @@ export default function Home({ route, navigation }) {
                 <Text style={[styles.subheading, { marginLeft: 5, fontSize: 16 }]}>$ {item.price}</Text>
 
                 <View style={{ flexDirection: 'row', margin: 15, justifyContent: 'space-between', marginRight: 20 }}>
-                  {/* <View style={{ flexDirection: 'row', }}>
-                    <Ionicons
-                      name="location"
-                      size={17}
-                      color="#BFC0C3"
-                    />
-                    <Text style={[styles.txt, { marginLeft: 5, fontSize: 15 }]}>{item.location}</Text>
-                  </View> */}
+
                   <View style={{ flexDirection: 'row' }}>
                     <MaterialCommunityIcons
                       name="clock"
@@ -274,7 +263,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#D6D8D9'
+    borderBottomColor: '#D6D8D9',
+    paddingTop: 13
 
   },
   searchContainer: {
@@ -340,6 +330,26 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  searchIcon: {
+    position: 'absolute',
+    marginTop: 10,
+    backgroundColor: '#FFC431',
+    padding: 5,
+    width: 30,
+    height: 30,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  caption: {
+    borderWidth: 1,
+    borderColor: '#EBE7E6',
+    borderRadius: 10,
+    marginTop: -28,
+    borderTopWidth: 0,
+    margin: -2,
+    marginBottom: 20
   }
 });
 

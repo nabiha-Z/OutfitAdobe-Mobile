@@ -18,6 +18,14 @@ export default function Details({ route, navigation }) {
     const [error, setError] = useState("");
     const [products, setProducts] = useState([]);
     useEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.pop()} style={{ margin: 15, zIndex: 2, backgroundColor: 'white' }}>
+                    <MaterialIcons name="keyboard-arrow-left" size={40} color="black" style={{ zIndex: 1 }}></MaterialIcons>
+                </TouchableOpacity>
+            )
+        })
+
         db.collection('products').get().then(
 
             (data) => {
@@ -31,14 +39,12 @@ export default function Details({ route, navigation }) {
                                 if (item.name == details.name) {
                                     var a = info;
                                     a.pid = data1.id;
-                                    a.boder="#C8C4C4";
-                                    a.background="white"
+                                    a.boder = "#C8C4C4";
+                                    a.background = "white"
                                     a.selected = false;
                                     temp.push(a);
                                 }
                             })
-
-
                         }
 
                     }
@@ -113,8 +119,6 @@ export default function Details({ route, navigation }) {
 
 
         });
-
-        console.log("tempp====", newData);
         setProducts(newData);
 
 
@@ -149,24 +153,24 @@ export default function Details({ route, navigation }) {
 
     return (
         <View>
-            <SliderBox
-
-                images={[details.img]}
-                sliderBoxHeight={SCREEN_WIDTH * 0.9}
-                dotColor="#FAB7A0"
-                dotStyle={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: 10,
-                    marginHorizontal: 8,
-                    padding: 0,
-                    margin: 0
-                }}
-
-                imageLoadingColor="#FAB7A0"
-            />
-
             <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1.6, backgroundColor: 'white' }}>
+                <SliderBox
+                    images={[details.img]}
+                    sliderBoxHeight={SCREEN_WIDTH * 0.9}
+                    dotColor="#FAB7A0"
+                    dotStyle={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: 10,
+                        marginHorizontal: 8,
+                        padding: 0,
+                        margin: 0
+                    }}
+
+                    imageLoadingColor="FFE035"
+                />
+
+
                 <View style={styles.description}>
                     <Text style={styles.subheading}>{details.name}</Text>
                     <TouchableOpacity onPress={() => favourite()} style={{ justifyContent: 'center' }}>

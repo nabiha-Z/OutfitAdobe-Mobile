@@ -5,9 +5,10 @@ import firebase from 'firebase/app';
 import { MaterialCommunityIcons, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
 
-export default function SearchItems({ route, navigation }) {
+export default function SearchServices({ route, navigation }) {
 
-  const { category } = route.params;
+  const { searchText } = route.params;
+  console.log("TEXT: ", searchText)
   const db = firebase.firestore();
   const auth = firebase.auth();
   const [searchTxt, setSearchField] = useState("");
@@ -27,8 +28,18 @@ export default function SearchItems({ route, navigation }) {
         var temp = [];
         data.docs.map(
           (data1) => {
-            if (data1.data().category === category.title) {
-              temp.push(data1.data());
+              var detail =data1.data().detail.toLowerCase();
+              var category = data1.data().category.toLowerCase();
+              var name = data1.data().name.toLowerCase();
+              var search = searchText.toLowerCase();
+              console.log("name:", name);
+              console.log("search:", search)
+            // if (( category.match(search)) || (name.match(search)) || (detail.match(search))){
+            //     console.log("found")
+            //   temp.push(data1.data());
+            // }
+            if((name.includes(search))){
+                console.log("foundddd")
             }
           }
 
@@ -52,10 +63,7 @@ export default function SearchItems({ route, navigation }) {
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
           <TextInput name="searchfield" value={searchTxt} onChange={(txt) => setSearchField(txt)} style={styles.searchField} placeholder='Type your text' />
-          <TouchableOpacity 
-          activeOpacity={0.5}
-          style={styles.searchIcon}
-          onPress={()=>{navigation.navigate('search-services',{searchText:searchTxt})}}>
+          <TouchableOpacity style={styles.searchIcon}>
             <Ionicons
               name="search"
               size={20}
@@ -71,7 +79,7 @@ export default function SearchItems({ route, navigation }) {
         <>
           <ScrollView contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
             <Text style={styles.heading}>
-              {category.title} Services
+              Matched Results
             </Text>
 
             <View style={{ flexDirection: 'row', flexWrap: 'wrap'}}>

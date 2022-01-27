@@ -14,14 +14,12 @@ export default function Bookings({ route, navigation }) {
         db.collection('bookings').get().then(
 
             (data) => {
-                var temp = [];    
+                var temp = [];
                 data.docs.map(
                     (data1) => {
-                        console.log("datttaaa:", data1.id)
                         if (data1.data().customer_id == user) {
-                            const a=data1.data();
+                            const a = data1.data();
                             a.bid = data1.id;
-                            console.log("id:", a.bid)
                             temp.push(a);
                         }
 
@@ -39,21 +37,19 @@ export default function Bookings({ route, navigation }) {
                     (item, key) => {
                         return (
                             <>
-                                <TouchableOpacity key={key} style={styles.tabContainer} onPress={()=>{navigation.navigate('bookingdetails', {booking:item})}}>
+                                <TouchableOpacity
+                                    style={styles.tabContainer}
+                                    onPress={() => { navigation.navigate('bookingdetails', { booking: item }) }}
+                                    key={key}>
 
-                                    <FontAwesome name="calendar" size={16} color="black" style={{ marginLeft:5, marginRight: 10, top: 4 }} />
+                                    <FontAwesome name="calendar" size={16} color="black" style={{ marginLeft: 5, marginRight: 10, top: 4 }} />
                                     <View style={styles.textContainer}>
                                         <Text style={styles.mainText}>{item.service_name}</Text>
                                         <Text style={styles.subText}>Date: {item.date}</Text>
                                         <Text style={styles.subText}>Time:{item.time}</Text>
                                         {/* <Text style={styles.mainText}>price : {item.price} $</Text> */}
                                     </View>
-
-                                   
-                                        <MaterialIcons name="keyboard-arrow-right" size={20} style={{ marginLeft: 30, top: 4 }}/>
-                                        
-                          
-
+                                    <MaterialIcons name="keyboard-arrow-right" size={20} style={{ marginLeft: 30, top: 4 }} />
                                 </TouchableOpacity>
 
                             </>
@@ -85,7 +81,7 @@ const styles = StyleSheet.create({
         borderColor: '#D4D4D7',
         paddingBottom: 20,
         marginBottom: 10,
-        marginHorizontal:20
+        marginHorizontal: 20
     },
     textContainer: {
         width: '70%',
