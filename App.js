@@ -21,6 +21,7 @@ import Password from './screens/Vendor/TabScreens/Profile/Password';
 import user_Password from './screens/user/TabScreens/Profile/Password';
 import user_Contact from './screens/user/TabScreens/Profile/Contact';
 import user_Setting from './screens/user/TabScreens/Profile/Settings';
+import Favourites from './screens/user/TabScreens/Profile/Favourites';
 import Dashboard_user from './screens/user/Dashboard';
 import Details from './screens/user/Details';
 import BookingScreen from './screens/user/BookingScreen';
@@ -317,8 +318,23 @@ function App() {
           })}
 
         />
+
+        <Stack.Screen name="favourites" component={Favourites}
+          options={() => ({
+            title: 'Favourites',
+            headerStyle: {
+              height: 100,
+            },
+            headerTitleStyle: {
+              color: 'black',
+              textAlign: 'center',
+              left: 30,
+            },
+          })}
+
+        />
         <Stack.Screen name="bookingscreen" component={BookingScreen}
-          options={({ navigation, route }) => ({
+          options={() => ({
             title: '',
             headerStyle: {
               height: 0,

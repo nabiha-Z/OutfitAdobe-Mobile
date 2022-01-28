@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, } from 'react-native'
+import { StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, ActivityIndicator, } from 'react-native'
 import firebase from 'firebase/app';
 import firebaseConfig from '../../../../Firebase/FirebaseConfig';
 import { Entypo, Ionicons, EvilIcons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -21,46 +21,116 @@ export default function Home({ route, navigation }) {
   const [isSelected, setSelected] = useState(false);
   const [check, setcheck] = useState(true);
   const [categories, setcategories] = useState([{ title: "Education", count: 5, img: education }, { title: "Health", count: 5, img: health }, { title: "Legal", count: 5, img: legal }, { title: "Beauty", count: 5, img: beauty }])
-  const [Items, setItems] = useState([])
+  const [Items, setItems] = useState([]);
+  const [fetchingData, setFetching] = useState(false);
+  const [favouriteItems, setFavourites] = useState([]);
+  const [count, setCount] = useState(0);
   useEffect(() => {
-    db.collection('services').get().then(
 
-      (data) => {
-        var temp = [];
-        data.docs.map(
-          (data1) => {
-            temp.push(data1.data());
+    console.log("count:", count);
+    if (Items.length==0) {
+      setFetching(true);
+      db.collection('services').get().then(
 
-          }
+        (data) => {
+          var temp = [];
+          data.docs.map(
+            (data1) => {
+              var a = data1.data();
+              a.id = data1.id;
+              a.fav = false;
+              temp.push(a);
 
-        )
-        setItems(temp);
-      }
-    )
+            }
+          )
+          setItems(temp);
+         
+        })
+
+
+      // var temp = [];
+      // db.collection('users').get().then(
+      //   (data) => {
+      //     data.docs.map(
+      //       (data1) => {
+      //         if (data1.id === auth.currentUser.uid) {
+      //           console.log("id:", data1.id);
+      //           var a = data1.data();
+      //           var fav = a.favourites;
+      //           setFavourites(fav);
+      //           if (fav.length != 0) {
+
+
+      //             fav.map((item) => {
+      //               Items.map((element) => {
+
+      //                 if (item === element.id) {
+      //                   element.fav = true;
+
+      //                   temp.push(element);
+
+      //                 } else {
+      //                   temp.push(element)
+      //                 }
+
+      //               })
+      //             })
+      //             setItems(temp);
+      //           }
+
+      //         }
+      //       }
+
+      //     )
+          
+
+      //   })
+        console.log("items:", Items);
+        setFetching(false);
+
+
+    }
+
+
 
   }, [check])
   const SCREEN_WIDTH = Dimensions.get('window').width;
 
+  const LoadingData = () => {
+    return (
+      <>
+        <ActivityIndicator size="large" color="#FBD92C" />
+        {/* <Text style={{ paddingTop: 20, color: '#DEBF4D', textAlign: 'center' }}>
+          Loading Data from JSON Placeholder API ...
+        </Text> */}
+      </>
+    );
+  };
   const favourite = (item) => {
 
-    console.log(item);
-    const newData = Items.map((element) => {
-      if (element.id === item.id) {
-        var color, background;
-        const f = element.fav;
-        return {
-          ...element,
-          fav: !element.fav
-        };
-      }
-      return {
-        ...element,
-        fav: element.fav
-      };
+    var fav = favouriteItems;
+    if (item.fav === false) {
+      fav.push(item.id);
+      item.fav = true;
 
-    });
-    setItems(newData);
+
+    } else {
+      fav = fav.filter(val => val !== item.id)
+      item.fav = false;
+    }
+
+    setFavourites(fav);
+
+    db.collection("users").doc(auth.currentUser.uid).update({
+      favourites: fav
+    }).then(
+      (data) => {
+        check ? setcheck(false) : setcheck(true);
+
+      }
+    )
   }
+
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
@@ -88,7 +158,7 @@ export default function Home({ route, navigation }) {
         (<View style={styles.searchContainer}>
           <View style={{ flexDirection: 'row', justifyContent: 'flex-end', margin: 10, marginLeft: -40 }}>
             <TextInput name="searchfield" value={searchTxt} onChangeText={(txt) => setSearchField(txt)} style={styles.searchField} placeholder='Type your text' />
- 
+
             <TouchableOpacity
               activeOpacity={0.5}
               style={styles.searchIcon}
@@ -116,34 +186,36 @@ export default function Home({ route, navigation }) {
           Popular Searches
         </Text>
 
-        <View style={{ flexDirection: 'row' }}>
+        {fetchingData ? <LoadingData /> : (
+          <View style={{ flexDirection: 'row' }}>
 
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}>
-            {Items.map((item, key) =>
-            (
-              <TouchableOpacity onPress={() => navigation.navigate('details', { details: item })} activeOpacity={0.7} key={key}>
-                <ImagedCarouselCard
-                  text={item.name}
-                  width={180}
-                  height={240}
-                  shadowColor="#051934"
-                  source={{ uri: item.img }}
-                  style={{ margin: 10 }}
-                  textStyle={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}
-                  overlayHeight={50}
-                  overlayBackgroundColor="rgba(0,0,0,0.6)"
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              {Items.map((item, key) =>
+              (
+                <TouchableOpacity onPress={() => navigation.navigate('details', { details: item })} activeOpacity={0.7} key={key}>
+                  <ImagedCarouselCard
+                    text={item.name}
+                    width={180}
+                    height={240}
+                    shadowColor="#051934"
+                    source={{ uri: item.img }}
+                    style={{ margin: 10 }}
+                    textStyle={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}
+                    overlayHeight={50}
+                    overlayBackgroundColor="rgba(0,0,0,0.6)"
 
-                />
-              </TouchableOpacity>
-            )
-            )}
+                  />
+                </TouchableOpacity>
+              )
+              )}
 
-          </ScrollView>
+            </ScrollView>
 
-        </View>
+          </View>
 
+        )}
         <Text style={styles.heading}>Categories</Text>
         <Text style={styles.txt}>Find the best services you need by browsing through the categories</Text>
         <View style={{ flexDirection: 'row' }}>
@@ -180,59 +252,60 @@ export default function Home({ route, navigation }) {
 
         </View>
         <Text style={styles.heading}>Our Picks</Text>
-
-        <View style={styles.picksView}>
-          {Items.map((item, key) =>
-          (
-            <>
-              <ImagedCarouselCard
-                text={item.name}
-                width={Math.round(SCREEN_WIDTH * 0.84)}
-                height={360}
-                shadowColor="#051934"
-                source={{ uri: item.img }}
-                borderRadius={10}
-                style={{ margin: 10 }}
-                textStyle={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}
-                overlayHeight={50}
-                overlayBackgroundColor="rgba(0,0,0,0.4)"
-                key={key}
-              />
-              <View style={styles.caption}>
-                <View style={styles.description}>
-                  <Text style={styles.subheading}>{item.name}</Text>
-                  <TouchableOpacity onPress={() => favourite(item)} style={{ justifyContent: 'center' }}>
-                    <Ionicons name="heart" color={item.fav ? '#F75451' : '#D3D3D3'} size={30}></Ionicons>
-                  </TouchableOpacity>
-                </View>
-                <Text style={[styles.txt, { marginLeft: 6 }]}>{item.detail}</Text>
-                <Text style={[styles.subheading, { marginLeft: 5, fontSize: 16 }]}>$ {item.price}</Text>
-
-                <View style={{ flexDirection: 'row', margin: 15, justifyContent: 'space-between', marginRight: 20 }}>
-
-                  <View style={{ flexDirection: 'row' }}>
-                    <MaterialCommunityIcons
-                      name="clock"
-                      size={17}
-                      color="#BFC0C3"
-                    />
-                    <Text style={[styles.txt, { marginLeft: 5, fontSize: 15 }]}>{item.time1} - {item.time2}</Text>
+        {fetchingData ? <LoadingData /> : (
+          <View style={styles.picksView}>
+            {Items.map((item, key) =>
+            (
+              <>
+                <ImagedCarouselCard
+                  text={item.name}
+                  width={Math.round(SCREEN_WIDTH * 0.84)}
+                  height={360}
+                  shadowColor="#051934"
+                  source={{ uri: item.img }}
+                  borderRadius={10}
+                  style={{ margin: 10 }}
+                  textStyle={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}
+                  overlayHeight={50}
+                  overlayBackgroundColor="rgba(0,0,0,0.4)"
+                  key={key}
+                />
+                <View style={styles.caption}>
+                  <View style={styles.description}>
+                    <Text style={styles.subheading}>{item.name}</Text>
+                    <TouchableOpacity onPress={() => favourite(item)} style={{ justifyContent: 'center' }}>
+                      <Ionicons name="heart" color={item.fav ? '#F75451' : '#D3D3D3'} size={30}></Ionicons>
+                    </TouchableOpacity>
                   </View>
-                </View>
+                  <Text style={[styles.txt, { marginLeft: 6 }]}>{item.detail}</Text>
+                  <Text style={[styles.subheading, { marginLeft: 5, fontSize: 16 }]}>$ {item.price}</Text>
 
-                <View style={styles.btnView}>
-                  {/* <TouchableOpacity style={[styles.btn, { backgroundColor: '#BAC7CE', margin: 6 }]} onPress={() => navigation.navigate('details', {details:item})}>
+                  <View style={{ flexDirection: 'row', margin: 15, justifyContent: 'space-between', marginRight: 20 }}>
+
+                    <View style={{ flexDirection: 'row' }}>
+                      <MaterialCommunityIcons
+                        name="clock"
+                        size={17}
+                        color="#BFC0C3"
+                      />
+                      <Text style={[styles.txt, { marginLeft: 5, fontSize: 15 }]}>{item.time1} - {item.time2}</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.btnView}>
+                    {/* <TouchableOpacity style={[styles.btn, { backgroundColor: '#BAC7CE', margin: 6 }]} onPress={() => navigation.navigate('details', {details:item})}>
                     <Text style={{ color: 'white' }}>View Details</Text>
                   </TouchableOpacity> */}
-                  <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', margin: 6 }]} onPress={() => navigation.navigate('details', { details: item })}>
-                    <Text style={{ color: 'white' }}>View Details</Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', margin: 6 }]} onPress={() => navigation.navigate('details', { details: item })}>
+                      <Text style={{ color: 'white' }}>View Details</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            </>
-          ))}
+              </>
+            ))}
 
-        </View>
+          </View>
+        )}
 
         <View style={{ padding: 40 }}>
 

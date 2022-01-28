@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 import { LogBox } from 'react-native';
 import _ from 'lodash';
 import { firebaseConfig } from '../Firebase/FirebaseConfig';
-import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 
 
@@ -12,7 +12,7 @@ import Icon from '@expo/vector-icons/AntDesign';
 function Vendor({ route, navigation }) {
   const [getEmail, setEmail] = useState(null);
   const [getPassword, setPassword] = useState(null);
-  const [users, setUsers] = useState([]);
+  const [fetchingData, setFetching] = useState(false);
   LogBox.ignoreLogs(['Warning:...']); // ignore specific logsFF
   LogBox.ignoreAllLogs(); // ignore all logs
   const _console = _.clone(console);
@@ -31,7 +31,7 @@ function Vendor({ route, navigation }) {
   const db = firebase.firestore();
 
   auth.onAuthStateChanged(user => {
-
+     
     if (user) {
 
       const data = db.collection('users').where(firebase.firestore.FieldPath.documentId(), '==', user.uid).get().then(
@@ -49,6 +49,18 @@ function Vendor({ route, navigation }) {
       navigation.navigate("LoginScreen")
     }
   })
+
+
+  const LoadingData = () => {
+    return (
+      <>
+        <ActivityIndicator size="large" color="#FBD92C" />
+        {/* <Text style={{ paddingTop: 20, color: '#DEBF4D', textAlign: 'center' }}>
+      Loading Data from JSON Placeholder API ...
+    </Text> */}
+      </>
+    );
+  };
 
   const authenticateUser = () => {
     if (getEmail != null && getPassword != null) {

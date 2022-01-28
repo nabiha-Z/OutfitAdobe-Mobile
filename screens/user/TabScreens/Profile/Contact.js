@@ -48,9 +48,9 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 20,
         paddingTop: 20,
-        paddingRight: 40,
         paddingBottom: 30,
         backgroundColor: '#FFFFFF',
+     
     },
     heading: {
         fontSize: 25,
@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
         opacity: 0.7,
         marginTop: 10,
         lineHeight: 23,
+        textAlign:'justify'
     },
     iconsView: {
         top: 15,

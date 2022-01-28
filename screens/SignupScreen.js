@@ -4,6 +4,7 @@ import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'reac
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import firebaseConfig from '../Firebase/FirebaseConfig';
 import Icon from '@expo/vector-icons/AntDesign';
+import { sha256 } from 'react-native-sha256';
 
 
 function SignupScreen({ route, navigation }) {
@@ -16,6 +17,7 @@ function SignupScreen({ route, navigation }) {
   const [emailError, setEmailError] = useState("");
   const [contactError, setContactError] = useState("");
   const [users, setUsers] = useState([]);
+  const [hashedPassword,, setHashed] = useState();
   var count = 0;
 
 
@@ -38,6 +40,7 @@ function SignupScreen({ route, navigation }) {
       getContact != null &&
       getEmail != null) {
 
+
       if (getEmail.match(validEmailRegex)) {
         setEmailError("");
         users.map((item, index) => {
@@ -49,7 +52,8 @@ function SignupScreen({ route, navigation }) {
         });
         if (count === 0) {
 
-
+     
+    
           await auth.createUserWithEmailAndPassword( getEmail, getPassword)
             .then((user) => {
 
@@ -68,7 +72,7 @@ function SignupScreen({ route, navigation }) {
                         }
                     
                     )
-              navigation.navigate('LoginScreen')
+              navigation.navigate('Dashboard_user')
             })
             .catch(error => {
               console.log("Error= ", typeof(error.message))

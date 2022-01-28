@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import firebase from 'firebase/app';
 
 export default function Contact({ route, navigation }) {
     const [oldPass, setOldPass] = useState(null);
     const [newPass, setNewPass] = useState(null);
     const [errors, setErrors] = useState("");
     const [confirmPass, setConfirmPass] = useState(null);
-
+    const auth = firebase.auth();
 
 
     const change = () => {
 
     }
+ 
     return (
         <View style={styles.container}>
 
@@ -26,18 +28,23 @@ export default function Contact({ route, navigation }) {
             </Text>
             <Text style={styles.errorsTxt}>{errors}</Text>
 
+            <Text
+                style={{ fontSize: 12, marginTop: 10, marginHorizontal: 10 }}>
+                Current Password
+            </Text>
+            <TextInput style={styles.businessField} value={oldPass} onChangeText={(text) => setOldPass(text)} />
             
             <Text
                 style={{ fontSize: 12, marginTop: 10, marginHorizontal: 10 }}>
                 New Password
             </Text>
-            <TextInput style={styles.businessField} onChangeText={(text) => setNewPass(text)} />
+            <TextInput style={styles.businessField} value={newPass}  onChangeText={(text) => setNewPass(text)} />
 
             <Text
                 style={{ fontSize: 12, marginTop: 10, marginHorizontal: 10 }}>
                 Confirm Password
             </Text>
-            <TextInput style={styles.businessField} onChangeText={(text) => setConfirmPass(text)} />
+            <TextInput style={styles.businessField} value={confirmPass}  onChangeText={(text) => setConfirmPass(text)} />
 
             <View style={styles.footerTab}>
                 <TouchableOpacity

@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
+import { AntDesign, EvilIcons } from '@expo/vector-icons';
 import firebase from 'firebase/app'
 import firebaseConfig from '../../../../Firebase/FirebaseConfig';
 import { StackActions } from '@react-navigation/native';
@@ -48,22 +47,24 @@ export default function Profile({ route, navigation }) {
 
 
             <ScrollView style={{ height: 20, marginHorizontal: -7, padding: 10 }}>
-               
-
-              
-                
-
-             
 
                 <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('user_ContactScreen')}>
                 <Image source={contact} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Contact Center</Text>
-
                     </View>
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
 
+                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('favourites')}>
+                    <EvilIcons name="heart" size={29} color="#233A98" style={{alignSelf: 'center', marginRight:10 }}/>
+                {/* <Image source={setting} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} /> */}
+                    <View style={styles.textContainer}>
+                        <Text style={styles.mainText}>Favourites</Text>
+
+                    </View>
+                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
+                </TouchableOpacity>
                 <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('user_SettingScreen')}>
                 <Image source={setting} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>

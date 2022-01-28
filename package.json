@@ -43,6 +43,7 @@
     "react-native-pure-chart": "^0.0.24",
     "react-native-safe-area-context": "3.2.0",
     "react-native-safe-area-view": "^1.1.1",
+    "react-native-sha256": "^1.4.7",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "12.1.1",
     "react-native-switch-toggle": "^2.2.1",
