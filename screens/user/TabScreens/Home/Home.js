@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, ActivityIndicator, } from 'react-native'
 import firebase from 'firebase/app';
 import firebaseConfig from '../../../../Firebase/FirebaseConfig';
-import { Entypo, Ionicons, EvilIcons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Entypo, Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
 
@@ -11,85 +11,34 @@ import education from "../../../../images/education.jpg";
 import health from "../../../../images/health.jpg";
 import beauty from "../../../../images/beauty.jpeg";
 import legal from "../../../../images/legal1.jpg";
+import jeans from "../../../../images/jeans2.png";
+import shirt from "../../../../images/shirt.png";
+import suit from "../../../../images/suit2.jpg";
+import handwave from "../../../../images/waving-hand.png";
+import headerImg from '../../../../images/headerImg1.png';
+import headerImg2 from '../../../../images/headerImg4.png';
 
 export default function Home({ route, navigation }) {
 
-  const db = firebase.firestore();
-  const auth = firebase.auth();
   const [searchTxt, setSearchField] = useState(" ");
   const [searchVisible, setsearchVisible] = useState(false);
   const [isSelected, setSelected] = useState(false);
   const [check, setcheck] = useState(true);
-  const [categories, setcategories] = useState([{ title: "Education", count: 5, img: education }, { title: "Health", count: 5, img: health }, { title: "Legal", count: 5, img: legal }, { title: "Beauty", count: 5, img: beauty }])
+  const [categories, setcategories] = useState([{ title: "Jeans", img: jeans }, { title: "Shirts",  img: shirt }, { title: "Suits",  img: suit }, { title: "Dresses", img: beauty }])
   const [Items, setItems] = useState([]);
   const [fetchingData, setFetching] = useState(false);
   const [favouriteItems, setFavourites] = useState([]);
   const [count, setCount] = useState(0);
   useEffect(() => {
 
-    console.log("count:", count);
-    if (Items.length==0) {
-      setFetching(true);
-      db.collection('services').get().then(
+    // if (Items.length==0) {
+    //   setFetching(true);
 
-        (data) => {
-          var temp = [];
-          data.docs.map(
-            (data1) => {
-              var a = data1.data();
-              a.id = data1.id;
-              a.fav = false;
-              temp.push(a);
-
-            }
-          )
-          setItems(temp);
-         
-        })
+    //     console.log("items:", Items);
+    //     setFetching(false);
 
 
-      // var temp = [];
-      // db.collection('users').get().then(
-      //   (data) => {
-      //     data.docs.map(
-      //       (data1) => {
-      //         if (data1.id === auth.currentUser.uid) {
-      //           console.log("id:", data1.id);
-      //           var a = data1.data();
-      //           var fav = a.favourites;
-      //           setFavourites(fav);
-      //           if (fav.length != 0) {
-
-
-      //             fav.map((item) => {
-      //               Items.map((element) => {
-
-      //                 if (item === element.id) {
-      //                   element.fav = true;
-
-      //                   temp.push(element);
-
-      //                 } else {
-      //                   temp.push(element)
-      //                 }
-
-      //               })
-      //             })
-      //             setItems(temp);
-      //           }
-
-      //         }
-      //       }
-
-      //     )
-          
-
-      //   })
-        console.log("items:", Items);
-        setFetching(false);
-
-
-    }
+    // }
 
 
 
@@ -121,70 +70,45 @@ export default function Home({ route, navigation }) {
 
     setFavourites(fav);
 
-    db.collection("users").doc(auth.currentUser.uid).update({
-      favourites: fav
-    }).then(
-      (data) => {
-        check ? setcheck(false) : setcheck(true);
+    // db.collection("users").doc(auth.currentUser.uid).update({
+    //   favourites: fav
+    // }).then(
+    //   (data) => {
+    //     check ? setcheck(false) : setcheck(true);
 
-      }
-    )
+    //   }
+    // )
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <Ionicons
-          name="location"
-          size={25}
-          color="#BFC0C3"
-          style={{ marginTop: 10 }} />
-        <Image
-          source={require('../../../../images/mainlogo.png')}
-          style={{ width: '40%', height: '70%', marginTop: 0 }}
-        />
-        {!searchVisible ?
-          <TouchableOpacity onPress={() => setsearchVisible(true)}>
-            <Ionicons
-              name="search"
-              size={25}
-              color="#BFC0C3"
-              style={{ marginTop: 5 }}
-            />
-          </TouchableOpacity>
-          : <Text>       </Text>}
-      </View>
-      {searchVisible ?
-        (<View style={styles.searchContainer}>
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', margin: 10, marginLeft: -40 }}>
-            <TextInput name="searchfield" value={searchTxt} onChangeText={(txt) => setSearchField(txt)} style={styles.searchField} placeholder='Type your text' />
+        <Ionicons name="menu-outline" style={styles.menuicon} />
+        <View style={styles.topBarContent}>
 
-            <TouchableOpacity
-              activeOpacity={0.5}
-              style={styles.searchIcon}
-              onPress={() => { navigation.navigate('search-services', { searchText: searchTxt }) }}
-            >
-              <Ionicons
-                name="search"
-                size={25}
-                color="#2A261B"
-              />
-            </TouchableOpacity>
+          <View style={styles.profile}>
+            <Text style={styles.lightTxt}>Welcome </Text>
+            <Image source={handwave} style={styles.handwaveIcon} />
           </View>
-          <TouchableOpacity onPress={() => setsearchVisible(false)}>
-            <Entypo
-              name="cross"
-              size={25}
-              color="red"
-            />
-          </TouchableOpacity>
+          <View>
+            <AntDesign name="user" style={styles.userIcon} />
+          </View>
+        </View>
 
-        </View>) : console.log("")}
+      </View>
+      <View style={styles.searchContainer}>
+        <TextInput style={styles.searchField} placeholder="Search products" />
+
+      </View>
+
 
       <ScrollView>
-        <Text style={styles.heading}>
-          Popular Searches
-        </Text>
+
+        <View style={styles.banner}>
+          <Text>Try the New Look</Text>
+        </View>
+
+        <Image source={headerImg2} style={[styles.bannerImg, { marginLeft: SCREEN_WIDTH * 0.56 }]} />
 
         {fetchingData ? <LoadingData /> : (
           <View style={{ flexDirection: 'row' }}>
@@ -217,7 +141,7 @@ export default function Home({ route, navigation }) {
 
         )}
         <Text style={styles.heading}>Categories</Text>
-        <Text style={styles.txt}>Find the best services you need by browsing through the categories</Text>
+        <Text style={styles.txt}>Find the outfits you need by browsing through the categories</Text>
         <View style={{ flexDirection: 'row' }}>
 
           <ScrollView
@@ -233,14 +157,14 @@ export default function Home({ route, navigation }) {
 
                   <ImagedCarouselCard
                     text={item.title}
-                    width={100}
+                    width={120}
                     height={150}
                     shadowColor="#02060D"
                     source={item.img}
                     style={{ margin: 10 }}
                     textStyle={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}
                     overlayHeight={40}
-                    overlayBackgroundColor="rgba(241, 196, 15,0.6)"
+                    overlayBackgroundColor="rgba(20, 20, 21,0.6)"
 
                   />
                 </TouchableOpacity>
@@ -329,22 +253,66 @@ const styles = StyleSheet.create({
   },
   topBar: {
     backgroundColor: 'white',
-    height: 80,
+    height: 60,
     padding: 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    margin: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#D6D8D9',
-    paddingTop: 13
+    margin: 20,
+    paddingTop: 13,
+    marginHorizontal: 10
 
+  },
+  topBarContent: {
+    flexDirection: 'row',
+    marginTop: 15,
+    marginRight: -30
+  },
+  menuicon:{
+    backgroundColor:'#DDDDDF',
+    padding:5,
+    borderRadius:30,
+    fontSize: 20
+
+  },
+  profile: {
+    flexDirection: 'row',
+  },
+  userIcon: {
+    backgroundColor: '#DDDDDF',
+    padding: 10,
+    borderRadius: 20,
+    fontSize: 15,
+    marginTop: -5
+  },
+  handwaveIcon: {
+    width: '18%',
+    height: '45%',
+    marginTop: 2
+  },
+  lightTxt: {
+    color: '#9C9D9F'
+  },
+  banner: {
+    margin: 10,
+    marginTop: 60,
+    borderRadius: 10,
+    backgroundColor: '#E0E1E3',
+    padding: 20,
+    height: 130
+  },
+  bannerImg: {
+    position: 'absolute',
+    width: '45%',
+    height: '25%',
+    zIndex: 2,
+    marginTop:33
   },
   searchContainer: {
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: 10,
     flexDirection: 'row',
     marginTop: -20
   },
@@ -423,6 +391,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     margin: -2,
     marginBottom: 20
-  }
+  },
+
 });
 

@@ -43,7 +43,7 @@ function App() {
     <NavigationContainer>
 
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen}
+        {/* <Stack.Screen name="Home" component={HomeScreen}
           options={({ navigation, route }) => ({
             title: '',
             headerStyle: {
@@ -51,7 +51,7 @@ function App() {
               height: 0
             },
           })}
-        />
+        /> */}
         <Stack.Screen name="Dashboard_user" component={Dashboard_user}
           options={({ navigation, route }) => ({
             title: '',

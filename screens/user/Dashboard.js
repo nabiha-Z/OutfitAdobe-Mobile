@@ -13,7 +13,7 @@ import Chats from './TabScreens/Chats/Chats';
 import Bookings from './TabScreens/Bookings/Bookings';
 import Profile from './TabScreens/Profile/Profile';
 import Notification from './TabScreens/Notifications/Notification';
-import firebase from 'firebase/app';
+
 import { LogBox } from 'react-native';
 import _ from 'lodash';
 function getWidth() {
@@ -30,7 +30,7 @@ LogBox.ignoreLogs(['Warning:...']); // ignore specific logs
 LogBox.ignoreAllLogs(); // ignore all logs
 
 export default function Dashboard({ route, navigation }) {
-    const auth=firebase.auth();
+
     const tabOffsetValue = useRef(new Animated.Value(0)).current;
     const Tab = createBottomTabNavigator();
     return (
