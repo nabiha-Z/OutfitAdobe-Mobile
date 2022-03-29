@@ -27,21 +27,44 @@ export default function Home({ route, navigation }) {
   const [fetchingData, setFetching] = useState(false);
   const [favouriteItems, setFavourites] = useState([]);
   const [count, setCount] = useState(0);
+
+  const API_URL = 'http://192.168.100.10:8000';
   useEffect(() => {
 
-    // if (Items.length==0) {
-    //   setFetching(true);
+    setFetching(true);
+    fetch(`${API_URL}/user/latestProducts`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async res => {
+        try {
 
-    //     console.log("items:", Items);
-    //     setFetching(false);
+          const jsonRes = await res.json();
+          console.log("res: ", jsonRes)
+          if (jsonRes.message === true) {
+            setFetching(false);
+            console.log("fetched")
+            setItems(jsonRes.products);
+          }
+          // if (res.message === true) {
+          //  console.log("Data:", data)
+          // }
 
 
-    // }
+        } catch (err) {
+          console.log(err);
+        };
+      })
+      .catch(err => {
+        console.log("error: ", err);
+      });
 
 
-
-  }, [check])
+  }, [])
   const SCREEN_WIDTH = Dimensions.get('window').width;
+  const SCREEN_HEIGHT = Dimensions.get('window').height;
 
   const LoadingData = () => {
     return (
@@ -102,7 +125,7 @@ export default function Home({ route, navigation }) {
       </View>
 
 
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 0.9 }}>
 
         <View style={styles.header}>
 
@@ -113,41 +136,14 @@ export default function Home({ route, navigation }) {
 
         <View style={styles.banner}>
           <Text style={[styles.heading, { fontSize: 25, color: 'white', marginTop: -9, left: -14 }]}>Try the New Look</Text>
-          <Text style={[styles.lightTxt,{color:'#F7E7E4'}]}>Seasons calls for the new look</Text>
+          <View style={{ width: '60%' }}>
+            <Text style={[styles.lightTxt, { color: '#F7E7E4' }]}>The forecast says that dress season has officially arrived! Spring forward with our swing, springy, dress shop.</Text>
+          </View>
         </View>
 
         <Image source={headerImg2} style={[styles.bannerImg, { marginLeft: SCREEN_WIDTH * 0.56 }]} />
 
-        {fetchingData ? <LoadingData /> : (
-          <View style={{ flexDirection: 'row' }}>
 
-            {/* <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              {Items.map((item, key) =>
-              (
-                <TouchableOpacity onPress={() => navigation.navigate('details', { details: item })} activeOpacity={0.7} key={key}>
-                  <ImagedCarouselCard
-                    text={item.name}
-                    width={180}
-                    height={240}
-                    shadowColor="#051934"
-                    source={{ uri: item.img }}
-                    style={{ margin: 10 }}
-                    textStyle={{ fontSize: 15, color: 'white', textAlign: 'center' }}
-                    overlayHeight={50}
-                    overlayBackgroundColor="rgba(0,0,0,0.6)"
-
-                  />
-                </TouchableOpacity>
-              )
-              )}
-
-            </ScrollView> */}
-
-          </View>
-
-        )}
         <Text style={styles.heading}>Categories</Text>
         <Text style={styles.txt}>Find the outfits you need by browsing through the categories</Text>
         <View style={{ flexDirection: 'row' }}>
@@ -159,11 +155,13 @@ export default function Home({ route, navigation }) {
             (
               <>
                 <TouchableOpacity
+                  key={key}
                   onPress={() => { navigation.navigate('search-screen', { category: item }) }}
                   activeOpacity={0.4}
-                  key={key}>
+                >
 
                   <ImagedCarouselCard
+                    key={key}
                     text={item.title}
                     width={120}
                     height={150}
@@ -183,18 +181,19 @@ export default function Home({ route, navigation }) {
           </ScrollView>
 
         </View>
-        <Text style={styles.heading}>Our Picks</Text>
+        <Text style={styles.heading}>Newest Products</Text>
         {fetchingData ? <LoadingData /> : (
           <View style={styles.picksView}>
             {Items.map((item, key) =>
             (
               <>
+                {console.log("item.title: ", item.title)}
                 <ImagedCarouselCard
-                  text={item.name}
+                  text={item.title}
                   width={Math.round(SCREEN_WIDTH * 0.84)}
                   height={360}
                   shadowColor="#051934"
-                  source={{ uri: item.img }}
+                  source={{ uri: item.picture }}
                   borderRadius={10}
                   style={{ margin: 10 }}
                   textStyle={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}
@@ -204,24 +203,17 @@ export default function Home({ route, navigation }) {
                 />
                 <View style={styles.caption}>
                   <View style={styles.description}>
-                    <Text style={styles.subheading}>{item.name}</Text>
+                    <Text style={styles.subheading}>{item.title}</Text>
                     <TouchableOpacity onPress={() => favourite(item)} style={{ justifyContent: 'center' }}>
                       <Ionicons name="heart" color={item.fav ? '#F75451' : '#D3D3D3'} size={30}></Ionicons>
                     </TouchableOpacity>
                   </View>
-                  <Text style={[styles.txt, { marginLeft: 6 }]}>{item.detail}</Text>
+                  <Text style={[styles.txt, { marginLeft: 6 }]}>{item.color}</Text>
                   <Text style={[styles.subheading, { marginLeft: 5, fontSize: 16 }]}>$ {item.price}</Text>
 
                   <View style={{ flexDirection: 'row', margin: 15, justifyContent: 'space-between', marginRight: 20 }}>
 
-                    <View style={{ flexDirection: 'row' }}>
-                      <MaterialCommunityIcons
-                        name="clock"
-                        size={17}
-                        color="#BFC0C3"
-                      />
-                      <Text style={[styles.txt, { marginLeft: 5, fontSize: 15 }]}>{item.time1} - {item.time2}</Text>
-                    </View>
+
                   </View>
 
                   <View style={styles.btnView}>
