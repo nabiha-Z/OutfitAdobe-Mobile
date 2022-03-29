@@ -1,8 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 import { AntDesign, EvilIcons } from '@expo/vector-icons';
-import firebase from 'firebase/app'
-import firebaseConfig from '../../../../Firebase/FirebaseConfig';
 import { StackActions } from '@react-navigation/native';
 
 
@@ -18,20 +16,6 @@ export default function Profile({ route, navigation }) {
     const colors = ["#C2E4EE", "#B2DBD6", "#D2B1B1", "#D0D4FA"];
 
   
-    const auth = firebase.auth();
-
-
-    const logout = () => {
-
-        auth.signOut().then(() => {
-            console.log("signed Out")
-            navigation.dispatch(
-                StackActions.popToTop()
-              );
-        }).catch((error) => {
-            console.log("Logout Error: ", error.message)
-        });
-    }
     return (
         <View style={styles.container}>
 
@@ -39,9 +23,9 @@ export default function Profile({ route, navigation }) {
 
             <View style={{ alignItems: 'center' }}>
                 <View style={[styles.imgContainer, { backgroundColor: colors[Math.floor(Math.random() * 5) + 0] }]}>
-                    <Text style={styles.imgLabel}>{auth.currentUser.displayName[0].toUpperCase()}</Text>
+                    <Text style={styles.imgLabel}>B</Text>
                 </View>
-                <Text style={styles.imgLabel}>{auth.currentUser.email}</Text>
+                <Text style={styles.lightHeading}>nabihazubair100@gmil.com</Text>
                 <Text style={{ color: '#6791DA', marginBottom: 40 }}>My Profile</Text>
             </View>
 
@@ -51,7 +35,7 @@ export default function Profile({ route, navigation }) {
                 <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('user_ContactScreen')}>
                 <Image source={contact} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>
-                        <Text style={styles.mainText}>Contact Center</Text>
+                        <Text style={styles.mainText}>Measurements</Text>
                     </View>
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
@@ -74,7 +58,7 @@ export default function Profile({ route, navigation }) {
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.tabContainer} onPress={logout}>
+                <TouchableOpacity style={styles.tabContainer}>
                 <Image source={logoutI} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Logout</Text>
@@ -136,5 +120,9 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: '#3F3E40',
 
+    },
+    lightHeading:{
+        fontSize: 15,
+        color: '#3F3E40',
     }
 })

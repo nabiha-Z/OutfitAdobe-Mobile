@@ -1,14 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native'
-import firebase from 'firebase/app';
 import { MaterialCommunityIcons, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
 
 export default function Favourites({ route, navigation }) {
 
-    const db = firebase.firestore();
-    const auth = firebase.auth();
     const [searchTxt, setSearchField] = useState("");
     const [check, setcheck] = useState(true);
     const [Items, setItems] = useState([]);
@@ -18,54 +15,7 @@ export default function Favourites({ route, navigation }) {
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-    useEffect(() => {
 
-        if (Items.length === 0) {
-            setCount(1);
-        }
-        setFetching(true);
-        db.collection('users').get().then(
-            (data) => {
-                data.docs.map(
-                    (data1) => {
-                        if (data1.id === auth.currentUser.uid) {
-                            var a = data1.data();
-                            var fav = a.favourites;
-                            setFavourites(fav);
-
-                        }
-                    }
-                )
-            })
-
-            var temp = [];
-
-        db.collection('services').get().then(
-
-            (data) => {
-                
-                data.docs.map((data1) => {
-                    favouriteItems.map((item) => {
-                        if (item === data1.id) {
-                            var a = data1.data();
-                            a.id = data1.id;
-                            temp.push(a);
-                        }
-
-                    })
-                }
-                )
-                setItems(temp);
-                setFetching(false);
-            })
-            if(count===0){
-                setItems(temp);
-                
-                check?setcheck(false):setcheck(true);
-                setCount(2);
-            }
-
-    }, [check])
 
     const LoadingData = () => {
         return (

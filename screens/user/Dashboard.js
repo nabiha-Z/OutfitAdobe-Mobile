@@ -74,7 +74,7 @@ export default function Dashboard({ route, navigation }) {
                 <Tab.Screen name={"Home"} component={Home} options={{
                     title: '',
                     headerStyle: {
-                        height:0
+                        height: 0
                     },
                     // headerLeft: () =>
 
@@ -92,7 +92,7 @@ export default function Dashboard({ route, navigation }) {
                             <FontAwesome5
                                 name="home"
                                 size={20}
-                                color={focused ? '#FFD933' : 'gray'}
+                                color={focused ? '#E7AA9E' : 'gray'}
                             ></FontAwesome5>
                         </View>
                     )
@@ -109,7 +109,7 @@ export default function Dashboard({ route, navigation }) {
                 <Tab.Screen name={"Bookings"} component={Bookings} options={{
                     title: "Bookings",
                     headerStyle: {
-                        height:110
+                        height: 110
                     },
                     headerTitleStyle: {
                         color: 'black',
@@ -124,9 +124,9 @@ export default function Dashboard({ route, navigation }) {
                             position: 'absolute',
                             top: 20
                         }}>
-                            <Octicons name="calendar" size={22} color={focused ? '#FFD933' : 'gray'} />
-                           
-                            
+                            <Octicons name="calendar" size={22} color={focused ? '#E7AA9E' : 'gray'} />
+
+
                         </View>
                     )
                 }} listeners={({ navigation, route }) => ({
@@ -140,11 +140,11 @@ export default function Dashboard({ route, navigation }) {
                 })}></Tab.Screen>
 
 
-            
+
                 <Tab.Screen name={"Profile"} component={Profile} options={({ navigation, route }) => ({
-                    title: "Business Profile",
+                    title: "Personal Profile",
                     headerStyle: {
-                        height:110
+                        height: 110
                     },
                     headerTitleStyle: {
                         color: 'black',
@@ -157,7 +157,7 @@ export default function Dashboard({ route, navigation }) {
                             // centring Tab Button...
                             width: 55,
                             height: 55,
-                            backgroundColor: '#ffd933',
+                            backgroundColor: '#E7AA9E',
                             borderRadius: 30,
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -183,7 +183,7 @@ export default function Dashboard({ route, navigation }) {
                 <Tab.Screen name={"Notifications"} component={Notification} options={{
                     title: "Notifications",
                     headerStyle: {
-                        height:110
+                        height: 110
                     },
                     headerTitleStyle: {
                         color: 'black',
@@ -200,7 +200,7 @@ export default function Dashboard({ route, navigation }) {
                             <FontAwesome5
                                 name="bell"
                                 size={20}
-                                color={focused ? '#FFD933' : 'gray'}
+                                color={focused ? '#E7AA9E' : 'gray'}
                             ></FontAwesome5>
                         </View>
                     )
@@ -217,7 +217,7 @@ export default function Dashboard({ route, navigation }) {
                 <Tab.Screen name={"Chats"} component={Chats} options={{
                     title: "Chats",
                     headerStyle: {
-                        height:110
+                        height: 110
                     },
                     headerTitleStyle: {
                         color: 'black',
@@ -231,15 +231,15 @@ export default function Dashboard({ route, navigation }) {
                             position: 'absolute',
                             top: 20
                         }}>
-                            
+
                             <Ionicons
-                                name="chatbox" 
+                                name="chatbox"
                                 size={20}
-                                color={focused ? '#FFD933' : 'gray'} />
+                                color={focused ? '#E7AA9E' : 'gray'} />
                             {/* <FontAwesome5
                                 name="comment"
                                 size={20}
-                                color={focused ? '#FFD933' : 'gray'}
+                                color={focused ? '#E7AA9E' : 'gray'}
                             ></FontAwesome5> */}
                         </View>
                     )
@@ -258,7 +258,7 @@ export default function Dashboard({ route, navigation }) {
             <Animated.View style={{
                 width: getWidth() - 20,
                 height: 2,
-                backgroundColor: '#FFD933',
+                backgroundColor: '#E7AA9E',
                 position: 'absolute',
                 bottom: 80,
                 // Horizontal Padding = 20...

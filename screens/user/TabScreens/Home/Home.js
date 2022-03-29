@@ -1,14 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, ActivityIndicator, } from 'react-native'
-import firebase from 'firebase/app';
-import firebaseConfig from '../../../../Firebase/FirebaseConfig';
 import { Entypo, Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
 
 import education from "../../../../images/education.jpg";
-import health from "../../../../images/health.jpg";
+import search from "../../../../images/searchIcon.png";
 import beauty from "../../../../images/beauty.jpeg";
 import legal from "../../../../images/legal1.jpg";
 import jeans from "../../../../images/jeans2.png";
@@ -24,7 +22,7 @@ export default function Home({ route, navigation }) {
   const [searchVisible, setsearchVisible] = useState(false);
   const [isSelected, setSelected] = useState(false);
   const [check, setcheck] = useState(true);
-  const [categories, setcategories] = useState([{ title: "Jeans", img: jeans }, { title: "Shirts",  img: shirt }, { title: "Suits",  img: suit }, { title: "Dresses", img: beauty }])
+  const [categories, setcategories] = useState([{ title: "Jeans", img: jeans }, { title: "Shirts", img: shirt }, { title: "Suits", img: suit }, { title: "Dresses", img: beauty }])
   const [Items, setItems] = useState([]);
   const [fetchingData, setFetching] = useState(false);
   const [favouriteItems, setFavourites] = useState([]);
@@ -98,14 +96,24 @@ export default function Home({ route, navigation }) {
       </View>
       <View style={styles.searchContainer}>
         <TextInput style={styles.searchField} placeholder="Search products" />
-
+        <TouchableOpacity style={styles.searchBtn}>
+          <Image source={search} style={styles.searchIcon} />
+        </TouchableOpacity>
       </View>
 
 
       <ScrollView>
 
+        <View style={styles.header}>
+
+          <Text style={[styles.heading, { fontSize: 15, color: '#7C7E7D' }]}>Find Outfits of your choice</Text>
+        </View>
+
+        {/* <Text style={[styles.heading, { fontSize: 40, marginTop: -20 }]}>Look</Text> */}
+
         <View style={styles.banner}>
-          <Text>Try the New Look</Text>
+          <Text style={[styles.heading, { fontSize: 25, color: 'white', marginTop: -9, left: -14 }]}>Try the New Look</Text>
+          <Text style={[styles.lightTxt,{color:'#F7E7E4'}]}>Seasons calls for the new look</Text>
         </View>
 
         <Image source={headerImg2} style={[styles.bannerImg, { marginLeft: SCREEN_WIDTH * 0.56 }]} />
@@ -113,7 +121,7 @@ export default function Home({ route, navigation }) {
         {fetchingData ? <LoadingData /> : (
           <View style={{ flexDirection: 'row' }}>
 
-            <ScrollView
+            {/* <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
               {Items.map((item, key) =>
@@ -126,7 +134,7 @@ export default function Home({ route, navigation }) {
                     shadowColor="#051934"
                     source={{ uri: item.img }}
                     style={{ margin: 10 }}
-                    textStyle={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}
+                    textStyle={{ fontSize: 15, color: 'white', textAlign: 'center' }}
                     overlayHeight={50}
                     overlayBackgroundColor="rgba(0,0,0,0.6)"
 
@@ -135,7 +143,7 @@ export default function Home({ route, navigation }) {
               )
               )}
 
-            </ScrollView>
+            </ScrollView> */}
 
           </View>
 
@@ -162,9 +170,9 @@ export default function Home({ route, navigation }) {
                     shadowColor="#02060D"
                     source={item.img}
                     style={{ margin: 10 }}
-                    textStyle={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}
-                    overlayHeight={40}
-                    overlayBackgroundColor="rgba(20, 20, 21,0.6)"
+                    textStyle={{ fontSize: 15, color: 'white', textAlign: 'center' }}
+                    overlayHeight={50}
+                    overlayBackgroundColor="rgba(20, 20, 21,0.4)"
 
                   />
                 </TouchableOpacity>
@@ -245,12 +253,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: 'white'
   },
-  header: {
-    textAlign: 'center',
-    fontSize: 18,
-    padding: 16,
-    marginTop: 16,
-  },
   topBar: {
     backgroundColor: 'white',
     height: 60,
@@ -268,10 +270,10 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginRight: -30
   },
-  menuicon:{
-    backgroundColor:'#DDDDDF',
-    padding:5,
-    borderRadius:30,
+  menuicon: {
+    backgroundColor: '#DDDDDF',
+    padding: 5,
+    borderRadius: 30,
     fontSize: 20
 
   },
@@ -291,22 +293,23 @@ const styles = StyleSheet.create({
     marginTop: 2
   },
   lightTxt: {
-    color: '#9C9D9F'
+    color: '#6E6F6E',
+    fontSize: 13
   },
   banner: {
     margin: 10,
-    marginTop: 60,
+    marginTop: 20,
     borderRadius: 10,
-    backgroundColor: '#E0E1E3',
+    backgroundColor: '#E7AA9E',
     padding: 20,
     height: 130
   },
   bannerImg: {
     position: 'absolute',
-    width: '45%',
-    height: '25%',
+    width: '50%',
+    height: '30%',
     zIndex: 2,
-    marginTop:33
+    marginTop: 9
   },
   searchContainer: {
     backgroundColor: 'white',
@@ -314,21 +317,58 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
     flexDirection: 'row',
-    marginTop: -20
+    marginTop: -20,
+    flexDirection: 'row',
   },
   searchField: {
     borderWidth: 1,
     borderColor: '#ADAFB5',
     borderRadius: 20,
-    width: '80%',
+    width: '85%',
     textAlign: 'center',
-    margin: 10
+    margin: 10,
+    marginLeft: 10
+  },
+  searchBtn: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    padding: 15,
+    backgroundColor: '#E7AA9E',
+    borderRadius: 20,
+    width: 15,
+    height: 15,
+    zIndex: 2,
+    left: -30,
+    top: -10
+
+
+
+  },
+  searchIcon: {
+    position: 'absolute',
+    borderRadius: 20,
+    margin: 15,
+    width: 20,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    left: -9
   },
   heading: {
     fontSize: 20,
     marginTop: 10,
     padding: 10,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: '#616362'
+  },
+  header: {
+    width: '60%',
+    marginHorizontal: 10,
+
   },
   txt: {
     color: '#AAAAAB',
@@ -372,17 +412,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  searchIcon: {
-    position: 'absolute',
-    marginTop: 10,
-    backgroundColor: '#FFC431',
-    padding: 5,
-    width: 30,
-    height: 30,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
+
   caption: {
     borderWidth: 1,
     borderColor: '#EBE7E6',

@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import firebase from 'firebase/app'
 import SwitchToggle from "react-native-switch-toggle";
-import firebaseConfig from '../../../../Firebase/FirebaseConfig';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Settings({ route, navigation }) {
@@ -12,11 +10,6 @@ export default function Settings({ route, navigation }) {
     const colors = ["#C2E4EE", "#B2DBD6", "#D2B1B1", "#D0D4FA"];
     const [toggle, setToggle] = useState(false);
 
-    if (!firebase.apps.length) {
-        const firebaseApp = firebase.initializeApp(firebaseConfig);
-    }
-    const auth = firebase.auth();
-    const db = firebase.firestore();
 
 
     return (
@@ -36,7 +29,7 @@ export default function Settings({ route, navigation }) {
                         source={require('../../../../images/user.png')}
                         style={{ width: '7%', height: '100%' }}
                     />
-                    <Text style={{ fontSize: 16, color: 'white', letterSpacing: 2, marginLeft: 10 }} >{auth.currentUser.displayName}</Text>
+                    <Text style={{ fontSize: 16, color: 'white', letterSpacing: 2, marginLeft: 10 }} >Biya</Text>
                 </View>
             </View>
             <View style={styles.lowerContainer}>

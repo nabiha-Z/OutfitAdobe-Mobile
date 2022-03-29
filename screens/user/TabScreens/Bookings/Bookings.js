@@ -2,37 +2,16 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import firebase from "firebase/app";
 
 
 export default function Bookings({ route, navigation }) {
-    const db = firebase.firestore();
-    const user = firebase.auth().currentUser.uid;
+ 
     const [bookings, setbookings] = useState([]);
     const [check, setcheck] = useState(true);
-    useEffect(() => {
-        db.collection('bookings').get().then(
-
-            (data) => {
-                var temp = [];
-                data.docs.map(
-                    (data1) => {
-                        if (data1.data().customer_id == user) {
-                            const a = data1.data();
-                            a.bid = data1.id;
-                            temp.push(a);
-                        }
-
-                    }
-                )
-                setbookings(temp);
-            }
-        )
-    }, [])
-
+    
     return (
         <View style={styles.container}>
-            {
+            {/* {
                 bookings.map(
                     (item, key) => {
                         return (
@@ -47,7 +26,7 @@ export default function Bookings({ route, navigation }) {
                                         <Text style={styles.mainText}>{item.service_name}</Text>
                                         <Text style={styles.subText}>Date: {item.date}</Text>
                                         <Text style={styles.subText}>Time:{item.time}</Text>
-                                        {/* <Text style={styles.mainText}>price : {item.price} $</Text> */}
+                                     
                                     </View>
                                     <MaterialIcons name="keyboard-arrow-right" size={20} style={{ marginLeft: 30, top: 4 }} />
                                 </TouchableOpacity>
@@ -56,7 +35,8 @@ export default function Bookings({ route, navigation }) {
                         )
                     }
                 )
-            }
+            } */}
+            <Text>Some Screen</Text>
 
 
 

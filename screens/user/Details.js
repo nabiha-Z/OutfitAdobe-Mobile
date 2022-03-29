@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Animated, Dimensions, View, Text, StyleSheet, TextInput, ActivityIndicator, TouchableOpacity, Button, Image, ListItem, ScrollView } from 'react-native';
 import { Ionicons, Feather, AntDesign, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import firebase from 'firebase/app';
 import { SliderBox } from "react-native-image-slider-box";
 import { CheckBox } from "react-native-elements";
 
@@ -10,7 +9,6 @@ export default function Details({ route, navigation }) {
     const { details } = route.params;
     //console.log("details:", details);
 
-    const auth = firebase.auth();
     const [isSelected, setSelected] = useState(details.fav);
     const [check1, setcheck1] = useState(true);
     const [staff, setstaff] = useState([])
@@ -25,62 +23,6 @@ export default function Details({ route, navigation }) {
                 </TouchableOpacity>
             )
         })
-
-        db.collection('products').get().then(
-
-            (data) => {
-                var temp = [], service = [];
-                data.docs.map(
-                    (data1) => {
-                        var info = data1.data();
-                        if (info.store == details.store) {
-                            service = info.service;
-                            service.map((item) => {
-                                if (item.name == details.name) {
-                                    var a = info;
-                                    a.pid = data1.id;
-                                    a.boder = "#C8C4C4";
-                                    a.background = "white"
-                                    a.selected = false;
-                                    temp.push(a);
-                                }
-                            })
-                        }
-
-                    }
-
-                )
-
-                setProducts(temp);
-
-            }
-        )
-
-        db.collection('staffs').get().then(
-
-            (data) => {
-                var temp = [], service = [];
-                data.docs.map(
-                    (data1) => {
-                        var info = data1.data();
-                        if (info.store == details.store) {
-                            service = info.service;
-                            service.map((item) => {
-                                if (item.name == details.name) {
-                                    //console.log("Found:", info)
-                                    temp.push(info);
-                                }
-                            })
-                        }
-
-                    }
-
-                )
-                setstaff(temp);
-                //console.log("serrrerere:", staff);
-            }
-        )
-
     }, [])
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;

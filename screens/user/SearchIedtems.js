@@ -1,15 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native'
-import firebase from 'firebase/app';
 import { MaterialCommunityIcons, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
 
 export default function SearchItems({ route, navigation }) {
 
   const { category } = route.params;
-  const db = firebase.firestore();
-  const auth = firebase.auth();
   const [searchTxt, setSearchField] = useState("");
   const [searchVisible, setsearchVisible] = useState(false);
   const [isSelected, setSelected] = useState(false);
@@ -19,27 +16,7 @@ export default function SearchItems({ route, navigation }) {
   const SCREEN_WIDTH = Dimensions.get('window').width;
   const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-  useEffect(() => {
-    db.collection('services').get().then(
-
-
-      (data) => {
-        var temp = [];
-        data.docs.map(
-          (data1) => {
-            if (data1.data().category === category.title) {
-              temp.push(data1.data());
-            }
-          }
-
-        )
-        setItems(temp);
-
-      }
-    )
-
-  }, [])
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
