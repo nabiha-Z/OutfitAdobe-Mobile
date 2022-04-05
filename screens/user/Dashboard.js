@@ -2,9 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Animated, Dimensions, View, Text, StyleSheet, TextInput, ActivityIndicator, TouchableOpacity, Button, Image, ListItem, ScrollView } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Entypo } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Entypo, FontAwesome5,FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 
@@ -92,7 +90,7 @@ export default function Dashboard({ route, navigation }) {
                             <FontAwesome5
                                 name="home"
                                 size={20}
-                                color={focused ? '#E7AA9E' : 'gray'}
+                                color={focused ? '#E7AA9E' : '#BCBCBF'}
                             ></FontAwesome5>
                         </View>
                     )
@@ -124,7 +122,7 @@ export default function Dashboard({ route, navigation }) {
                             position: 'absolute',
                             top: 20
                         }}>
-                            <Octicons name="calendar" size={22} color={focused ? '#E7AA9E' : 'gray'} />
+                            <Entypo name="shop" size={22} color={focused ? '#E7AA9E' : '#BCBCBF'} />
 
 
                         </View>
@@ -197,11 +195,11 @@ export default function Dashboard({ route, navigation }) {
                             position: 'absolute',
                             top: 20
                         }}>
-                            <FontAwesome5
-                                name="bell"
+                            <FontAwesome
+                                name="opencart"
                                 size={20}
-                                color={focused ? '#E7AA9E' : 'gray'}
-                            ></FontAwesome5>
+                                color={focused ? '#E7AA9E' : '#BCBCBF'}
+                            ></FontAwesome>
                         </View>
                     )
                 }} listeners={({ navigation, route }) => ({
@@ -235,11 +233,11 @@ export default function Dashboard({ route, navigation }) {
                             <Ionicons
                                 name="chatbox"
                                 size={20}
-                                color={focused ? '#E7AA9E' : 'gray'} />
+                                color={focused ? '#E7AA9E' : '#BCBCBF'} />
                             {/* <FontAwesome5
                                 name="comment"
                                 size={20}
-                                color={focused ? '#E7AA9E' : 'gray'}
+                                color={focused ? '#E7AA9E' : '#BCBCBF'}
                             ></FontAwesome5> */}
                         </View>
                     )

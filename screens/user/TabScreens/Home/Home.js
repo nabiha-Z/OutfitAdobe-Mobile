@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, ActivityIndicator, } from 'react-native'
-import { Entypo, Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Entypo, Ionicons, AntDesign, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
 
@@ -28,7 +28,7 @@ export default function Home({ route, navigation }) {
   const [favouriteItems, setFavourites] = useState([]);
   const [count, setCount] = useState(0);
 
-  const API_URL = 'http://192.168.100.10:8000';
+  const API_URL = 'http://192.168.100.2:8000';
   useEffect(() => {
 
     setFetching(true);
@@ -42,7 +42,7 @@ export default function Home({ route, navigation }) {
         try {
 
           const jsonRes = await res.json();
-          console.log("res: ", jsonRes)
+
           if (jsonRes.message === true) {
             setFetching(false);
             console.log("fetched")
@@ -125,7 +125,7 @@ export default function Home({ route, navigation }) {
       </View>
 
 
-      <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 0.9 }}>
+      <ScrollView contentContainerStyle={{ overflow: 'scroll' }}>
 
         <View style={styles.header}>
 
@@ -137,12 +137,11 @@ export default function Home({ route, navigation }) {
         <View style={styles.banner}>
           <Text style={[styles.heading, { fontSize: 25, color: 'white', marginTop: -9, left: -14 }]}>Try the New Look</Text>
           <View style={{ width: '60%' }}>
-            <Text style={[styles.lightTxt, { color: '#F7E7E4' }]}>The forecast says that dress season has officially arrived! Spring forward with our swing, springy, dress shop.</Text>
+            <Text style={[styles.lightTxt, { color: '#F7E7E4', textAlign: 'justify', }]}>The forecast says that dress season has officially arrived! Spring forward with our swing, springy, dress shop.</Text>
           </View>
         </View>
 
         <Image source={headerImg2} style={[styles.bannerImg, { marginLeft: SCREEN_WIDTH * 0.56 }]} />
-
 
         <Text style={styles.heading}>Categories</Text>
         <Text style={styles.txt}>Find the outfits you need by browsing through the categories</Text>
@@ -182,6 +181,7 @@ export default function Home({ route, navigation }) {
 
         </View>
         <Text style={styles.heading}>Newest Products</Text>
+       
         {fetchingData ? <LoadingData /> : (
           <View style={styles.picksView}>
             {Items.map((item, key) =>
@@ -190,40 +190,33 @@ export default function Home({ route, navigation }) {
                 {console.log("item.title: ", item.title)}
                 <ImagedCarouselCard
                   text={item.title}
-                  width={Math.round(SCREEN_WIDTH * 0.84)}
-                  height={360}
-                  shadowColor="#051934"
+                  width={Math.round(SCREEN_WIDTH * 0.74)}
+                  height={300}
                   source={{ uri: item.picture }}
-                  borderRadius={10}
+                  borderRadius={4}
                   style={{ margin: 10 }}
                   textStyle={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}
-                  overlayHeight={50}
+                  overlayHeight={0}
                   overlayBackgroundColor="rgba(0,0,0,0.4)"
                   key={key}
                 />
-                <View style={styles.caption}>
+                 <View style={[styles.caption,{width:SCREEN_WIDTH * 0.74}]}>
                   <View style={styles.description}>
                     <Text style={styles.subheading}>{item.title}</Text>
                     <TouchableOpacity onPress={() => favourite(item)} style={{ justifyContent: 'center' }}>
                       <Ionicons name="heart" color={item.fav ? '#F75451' : '#D3D3D3'} size={30}></Ionicons>
                     </TouchableOpacity>
                   </View>
-                  <Text style={[styles.txt, { marginLeft: 6 }]}>{item.color}</Text>
-                  <Text style={[styles.subheading, { marginLeft: 5, fontSize: 16 }]}>$ {item.price}</Text>
+                  <View style={{display:'flex',flexDirection:'row'}}>
+              <Ionicons name="alert-circle-sharp" size={20} color={item.color}/>
+            <Text style={[styles.txt, { marginLeft: 10 }]}>{item.color}</Text>
+            </View>
+             
+                  <Text style={[styles.subheading, { fontSize: 18, color:'#666668', marginBottom:10 }]}>{item.price}/-</Text>
+{}
+              
 
-                  <View style={{ flexDirection: 'row', margin: 15, justifyContent: 'space-between', marginRight: 20 }}>
-
-
-                  </View>
-
-                  <View style={styles.btnView}>
-                    {/* <TouchableOpacity style={[styles.btn, { backgroundColor: '#BAC7CE', margin: 6 }]} onPress={() => navigation.navigate('details', {details:item})}>
-                    <Text style={{ color: 'white' }}>View Details</Text>
-                  </TouchableOpacity> */}
-                    <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', margin: 6 }]} onPress={() => navigation.navigate('details', { details: item })}>
-                      <Text style={{ color: 'white' }}>View Details</Text>
-                    </TouchableOpacity>
-                  </View>
+                 
                 </View>
               </>
             ))}
@@ -294,14 +287,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#E7AA9E',
     padding: 20,
-    height: 130
+    height: 140
   },
   bannerImg: {
     position: 'absolute',
     width: '50%',
-    height: '30%',
+    height: 200,
     zIndex: 2,
-    marginTop: 9
+    marginTop: 11,
+
   },
   searchContainer: {
     backgroundColor: 'white',
@@ -311,6 +305,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: -20,
     flexDirection: 'row',
+    marginLeft: 10
   },
   searchField: {
     borderWidth: 1,
@@ -364,20 +359,19 @@ const styles = StyleSheet.create({
   },
   txt: {
     color: '#AAAAAB',
-    padding: 10,
     paddingTop: 0,
-    fontSize: 13
+    fontSize: 15,
   },
   subheading: {
     color: '#343537',
-    padding: 10,
     fontSize: 20,
     fontWeight: 'bold'
   },
   picksView: {
 
     padding: 5,
-    margin: 5
+    margin: 5,
+    alignItems:'center'
 
   },
   elevation: {
@@ -387,8 +381,6 @@ const styles = StyleSheet.create({
   description: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginLeft: 6,
-    marginRight: 10,
     marginTop: 26
 
   },
@@ -408,12 +400,17 @@ const styles = StyleSheet.create({
   caption: {
     borderWidth: 1,
     borderColor: '#EBE7E6',
-    borderRadius: 10,
     marginTop: -28,
     borderTopWidth: 0,
     margin: -2,
-    marginBottom: 20
+    marginBottom: 20,
+    padding:10
   },
+  color:{
+    width:59,
+    height:50,
+    borderRadius:20
+  }
 
 });
 
