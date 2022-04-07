@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 const Tab = createMaterialTopTabNavigator();
@@ -30,9 +30,70 @@ function Activity() {
     );
   }
 
+  function News2() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.heading}>No new news</Text>
+        <Image
+        source={require('../../../../images/news.png')}
+        style={{ width: '50%', height: '25%' }}
+      />
+      </View>
+    );
+  }
+
+  function News3() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.heading}>No new news</Text>
+        <Image
+        source={require('../../../../images/news.png')}
+        style={{ width: '50%', height: '25%' }}
+      />
+      </View>
+    );
+  }
+
+  function News4() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.heading}>No new news</Text>
+        <Image
+        source={require('../../../../images/news.png')}
+        style={{ width: '50%', height: '25%' }}
+      />
+      </View>
+    );
+  }
+
+  function News6() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.heading}>No new news</Text>
+        <Image
+        source={require('../../../../images/news.png')}
+        style={{ width: '50%', height: '25%' }}
+      />
+      </View>
+    );
+  }
+  function News5() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.heading}>No new news</Text>
+        <Image
+        source={require('../../../../images/news.png')}
+        style={{ width: '50%', height: '25%' }}
+      />
+      </View>
+    );
+  }
+
 export default function Notifications() {
     return (
         <>
+       
+    
             <Tab.Navigator
                 screenOptions={{
                     labelStyle: { fontSize: 14 },
@@ -45,7 +106,14 @@ export default function Notifications() {
             >
                 <Tab.Screen name="Activity" component={Activity} />
                 <Tab.Screen name="News" component={News} />
+                <Tab.Screen name="News2" component={News2} />
+                <Tab.Screen name="News3" component={News3} />
+                <Tab.Screen name="News4" component={News4} />
+                <Tab.Screen name="News5" component={News5} />
+                <Tab.Screen name="News6" component={News6} />
+                
             </Tab.Navigator>
+     
         </>
     )
 

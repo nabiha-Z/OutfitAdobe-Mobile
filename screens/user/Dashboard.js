@@ -8,7 +8,7 @@ import { Octicons } from '@expo/vector-icons';
 
 import Home from './TabScreens/Home/Home';
 import Chats from './TabScreens/Chats/Chats';
-import Bookings from './TabScreens/Bookings/Bookings';
+import Store from './TabScreens/Store/Store';
 import Profile from './TabScreens/Profile/Profile';
 import Notification from './TabScreens/Notifications/Notification';
 
@@ -104,10 +104,10 @@ export default function Dashboard({ route, navigation }) {
                     }
                 })}></Tab.Screen>
 
-                <Tab.Screen name={"Bookings"} component={Bookings} options={{
-                    title: "Bookings",
+                <Tab.Screen name={"Store"} component={Store} options={{
+                    title: "",
                     headerStyle: {
-                        height: 110
+                        height: 0
                     },
                     headerTitleStyle: {
                         color: 'black',

@@ -285,16 +285,16 @@ const styles = StyleSheet.create({
     margin: 10,
     marginTop: 20,
     borderRadius: 10,
-    backgroundColor: '#E7AA9E',
+    backgroundColor: '#227A74',
     padding: 20,
-    height: 140
+    height: 155
   },
   bannerImg: {
     position: 'absolute',
     width: '50%',
     height: 200,
     zIndex: 2,
-    marginTop: 11,
+    marginTop: 26,
 
   },
   searchContainer: {

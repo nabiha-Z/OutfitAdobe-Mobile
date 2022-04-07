@@ -25,7 +25,6 @@ import Favourites from './screens/user/TabScreens/Profile/Favourites';
 import Dashboard_user from './screens/user/Dashboard';
 import Details from './screens/user/Details';
 import BookingScreen from './screens/user/BookingScreen';
-import PaymentScreen from './screens/user/PaymentScreen';
 import Chats from './screens/Vendor/TabScreens/Chats/userChat';
 import user_Chats from './screens/user/TabScreens/Chats/userChat';
 import ServicesDetails from './screens/Vendor/TabScreens/Profile/Services';
@@ -353,16 +352,6 @@ function App() {
 
 
 
-          })}
-
-        />
-        <Stack.Screen name="paymentscreen" component={PaymentScreen}
-          options={({ navigation, route }) => ({
-            title: '',
-            headerStyle: {
-              height: 0,
-
-            },
           })}
 
         />
