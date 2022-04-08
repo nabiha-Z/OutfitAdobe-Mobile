@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Animated, Dimensions, View, Text, StyleSheet, TextInput, ActivityIndicator, TouchableOpacity, Button, Image, ListItem, ScrollView } from 'react-native';
 import { Ionicons, Feather, AntDesign, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { SliderBox } from "react-native-image-slider-box";
-import { CheckBox } from "react-native-elements";
+import { CheckBox, colors } from "react-native-elements";
 
 export default function Details({ route, navigation }) {
-    const db = firebase.firestore();
     const { details } = route.params;
     //console.log("details:", details);
 
-    const [isSelected, setSelected] = useState(details.fav);
+    const [isSelected, setSelected] = useState(false);
     const [check1, setcheck1] = useState(true);
     const [staff, setstaff] = useState([])
     const [check, setcheck] = useState(1);
@@ -21,6 +20,11 @@ export default function Details({ route, navigation }) {
                 <TouchableOpacity onPress={() => navigation.pop()} style={{ margin: 15, zIndex: 2, backgroundColor: 'white' }}>
                     <MaterialIcons name="keyboard-arrow-left" size={40} color="black" style={{ zIndex: 1 }}></MaterialIcons>
                 </TouchableOpacity>
+            ),
+            headerRight: () => (
+                <TouchableOpacity onPress={() => favourite()} style={{ justifyContent: 'center' }}>
+                    <Ionicons name="heart-outline" color={isSelected ? '#F75451' : '#D3D3D3'} size={30}></Ionicons>
+                </TouchableOpacity>
             )
         })
     }, [])
@@ -29,7 +33,6 @@ export default function Details({ route, navigation }) {
 
     const favourite = () => {
 
-        setSelected(!isSelected)
     }
 
     const onChange = (item) => {
@@ -67,31 +70,6 @@ export default function Details({ route, navigation }) {
 
     };
 
-    const nextScreen = (staff) => {
-        const selectedData = [];
-        var count = 0;
-        products.map((item, key) => {
-            if (item.selected == true) {
-                setError("");
-                selectedData.push({
-                    id: item.id,
-                    price: item.price,
-                    name: item.name,
-                    img: item.img,
-                    selected: item.selected,
-                })
-                count++;
-            }
-        })
-        if (count === 0) {
-            setError("Please choose a product")
-
-        } else {
-            navigation.navigate('bookingscreen', { service: details, staff: staff, products: selectedData })
-        }
-
-
-    }
 
     return (
         <View>
@@ -114,145 +92,110 @@ export default function Details({ route, navigation }) {
 
 
                 <View style={styles.description}>
-                    <Text style={styles.subheading}>{details.name}</Text>
-                    <TouchableOpacity onPress={() => favourite()} style={{ justifyContent: 'center' }}>
-                        <Ionicons name="heart" color={isSelected ? '#F75451' : '#D3D3D3'} size={30}></Ionicons>
-                    </TouchableOpacity>
-                </View>
-                <Text style={[styles.txt, { marginHorizontal: 20 }]}>{details.detail}</Text>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginRight: 10 }}>
-                    <Text style={[styles.subheading, { marginHorizontal: 20, fontSize: 16, color: '#214279' }]}>$ {details.price}</Text>
-                    {/* <TouchableOpacity style={[styles.btn, { backgroundColor: '#336B99', width: '30%' }]} onPress={() => navigation.navigate('bookingscreen', { item: details })}>
-                        <Text style={{ color: 'white' }}>Book</Text>
+                    <Text style={styles.heading}>{details.title}</Text>
+                    <Text style={styles.subheading}> {details.price}/-</Text>
+                    <Text style={[styles.heading, { fontSize: 16, color: '#214279' }]}>Description</Text>
+                    <Text style={styles.txt}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</Text>
+                    {/* <Text style={[styles.txt, { marginHorizontal: 20 }]}>{details.detail}</Text> */}
+                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginRight: 10 }}>
+                        
                     </TouchableOpacity> */}
-                    <TouchableOpacity
-                        style={{ flexDirection: 'row', backgroundColor: 'rgba(135, 199, 199,0.7)', padding: 10, borderRadius: 10 }}
-                        key={details.store} onPress={() => navigation.navigate("user_Chat", { uid: details.store, name: details.name })}
-                    >
-                        <Ionicons name="chatbubble-outline" color='white' size={20} />
-                        <Text style={{ color: 'white' }}> Chat Now</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={{ margin: 15, justifyContent: 'space-between', marginHorizontal: 25 }}>
-                    <View style={{ flexDirection: 'row', }}>
-                        <Ionicons
-                            name="location"
-                            size={17}
-                            color="#BFC0C3"
-                        />
-                        <Text style={[styles.txt, { marginLeft: 6, fontSize: 15 }]}>{details.location}</Text>
+                        {/* <TouchableOpacity
+                            style={{ flexDirection: 'row', backgroundColor: 'rgba(135, 199, 199,0.7)', padding: 10, borderRadius: 10 }}
+                            key={details.store} onPress={() => navigation.navigate("user_Chat", { uid: details.store, name: details.name })}
+                        >
+                            <Ionicons name="chatbubble-outline" color='white' size={20} />
+                            <Text style={{ color: 'white' }}> Chat Now</Text>
+                        </TouchableOpacity>
+                    </View> */} 
+                    <View style={styles.variationContainer}>
+                        <TouchableOpacity style={styles.colors}>
+
+
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.sizes}>
+                            
+                            
+
+                        </TouchableOpacity>
                     </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <MaterialCommunityIcons
-                            name="clock"
-                            size={17}
-                            color="#BFC0C3"
-                        />
-                        <Text style={[styles.txt, { marginLeft: 5, fontSize: 15 }]}>{details.time1} - {details.time2}</Text>
+                    <View style={{ margin: 15, justifyContent: 'space-between', marginHorizontal: 25 }}>
+                        <View style={{ flexDirection: 'row', }}>
+                            <Ionicons
+                                name="location"
+                                size={17}
+                                color="#BFC0C3"
+                            />
+                            <Text style={[styles.txt, { marginLeft: 6, fontSize: 15 }]}>{details.location}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <MaterialCommunityIcons
+                                name="clock"
+                                size={17}
+                                color="#BFC0C3"
+                            />
+                            <Text style={[styles.txt, { marginLeft: 5, fontSize: 15 }]}>{details.time1} - {details.time2}</Text>
+                        </View>
+
+                        <Text style={[styles.heading, { color: '#383939', fontSize: 20 }]}>Products</Text>
+
+                        <Text style={{ color: '#747676', fontSize: 12, padding: 10, marginTop: -5 }}>Select from the below products to add in the serivce</Text>
+
                     </View>
 
-                    <Text style={[styles.heading, { color: '#383939', fontSize: 20 }]}>Products</Text>
+                    <Text style={[styles.heading, { color: '#383939', fontSize: 20, marginHorizontal: 20 }]}>Our Staff</Text>
+                    <Text style={{ color: '#747676', fontSize: 13, padding: 10, marginHorizontal: 15, marginTop: -5 }}>Select the staff for your service</Text>
 
-                    <Text style={{ color: '#747676', fontSize: 12, padding: 10, marginTop: -5 }}>Select from the below products to add in the serivce</Text>
+                    <ScrollView
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={true}
+                        contentContainerStyle={{ height: 160, marginHorizontal: 25, justifyContent: 'center', alignItems: 'center' }}>
+                        {staff.map((item, key) => (
 
-                    <View style={styles.productsView}>
-                        {products.map((item, key) => (
                             <>
-                                <View style={styles.checkboxContainer} key={key}>
-                                    <CheckBox
-                                        key={item.id}
-                                        checked={item.selected}
-                                        containerStyle={[styles.ckItem, { zIndex: 1 }]}
-                                        disabled={false}
-                                        onAnimationType="fill"
-                                        offAnimationType="fade"
-                                        boxType="square"
-                                        onPress={() => onChange(item)}
-                                    />
-                                    <View
-                                        style={[
-                                            styles.customCheckbox,
-                                            {
-                                                zIndex: 0,
-                                                borderColor: item.border,
-                                                backgroundColor: item.background,
-                                            },
-                                        ]}
-                                    >
+                                <TouchableOpacity
+                                    style={styles.checkboxContainer}
+                                    key={key}
+                                    activeOpacity={0.4}
 
-                                        <Image
-                                            source={{ uri: item.img }}
-                                            style={{
-                                                width: 30,
-                                                height: 30,
-                                                borderRadius: 30 / 2,
-                                                alignSelf: "center",
-                                            }}
-                                        />
-                                        <View style={styles.textContainer}>
-                                            <Text style={styles.mainText}>{item.name}</Text>
+                                >
+
+                                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                        <View style={styles.staffView}>
+
+                                            <Image
+                                                source={{ uri: item.img }}
+                                                style={{
+                                                    width: 70,
+                                                    height: 70,
+                                                    borderRadius: 40,
+                                                    alignSelf: "center",
+                                                }}
+                                            />
                                         </View>
+                                        <View style={styles.ratingView}>
+                                            <AntDesign name="star" color="#EED51F" size={12} />
+                                            <Text style={{ textAlign: 'center', fontSize: 12, fontWeight: 'bold' }}>{item.rating} </Text>
 
-                                        <Text>$ {item.price}</Text>
+                                        </View>
+                                        <Text style={{ textAlign: 'center', fontSize: 14, color: '#000000', marginTop: 10, fontWeight: 'bold' }}>{item.name} </Text>
+                                        <Text style={{ textAlign: 'center', fontSize: 10, color: '#B8BABB', marginTop: 2 }}>{item.profession} </Text>
                                     </View>
-                                </View>
+
+                                </TouchableOpacity>
+
                             </>
-                        ))}
-                    </View>
-                    <Text style={styles.errorMsg}>{error}</Text>
+                        )
 
+                        )}
+
+
+
+                    </ScrollView>
                 </View>
-
-                <Text style={[styles.heading, { color: '#383939', fontSize: 20, marginHorizontal: 20 }]}>Our Staff</Text>
-                <Text style={{ color: '#747676', fontSize: 13, padding: 10, marginHorizontal: 15, marginTop: -5 }}>Select the staff for your service</Text>
-
-                <ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={true}
-                    contentContainerStyle={{ height: 160, marginHorizontal: 25, justifyContent: 'center', alignItems: 'center' }}>
-                    {staff.map((item, key) => (
-
-                        <>
-                            <TouchableOpacity
-                                style={styles.checkboxContainer}
-                                key={key}
-                                activeOpacity={0.4}
-                                onPress={() => nextScreen(item)}
-                            >
-
-                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                    <View style={styles.staffView}>
-
-                                        <Image
-                                            source={{ uri: item.img }}
-                                            style={{
-                                                width: 70,
-                                                height: 70,
-                                                borderRadius: 40,
-                                                alignSelf: "center",
-                                            }}
-                                        />
-                                    </View>
-                                    <View style={styles.ratingView}>
-                                        <AntDesign name="star" color="#EED51F" size={12} />
-                                        <Text style={{ textAlign: 'center', fontSize: 12, fontWeight: 'bold' }}>{item.rating} </Text>
-
-                                    </View>
-                                    <Text style={{ textAlign: 'center', fontSize: 14, color: '#000000', marginTop: 10, fontWeight: 'bold' }}>{item.name} </Text>
-                                    <Text style={{ textAlign: 'center', fontSize: 10, color: '#B8BABB', marginTop: 2 }}>{item.profession} </Text>
-                                </View>
-
-                            </TouchableOpacity>
-
-                        </>
-                    )
-
-                    )}
-
-
-                </ScrollView>
-
             </ScrollView>
+
 
         </View>
     )
@@ -312,13 +255,23 @@ const styles = StyleSheet.create({
         color: '#AAAAAB',
         padding: 10,
         paddingTop: 0,
-        fontSize: 13
+        fontSize: 13,
+        marginHorizontal: 20
+    },
+    heading: {
+        color: '#343537',
+        padding: 10,
+        fontSize: 18,
+        fontWeight: 'bold',
+
     },
     subheading: {
         color: '#343537',
         padding: 10,
-        fontSize: 20,
         fontWeight: 'bold',
+        marginHorizontal: 20,
+        fontSize: 16, 
+        color: '#214279'
 
     },
     picksView: {
@@ -332,10 +285,10 @@ const styles = StyleSheet.create({
         shadowColor: '#52006A',
     },
     description: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        flex:1,
         marginHorizontal: 20,
-        marginTop: 26
+        marginTop: 26,
+        flexWrap:'wrap'
 
     },
     btnView: {

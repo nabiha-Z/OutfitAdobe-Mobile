@@ -35,7 +35,9 @@ import BookingDetails from './screens/user/BookingDetails';
 import SearchItems from './screens/user/SearchIedtems';
 import SearchServices from './screens/user/SearchedServices';
 
-const Stack = createStackNavigator();
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
+
+const Stack = createSharedElementStackNavigator();
 
 function App() {
   return (
@@ -342,17 +344,22 @@ function App() {
           })}
 
         />
-        <Stack.Screen name="details" component={Details}
+        <Stack.Screen
+          name="Details"
+          component={Details}
           options={({ navigation, route }) => ({
             title: '',
             headerStyle: {
-              height: 90,
+              height: 100,
 
             },
 
 
 
           })}
+          sharedElements={(route) => {
+            return [route.params.details._id]
+          }}
 
         />
 

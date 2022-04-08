@@ -69,13 +69,14 @@ export default function Home({ route, navigation }) {
   const LoadingData = () => {
     return (
       <>
-        <ActivityIndicator size="large" color="#FBD92C" />
+        <ActivityIndicator size="large" color="#E7AA9E" />
         {/* <Text style={{ paddingTop: 20, color: '#DEBF4D', textAlign: 'center' }}>
           Loading Data from JSON Placeholder API ...
         </Text> */}
       </>
     );
   };
+
   const favourite = (item) => {
 
     var fav = favouriteItems;
@@ -90,15 +91,6 @@ export default function Home({ route, navigation }) {
     }
 
     setFavourites(fav);
-
-    // db.collection("users").doc(auth.currentUser.uid).update({
-    //   favourites: fav
-    // }).then(
-    //   (data) => {
-    //     check ? setcheck(false) : setcheck(true);
-
-    //   }
-    // )
   }
 
   return (
@@ -189,13 +181,12 @@ export default function Home({ route, navigation }) {
               <>
                 {console.log("item.title: ", item.title)}
                 <ImagedCarouselCard
-                  text={item.title}
+                  text=""
                   width={Math.round(SCREEN_WIDTH * 0.74)}
                   height={300}
                   source={{ uri: item.picture }}
                   borderRadius={4}
                   style={{ margin: 10 }}
-                  textStyle={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}
                   overlayHeight={0}
                   overlayBackgroundColor="rgba(0,0,0,0.4)"
                   key={key}
@@ -209,7 +200,7 @@ export default function Home({ route, navigation }) {
                   </View>
                   <View style={{display:'flex',flexDirection:'row'}}>
               <Ionicons name="alert-circle-sharp" size={20} color={item.color}/>
-            <Text style={[styles.txt, { marginLeft: 10 }]}>{item.color}</Text>
+            <Text style={[styles.txt]}>{item.color}</Text>
             </View>
              
                   <Text style={[styles.subheading, { fontSize: 18, color:'#666668', marginBottom:10 }]}>{item.price}/-</Text>
@@ -285,7 +276,7 @@ const styles = StyleSheet.create({
     margin: 10,
     marginTop: 20,
     borderRadius: 10,
-    backgroundColor: '#227A74',
+    backgroundColor: '#E7AA9E',
     padding: 20,
     height: 155
   },
@@ -360,7 +351,8 @@ const styles = StyleSheet.create({
   txt: {
     color: '#AAAAAB',
     paddingTop: 0,
-    fontSize: 15,
+    fontSize: 13,
+    marginHorizontal:10
   },
   subheading: {
     color: '#343537',
@@ -410,6 +402,11 @@ const styles = StyleSheet.create({
     width:59,
     height:50,
     borderRadius:20
+  },
+
+  divider:{
+    width:'40%',
+    height:10
   }
 
 });
