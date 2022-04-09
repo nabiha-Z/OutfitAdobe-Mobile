@@ -127,7 +127,7 @@ export default function Home({ route, navigation }) {
         {/* <Text style={[styles.heading, { fontSize: 40, marginTop: -20 }]}>Look</Text> */}
 
         <View style={styles.banner}>
-          <Text style={[styles.heading, { fontSize: 25, color: 'white', marginTop: -9, left: -14 }]}>Try the New Look</Text>
+          <Text style={[styles.heading, { fontSize: 25, color: 'white', marginTop: -9, left: -14, textAlign:'left' }]}>Try the New Look</Text>
           <View style={{ width: '60%' }}>
             <Text style={[styles.lightTxt, { color: '#F7E7E4', textAlign: 'justify', }]}>The forecast says that dress season has officially arrived! Spring forward with our swing, springy, dress shop.</Text>
           </View>
@@ -136,6 +136,7 @@ export default function Home({ route, navigation }) {
         <Image source={headerImg2} style={[styles.bannerImg, { marginLeft: SCREEN_WIDTH * 0.56 }]} />
 
         <Text style={styles.heading}>Categories</Text>
+        <View style={styles.divider}></View>
         <Text style={styles.txt}>Find the outfits you need by browsing through the categories</Text>
         <View style={{ flexDirection: 'row' }}>
 
@@ -173,6 +174,7 @@ export default function Home({ route, navigation }) {
 
         </View>
         <Text style={styles.heading}>Newest Products</Text>
+        <View style={[styles.divider,{width:'50%'}]}></View>
        
         {fetchingData ? <LoadingData /> : (
           <View style={styles.picksView}>
@@ -341,7 +343,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 10,
     fontWeight: 'bold',
-    color: '#616362'
+    color: '#616362',
   },
   header: {
     width: '60%',
@@ -405,8 +407,14 @@ const styles = StyleSheet.create({
   },
 
   divider:{
-    width:'40%',
-    height:10
+    width:'35%',
+    height:2,
+    backgroundColor:'#FAC4BA',
+    margin:10,
+    marginHorizontal:10,
+    marginTop:0,
+    borderRadius:5,
+    
   }
 
 });

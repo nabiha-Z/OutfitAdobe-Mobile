@@ -35,7 +35,8 @@ import BookingDetails from './screens/user/BookingDetails';
 import SearchItems from './screens/user/SearchIedtems';
 import SearchServices from './screens/user/SearchedServices';
 
-import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
+import { createSharedElementStackNavigator,SharedElementTransition,
+  nodeFromRef } from 'react-navigation-shared-element';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -147,19 +148,7 @@ function App() {
           })}
         />
 
-        <Stack.Screen name="StaffDetails" component={StaffDetails}
-          options={({ navigation, route }) => ({
-            title: 'Staff Details',
-            headerStyle: {
-              height: 100
-            },
-            headerTitleStyle: {
-              color: 'black',
-              textAlign: 'center',
-              left: 60,
-            },
-          })}
-        />
+    
         <Stack.Screen name="AddStaff" component={AddStaff}
           options={({ navigation, route }) => ({
             title: 'New Staff',
@@ -170,19 +159,7 @@ function App() {
             },
           })}
         />
-        <Stack.Screen name="ProductDetails" component={InventoryDetails}
-          options={({ navigation, route }) => ({
-            title: 'Product Details',
-            headerStyle: {
-              height: 100
-            },
-            headerTitleStyle: {
-              color: 'black',
-              textAlign: 'center',
-              left: 60,
-            },
-          })}
-        />
+ 
         <Stack.Screen name="AddProduct" component={NewInventory}
           options={({ navigation, route }) => ({
             title: 'New Product',
@@ -193,19 +170,7 @@ function App() {
             },
           })}
         />
-        <Stack.Screen name="ServiceDetails" component={ServicesDetails}
-          options={({ navigation, route }) => ({
-            title: 'Service Details',
-            headerStyle: {
-              height: 100
-            },
-            headerTitleStyle: {
-              color: 'black',
-              textAlign: 'center',
-              left: 60,
-            },
-          })}
-        />
+ 
         <Stack.Screen name="AddService" component={NewService}
           options={({ navigation, route }) => ({
             title: 'New Service',
@@ -358,6 +323,7 @@ function App() {
 
           })}
           sharedElements={(route) => {
+            
             return [route.params.details._id]
           }}
 

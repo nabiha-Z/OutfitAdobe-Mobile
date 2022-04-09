@@ -121,7 +121,7 @@ export default function Bookings({ route, navigation }) {
                 }
             })
 
-            
+
             setProducts(data);
         }
     }
@@ -154,12 +154,15 @@ export default function Bookings({ route, navigation }) {
             <ScrollView contentContainerStyle={{ overflow: 'scroll' }}>
 
                 {fetchingData ? <LoadingData /> : (
-                    <View style={styles.picksView}>
+                    <View style={styles.picksView} >
                         {products.map((item, key) =>
                         (
                             <>
-                               
-                                <View style={{ margin: 5 }} onPress={()=>navigation.navigate('Details',{details:item})}>
+
+                                <TouchableOpacity
+                                    key={key}
+                                    style={{ margin: 5 }}
+                                    onPress={() => navigation.navigate('Details',{details:item})} >
                                     <ImagedCarouselCard
                                         text=""
                                         width={Math.round(SCREEN_WIDTH * 0.44)}
@@ -182,14 +185,14 @@ export default function Bookings({ route, navigation }) {
                                             <Ionicons name="alert-circle-sharp" size={20} color={item.color} />
                                             <Text style={[styles.txt]}>{item.color}</Text>
                                         </View>
-                                        <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                                        <Text style={[styles.subheading, { fontSize: 18, color: '#666668', marginBottom: 10 }]}>{item.price}/-</Text>
-                                        <MaterialIcons name="keyboard-arrow-right" size={20} style={{marginRight:15}}/>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                            <Text style={[styles.subheading, { fontSize: 18, color: '#666668', marginBottom: 10 }]}>{item.price}/-</Text>
+                                            <MaterialIcons name="keyboard-arrow-right" size={17} color="#4B4949" style={styles.icon} />
                                         </View>
 
 
                                     </View>
-                                </View>
+                                </TouchableOpacity>
                             </>
                         ))}
 
@@ -258,8 +261,8 @@ const styles = StyleSheet.create({
         margin: 5,
         alignItems: 'center',
         justifyContent: 'center',
-        
-       
+
+
     },
     elevation: {
         elevation: 10,
@@ -315,5 +318,9 @@ const styles = StyleSheet.create({
     divider: {
         width: '40%',
         height: 10
+    },
+    icon:{
+        marginTop:13,
+    
     }
 })
