@@ -7,18 +7,19 @@ import { color } from 'react-native-elements/dist/helpers';
 
 export default function Details({ route, navigation }) {
     const { details } = route.params;
-    console.log("details:", details._id);
 
     const [isSelected, setSelected] = useState(false);
     const [check1, setcheck1] = useState(true);
     const [staff, setstaff] = useState([])
-    const [check, setcheck] = useState(1);
+    const [check, setcheck] = useState(false);
     const [error, setError] = useState("");
+    const [loadingData, setLoadingData] = useState(false);
+    const [loadingText, setLoadingText] = useState('Add to Cart')
+    const [loadingIcon, setLoadingIcon] = useState('cart');
     const [products, setProducts] = useState([]);
-    const [colors, setColors] = useState(['green', 'brown', 'black', 'blue']);
-    const [sizes, setSizes] = useState(['S', 'M', 'L', 'XL']);
-    const width = Dimensions.get('window').width;
-    const height = Dimensions.get('window').height;
+    const [colors, setColors] = useState(['#741823', '#B4535D', '#D87373', '#E9A0A0']);
+    const [sizes, setSizes] = useState([{ size: 'S', selected: true }, { size: 'M', selected: false }, { size: 'L', selected: false }, { size: 'XL', selected: false }]);
+    var available = ['S', 'M', 'L', 'XL'];
 
 
     useEffect(() => {
@@ -35,29 +36,19 @@ export default function Details({ route, navigation }) {
             )
         })
 
-        var object = {};
-        var data = [];
+        var tempSizes = [];
         sizes.map((item) => {
-            var active = false;
-            if (item === 'S') {
-                active = true
+            if (!available.includes(item.size)) {
+                console.log("item: ", item);
+                setSizes(sizes.filter(element => element.size !== item.size))
+
             }
-            object = {};
-            object.size = item;
-            object.active = active;
-            data.push(object)
-            console.log("type of data: ", typeof(data))
         })
-        console.log("sizes: ", data)
-        console.log("type of data: ", typeof(data))
-        console.log("type of sizes: ", typeof(sizes))
-        setSizes(data);
+
     }, [check])
 
-    console.log("type: ", typeof(sizes))
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
-    console.log("height: ", height)
 
     const favourite = () => {
 
@@ -94,14 +85,58 @@ export default function Details({ route, navigation }) {
         });
         setProducts(newData);
 
-
-
     };
+
+    const LoadingData = () => {
+        return (
+            <>
+                <ActivityIndicator size="small" color="white" />
+            </>
+        );
+    };
+
+    const selectSize = (item) => {
+        console.log("size: ", item.size);
+
+        const updatedSizes = sizes.map((element) => {
+            if (item.size === element.size) {
+
+                return {
+                    ...element,
+                    selected: true
+                };
+            } else {
+                return {
+                    ...element,
+                    selected: false
+                };
+
+            }
+
+        })
+        setSizes(updatedSizes);
+        setcheck(check ? false : true)
+    }
+
+    const Addtocart = () => {
+        setLoadingData(true);
+        setTimeout(() => {
+            setLoadingIcon('checkmark-sharp');
+            setLoadingData(false);
+            setLoadingText('Added ')
+          }, 2000);
+
+          setTimeout(() => {
+            setLoadingIcon('cart');
+            setLoadingText('Add to Cart')
+          }, 4000);
+       
+    }
 
 
     return (
         <View>
-            <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1.05, backgroundColor: 'white' }}>
+            <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1.1, backgroundColor: 'white' }}>
                 <ImagedCarouselCard
                     text=""
                     width={Math.round(SCREEN_WIDTH * 0.8)}
@@ -133,39 +168,50 @@ export default function Details({ route, navigation }) {
                 <View style={styles.description}>
                     <Text style={styles.heading}>{details.title}</Text>
                     <Text style={[styles.subheading]}>{details.price}/-</Text>
-                    <Text style={[styles.heading, { fontSize: 16, color: '#214279', marginTop: 5, marginBottom: 0 }]}>Description</Text>
+                    <Text style={[styles.heading, { fontSize: 16, marginTop: 5, marginBottom: 0 }]}>Description</Text>
                     <Text style={[styles.txt]}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</Text>
 
                     <View style={styles.variationContainer}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={[styles.subheading, { margin: 0, padding: 0 }]}>Color</Text>
-                            <Text style={[styles.subheading, { marginRight: 120, padding: 0 }]}>Size</Text>
+                            <Text style={[styles.subheading, { marginRight: 115, padding: 0 }]}>Size</Text>
                         </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ flexDirection: 'row' }}>
                             <View style={{ flexDirection: 'row' }}>
-                                {colors.map((item) => (
-                                    <TouchableOpacity style={[styles.colors, { backgroundColor: item }]}>
+                                {colors.map((item, key) => (
+                                    <TouchableOpacity style={[styles.colors, { backgroundColor: item }]} key={key}>
                                         <Text></Text>
                                     </TouchableOpacity>
                                 ))}
                             </View>
 
 
-                            <View style={{ flexDirection: 'row', marginLeft: 10 }}>
+                            <View style={{ flexDirection: 'row', marginLeft: 15, marginTop: -3 }}>
 
 
-                                {sizes.map((item) => (
-                                    <TouchableOpacity style={[styles.size]}>
-                                        <Text>{item.size}</Text>
+                                {sizes.map((item, key) => (
+                                    <TouchableOpacity
+                                        style={[styles.size, { backgroundColor: item.selected ? '#7EA5A5' : 'white', borderColor: item.selected ? '#7EA5A5' : '#6B6E6E' }]}
+                                        key={key}
+                                        onPress={() => selectSize(item)}>
+                                        <Text style={[{ color: item.selected ? 'white' : 'black', fontSize: 15, fontWeight: 'bold' }]}>{item.size}</Text>
                                     </TouchableOpacity>
                                 ))}
                             </View>
                         </View>
                     </View>
                 </View>
-                <View style={[styles.nextBtn, { width: width * 1 }]}>
-                    <TouchableOpacity style={styles.btn}>
-                        <Text style={styles.btnTxt}>Add to Cart</Text>
+                <View style={[styles.footerBtns, { width: SCREEN_WIDTH * 1 }]}>
+                    <TouchableOpacity style={[styles.btn, { backgroundColor: 'white', borderWidth: 1 }]}>
+                        <Text style={[styles.btnTxt, { color: 'black' }]}>Try On</Text>
+                        <Ionicons name="camera" size={20} style={{ margin: 5 }} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btn} onPress={()=>Addtocart()}>
+                        {loadingData ? <LoadingData /> : (
+                            <>
+                                <Text style={styles.btnTxt}>{loadingText}</Text>
+                                <Ionicons name={loadingIcon} size={20} style={{ margin: 5, color: 'white' }} />
+                            </>)}
 
                     </TouchableOpacity>
                 </View>
@@ -255,13 +301,15 @@ const styles = StyleSheet.create({
 
     btn: {
         height: 40,
-        width: '90%',
+        width: '95%',
         borderRadius: 4,
         padding: 10,
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'black',
-        marginLeft: -7
+        backgroundColor: '#114D53',
+        margin: 5,
+        marginHorizontal: 5
     },
     btnTxt: {
         textAlign: 'center',
@@ -305,23 +353,21 @@ const styles = StyleSheet.create({
         padding: 2,
         borderWidth: 1,
         margin: 5,
-        justifyContent: 'center',
-        alignContent: 'center',
+        justifyContent: 'flex-start',
+        alignSelf: 'flex-start',
         alignItems: 'center'
     },
-    nextBtn: {
+    footerBtns: {
         display: "flex",
-        flexDirection: 'row',
         backgroundColor: 'white',
-        bottom: 20,
         padding: 10,
         marginHorizontal: 10,
         backgroundColor: 'white',
         bottom: 20,
         marginTop: 30,
-        marginHorizontal: 10,
         justifyContent: 'center',
-        height: 60,
+        alignItems: 'center',
+        height: 90,
         borderRadius: 10,
         borderTopWidth: 1,
         borderColor: '#C6CBCA',
@@ -332,8 +378,9 @@ const styles = StyleSheet.create({
             height: 10
         },
         paddingHorizontal: 20,
+        marginLeft: 0
     },
-    nextBtnTxt: {
+    footerBtnsTxt: {
         fontSize: 16,
         marginRight: 5,
         fontWeight: '200',

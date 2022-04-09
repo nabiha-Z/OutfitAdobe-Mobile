@@ -7,7 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 
 
 
-export default function Bookings({ route, navigation }) {
+export default function Shop({ route, navigation }) {
 
     const [bookings, setbookings] = useState([]);
     const [check, setcheck] = useState(true);
@@ -19,7 +19,7 @@ export default function Bookings({ route, navigation }) {
     const [products, setProducts] = useState([]);
     const [count, setCount] = useState(0);
 
-    const API_URL = 'http://192.168.100.2:8000';
+    const API_URL = 'http://192.168.100.10:8000';
     useEffect(() => {
 
         setFetching(true);
@@ -43,8 +43,6 @@ export default function Bookings({ route, navigation }) {
                     // if (res.message === true) {
                     //  console.log("Data:", data)
                     // }
-
-
                 } catch (err) {
                     console.log(err);
                 };
@@ -87,13 +85,13 @@ export default function Bookings({ route, navigation }) {
 
     const changeActive = (item) => {
         console.log("title: ", item.title);
-        var active;
+    
         const newData = categories.map((element) => {
             if (item.title === element.title) {
-                active = true;
+               
                 return {
                     ...element,
-                    active: active
+                    active: true
                 };
             } else {
                 return {
@@ -146,7 +144,7 @@ export default function Bookings({ route, navigation }) {
                 <View style={styles.categoryBtns}>
                     {categories.map((item, key) => (
                         <>
-                            <Tabs item={item} />
+                            <Tabs item={item} key={key}/>
                         </>
                     ))}
                 </View>
@@ -320,7 +318,6 @@ const styles = StyleSheet.create({
         height: 10
     },
     icon:{
-        marginTop:13,
-    
+        marginTop:13,  
     }
 })

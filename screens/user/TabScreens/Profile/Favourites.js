@@ -58,7 +58,7 @@ export default function Favourites({ route, navigation }) {
                                 Saved Services
                             </Text>
 
-                            <View style={{ justifyContent:'space-between' }}>
+                            <View style={{ justifyContent: 'space-between' }}>
 
 
                                 {Items.map((item, key) =>
@@ -75,12 +75,12 @@ export default function Favourites({ route, navigation }) {
                                             overlayHeight={0}
 
 
-                           />
+                                        />
                                         <View style={styles.caption}>
                                             <View style={styles.description}>
                                                 <Text style={styles.subheading}>{item.name}</Text>
                                                 <TouchableOpacity
-                                                    
+
                                                     activeOpacity={0.4}
                                                     onPress={() => unfav(item)} style={{ marginLeft: 10 }}>
                                                     <Ionicons name="heart" color='#F75451' size={30}></Ionicons>
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     },
     picksView: {
         backgroundColor: 'white',
-        margin:10,
+        margin: 10,
         borderRadius: 6,
         alignItems: 'center'
 

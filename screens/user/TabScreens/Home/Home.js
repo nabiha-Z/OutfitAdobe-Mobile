@@ -1,10 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, ActivityIndicator, } from 'react-native'
-import { Entypo, Ionicons, AntDesign, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
+import { Entypo, Ionicons, AntDesign, MaterialCommunityIcons, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
-
 import education from "../../../../images/education.jpg";
 import search from "../../../../images/searchIcon.png";
 import beauty from "../../../../images/beauty.jpeg";
@@ -28,7 +27,7 @@ export default function Home({ route, navigation }) {
   const [favouriteItems, setFavourites] = useState([]);
   const [count, setCount] = useState(0);
 
-  const API_URL = 'http://192.168.100.2:8000';
+  const API_URL = 'http://192.168.100.10:8000';
   useEffect(() => {
 
     setFetching(true);
@@ -127,7 +126,7 @@ export default function Home({ route, navigation }) {
         {/* <Text style={[styles.heading, { fontSize: 40, marginTop: -20 }]}>Look</Text> */}
 
         <View style={styles.banner}>
-          <Text style={[styles.heading, { fontSize: 25, color: 'white', marginTop: -9, left: -14, textAlign:'left' }]}>Try the New Look</Text>
+          <Text style={[styles.heading, { fontSize: 25, color: 'white', marginTop: -9, left: -14, textAlign: 'left' }]}>Try the New Look</Text>
           <View style={{ width: '60%' }}>
             <Text style={[styles.lightTxt, { color: '#F7E7E4', textAlign: 'justify', }]}>The forecast says that dress season has officially arrived! Spring forward with our swing, springy, dress shop.</Text>
           </View>
@@ -174,43 +173,46 @@ export default function Home({ route, navigation }) {
 
         </View>
         <Text style={styles.heading}>Newest Products</Text>
-        <View style={[styles.divider,{width:'50%'}]}></View>
-       
+        <View style={[styles.divider, { width: '50%' }]}></View>
+
         {fetchingData ? <LoadingData /> : (
           <View style={styles.picksView}>
             {Items.map((item, key) =>
             (
               <>
                 {console.log("item.title: ", item.title)}
-                <ImagedCarouselCard
-                  text=""
-                  width={Math.round(SCREEN_WIDTH * 0.74)}
-                  height={300}
-                  source={{ uri: item.picture }}
-                  borderRadius={4}
-                  style={{ margin: 10 }}
-                  overlayHeight={0}
-                  overlayBackgroundColor="rgba(0,0,0,0.4)"
+                <TouchableOpacity
                   key={key}
-                />
-                 <View style={[styles.caption,{width:SCREEN_WIDTH * 0.74}]}>
-                  <View style={styles.description}>
-                    <Text style={styles.subheading}>{item.title}</Text>
-                    <TouchableOpacity onPress={() => favourite(item)} style={{ justifyContent: 'center' }}>
-                      <Ionicons name="heart" color={item.fav ? '#F75451' : '#D3D3D3'} size={30}></Ionicons>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={{display:'flex',flexDirection:'row'}}>
-              <Ionicons name="alert-circle-sharp" size={20} color={item.color}/>
-            <Text style={[styles.txt]}>{item.color}</Text>
-            </View>
-             
-                  <Text style={[styles.subheading, { fontSize: 18, color:'#666668', marginBottom:10 }]}>{item.price}/-</Text>
-{}
-              
+                  onPress={() => navigation.navigate('Details', { details: item })} >
+                  <ImagedCarouselCard
+                    text=""
+                    width={Math.round(SCREEN_WIDTH * 0.74)}
+                    height={300}
+                    source={{ uri: item.picture }}
+                    borderRadius={4}
+                    overlayHeight={0}
+                    overlayBackgroundColor="rgba(0,0,0,0.4)"
+                    key={key}
+                  />
+                  <View style={[styles.caption, { width: SCREEN_WIDTH * 0.74 }]}>
+                    <View style={styles.description}>
+                      <Text style={styles.subheading}>{item.title}</Text>
+                      <TouchableOpacity onPress={() => favourite(item)} style={{ justifyContent: 'center' }}>
+                        <Ionicons name="heart" color={item.fav ? '#F75451' : '#D3D3D3'} size={30}></Ionicons>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                      <Ionicons name="alert-circle-sharp" size={20} color={item.color} />
+                      <Text style={[styles.txt]}>{item.color}</Text>
+                    </View>
 
-                 
-                </View>
+                    {/* <Text style={[styles.subheading, { fontSize: 18, color: '#666668', marginBottom: 10 }]}>{item.price}/-</Text> */}
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin:10 }}>
+                      <Text style={[styles.subheading, { fontSize: 18, color: '#666668', marginBottom: 10 }]}>{item.price}/-</Text>
+                      <MaterialIcons name="keyboard-arrow-right" size={19} color="#4B4949" style={styles.icon} />
+                    </View>
+                  </View>
+                </TouchableOpacity>
               </>
             ))}
 
@@ -354,7 +356,7 @@ const styles = StyleSheet.create({
     color: '#AAAAAB',
     paddingTop: 0,
     fontSize: 13,
-    marginHorizontal:10
+    marginHorizontal: 10
   },
   subheading: {
     color: '#343537',
@@ -365,7 +367,7 @@ const styles = StyleSheet.create({
 
     padding: 5,
     margin: 5,
-    alignItems:'center'
+    alignItems: 'center'
 
   },
   elevation: {
@@ -396,25 +398,27 @@ const styles = StyleSheet.create({
     borderColor: '#EBE7E6',
     marginTop: -28,
     borderTopWidth: 0,
-    margin: -2,
     marginBottom: 20,
-    padding:10
+    padding: 10
   },
-  color:{
-    width:59,
-    height:50,
-    borderRadius:20
+  color: {
+    width: 59,
+    height: 50,
+    borderRadius: 20
   },
 
-  divider:{
-    width:'35%',
-    height:2,
-    backgroundColor:'#FAC4BA',
-    margin:10,
-    marginHorizontal:10,
-    marginTop:0,
-    borderRadius:5,
-    
+  divider: {
+    width: '35%',
+    height: 2,
+    backgroundColor: '#FAC4BA',
+    margin: 10,
+    marginHorizontal: 10,
+    marginTop: 0,
+    borderRadius: 5,
+
+  },
+  icon:{
+      marginTop:5,  
   }
 
 });
