@@ -12,18 +12,17 @@ export default function Shop({ route, navigation }) {
     const [bookings, setbookings] = useState([]);
     const [check, setcheck] = useState(true);
     const [categories, setCategories] = useState([{ title: 'All', active: true }, { title: 'Men', active: false }, { title: 'Women', active: false }, { title: 'Tshirt', active: false }, { title: 'Jeans', active: false }, { title: 'Suit', active: false }, { title: 'Dress', active: false }]);
-
     const [Items, setItems] = useState([]);
     const [fetchingData, setFetching] = useState(false);
     const [favouriteItems, setFavourites] = useState([]);
     const [products, setProducts] = useState([]);
     const [count, setCount] = useState(0);
 
-    const API_URL = 'http://192.168.100.10:8000';
+    const API_URL = 'https://outfit-adobe-server.herokuapp.com';
     useEffect(() => {
 
         setFetching(true);
-        fetch(`${API_URL}/user/latestProducts`, {
+        fetch(`${API_URL}/admin/getproducts`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -53,6 +52,7 @@ export default function Shop({ route, navigation }) {
 
 
     }, [])
+
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
 

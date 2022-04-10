@@ -21,13 +21,13 @@ export default function Home({ route, navigation }) {
   const [searchVisible, setsearchVisible] = useState(false);
   const [isSelected, setSelected] = useState(false);
   const [check, setcheck] = useState(true);
-  const [categories, setcategories] = useState([{ title: "Jeans", img: jeans }, { title: "Shirts", img: shirt }, { title: "Suits", img: suit }, { title: "Dresses", img: beauty }])
+  const [categories, setcategories] = useState([{ title: "Jeans", img: jeans }, { title: "TShirt", img: shirt }, { title: "Suit", img: suit }, { title: "Dress", img: beauty }])
   const [Items, setItems] = useState([]);
   const [fetchingData, setFetching] = useState(false);
   const [favouriteItems, setFavourites] = useState([]);
   const [count, setCount] = useState(0);
 
-  const API_URL = 'http://192.168.100.10:8000';
+  const API_URL = 'https://outfit-adobe-server.herokuapp.com';
   useEffect(() => {
 
     setFetching(true);
@@ -147,7 +147,7 @@ export default function Home({ route, navigation }) {
               <>
                 <TouchableOpacity
                   key={key}
-                  onPress={() => { navigation.navigate('search-screen', { category: item }) }}
+                  onPress={() => { navigation.navigate('search-screen', { category: item.title }) }}
                   activeOpacity={0.4}
                 >
 

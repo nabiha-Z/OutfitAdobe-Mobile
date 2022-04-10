@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, Touch
 import { MaterialCommunityIcons, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
 
-export default function SearchServices({ route, navigation }) {
+export default function SearchedItem({ route, navigation }) {
 
   const { searchText } = route.params;
   console.log("TEXT: ", searchText)

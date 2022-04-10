@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Animated, Dimensions, View, Text, StyleSheet, TextInput, ActivityIndicator, TouchableOpacity, Button, Image, ListItem, ScrollView } from 'react-native';
 import { Ionicons, Feather, AntDesign, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { SliderBox } from "react-native-image-slider-box";
@@ -20,6 +20,8 @@ export default function Details({ route, navigation }) {
     const [colors, setColors] = useState(['#741823', '#B4535D', '#D87373', '#E9A0A0']);
     const [sizes, setSizes] = useState([{ size: 'S', selected: true }, { size: 'M', selected: false }, { size: 'L', selected: false }, { size: 'XL', selected: false }]);
     var available = ['S', 'M', 'L', 'XL'];
+
+    const API_URL = 'https://outfit-adobe-server.herokuapp.com';
 
 
     useEffect(() => {
@@ -46,6 +48,9 @@ export default function Details({ route, navigation }) {
         })
 
     }, [check])
+
+
+
 
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -121,16 +126,17 @@ export default function Details({ route, navigation }) {
     const Addtocart = () => {
         setLoadingData(true);
         setTimeout(() => {
+            
             setLoadingIcon('checkmark-sharp');
             setLoadingData(false);
             setLoadingText('Added ')
-          }, 2000);
+        }, 2000);
 
-          setTimeout(() => {
+        setTimeout(() => {
             setLoadingIcon('cart');
             setLoadingText('Add to Cart')
-          }, 4000);
-       
+        }, 4000);
+
     }
 
 
@@ -206,11 +212,13 @@ export default function Details({ route, navigation }) {
                         <Text style={[styles.btnTxt, { color: 'black' }]}>Try On</Text>
                         <Ionicons name="camera" size={20} style={{ margin: 5 }} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btn} onPress={()=>Addtocart()}>
+                    <TouchableOpacity style={styles.btn} onPress={() => Addtocart()}>
                         {loadingData ? <LoadingData /> : (
                             <>
+
                                 <Text style={styles.btnTxt}>{loadingText}</Text>
                                 <Ionicons name={loadingIcon} size={20} style={{ margin: 5, color: 'white' }} />
+
                             </>)}
 
                     </TouchableOpacity>

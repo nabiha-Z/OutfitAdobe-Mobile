@@ -32,7 +32,7 @@ import NewService from './screens/Vendor/TabScreens/Profile/NewService';
 import InventoryDetails from './screens/Vendor/TabScreens/Profile/Inventory';
 import NewInventory from './screens/Vendor/TabScreens/Profile/NewInventory';
 import BookingDetails from './screens/user/BookingDetails';
-import SearchItems from './screens/user/SearchIedtems';
+import SearchedCategory from './screens/user/SearchCategory';
 import SearchServices from './screens/user/SearchedServices';
 
 import { createSharedElementStackNavigator,SharedElementTransition,
@@ -316,7 +316,6 @@ function App() {
             title: '',
             headerStyle: {
               height: 100,
-
             },
 
 
@@ -339,14 +338,18 @@ function App() {
           })}
 
         />
-        <Stack.Screen name="search-screen" component={SearchItems}
+        <Stack.Screen name="search-screen" component={SearchedCategory}
           options={({ navigation, route }) => ({
-            title: '',
+            title: 'Search Products',
             headerStyle: {
-              height: 0,
-
+              height: 100,
             },
-            headerLeft: null,
+            headerTitleStyle: {
+              color: 'black',
+              textAlign: 'center',
+              left: 40,
+              fontWeight:'bold'
+            },
           })}
 
         />
