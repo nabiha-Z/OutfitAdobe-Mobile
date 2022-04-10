@@ -180,7 +180,6 @@ export default function Home({ route, navigation }) {
             {Items.map((item, key) =>
             (
               <>
-                {console.log("item.title: ", item.title)}
                 <TouchableOpacity
                   key={key}
                   onPress={() => navigation.navigate('Details', { details: item })} >

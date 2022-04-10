@@ -17,7 +17,7 @@ export default function SearchedCategory({ route, navigation }) {
   const SCREEN_WIDTH = Dimensions.get('window').width;
   const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-  const API_URL = 'http://192.168.100.2:8000';
+  const API_URL = 'https://outfit-adobe-server.herokuapp.com';
 
   useEffect(() => {
     setFetching(true);

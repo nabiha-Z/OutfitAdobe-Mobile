@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useContext, useReducer } from 'react';
 import { StyleSheet, TouchableOpacity, Button, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -34,18 +34,136 @@ import NewInventory from './screens/Vendor/TabScreens/Profile/NewInventory';
 import BookingDetails from './screens/user/BookingDetails';
 import SearchedCategory from './screens/user/SearchCategory';
 import SearchServices from './screens/user/SearchedServices';
+import SignInScreen from './screens/user/SigninScreen';
+import { AuthContext } from './components/context';
 
-import { createSharedElementStackNavigator,SharedElementTransition,
-  nodeFromRef } from 'react-navigation-shared-element';
-
-const Stack = createSharedElementStackNavigator();
+const Stack = createStackNavigator();
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function App() {
-  return (
-    <NavigationContainer>
 
-      <Stack.Navigator>
-        {/* <Stack.Screen name="Home" component={HomeScreen}
+  const initialLoginState = {
+    isLoading: true,
+    userID: null,
+    userToken: null,
+  };
+
+  const loginReducer = (prevState, action) => {
+    switch( action.type ) {
+      case 'RETRIEVE_TOKEN': 
+        return {
+          ...prevState,
+          userToken: action.token,
+          isLoading: false,
+        };
+      case 'LOGIN': 
+        return {
+          ...prevState,
+          userID: action.id,
+          userToken: action.token,
+          isLoading: false,
+        };
+      case 'LOGOUT': 
+        return {
+          ...prevState,
+          userID: null,
+          userToken: null,
+          isLoading: false,
+        };
+      case 'REGISTER': 
+        return {
+          ...prevState,
+          userID: action.id,
+          userToken: action.token,
+          isLoading: false,
+        };
+    }
+  };
+
+  const [loginState, dispatch] = useReducer(loginReducer, initialLoginState);
+
+  const authContext = useMemo(() => ({
+    loggedIN: async (token) => {
+      // setUserToken('fgkj');
+      // setIsLoading(false);
+      const userToken = String(token);
+
+      try {
+        await AsyncStorage.getItem('userToken', userToken);
+        
+      } catch (e) {
+        console.log(e);
+      }
+      // console.log('user token: ', userToken);
+      dispatch({ type: 'LOGIN', id: userID, token: userToken });
+    },
+    signIn: async (currentUser, token) => {
+      // setUserToken('fgkj');
+      // setIsLoading(false);
+      const userToken = String(token);
+      const userID = currentUser;
+    
+      
+
+      try {
+        await AsyncStorage.setItem('userToken', userToken);
+        //console.log(AsyncStorage.getItem('userToken', userToken))
+        console.log("token set")
+      } catch (e) {
+        console.log(e);
+      }
+      // console.log('user token: ', userToken);
+      dispatch({ type: 'LOGIN', id: userID, token: userToken });
+    },
+    signOut: async () => {
+      // setUserToken(null);
+      // setIsLoading(false);
+      try {
+        await AsyncStorage.removeItem('userToken');
+      } catch (e) {
+        console.log(e);
+      }
+      dispatch({ type: 'LOGOUT' });
+    },
+    signUp: () => {
+      // setUserToken('fgkj');
+      // setIsLoading(false);
+    },
+  }), []);
+
+  useEffect(() => {
+    setTimeout(async () => {
+      // setIsLoading(false);
+      let userToken;
+      userToken = null;
+      
+      try {
+        userToken = await AsyncStorage.getItem('userToken');
+        console.log("Tokenn:", userToken)
+        
+      } catch (e) {
+        console.log(e);
+      }
+      // console.log('user token: ', userToken);
+      
+    }, 1000);
+  }, []);
+
+  if (loginState.isLoading) {
+    console.log("loading ..... ")
+    // return (
+    //   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    //     <ActivityIndicator size="large" />
+    //   </View>
+    // );
+  }
+
+  return (
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+
+        <Stack.Navigator>
+          {/* <Stack.Screen name="Home" component={HomeScreen}
           options={({ navigation, route }) => ({
             title: '',
             headerStyle: {
@@ -54,318 +172,326 @@ function App() {
             },
           })}
         /> */}
-        <Stack.Screen name="Dashboard_user" component={Dashboard_user}
-          options={({ navigation, route }) => ({
-            title: '',
-            headerStyle: {
-              backgroundColor: '#47A7AB',
-              height: 0
-            },
-            headerLeft: null
-          })}
-        />
-        <Stack.Screen name="Chat" component={Chats}
-          options={({ navigation, route }) => ({
-            title: '',
-            headerStyle: {
-              backgroundColor: '#47A7AB',
-              height: 0
-            },
-          })}
-        />
-        <Stack.Screen name="user_Chat" component={user_Chats}
-          options={({ navigation, route }) => ({
-            title: route.params.name,
-            headerStyle: {
-              backgroundColor: '#FFFFFF',
+        
 
-            },
+          <Stack.Screen name="Dashboard_user" component={Dashboard_user}
+            options={({ navigation, route }) => ({
+              title: '',
+              headerStyle: {
+                backgroundColor: '#47A7AB',
+                height: 0
+              },
+              headerLeft: null
+            })}
+          />
+          <Stack.Screen name="Chat" component={Chats}
+            options={({ navigation, route }) => ({
+              title: '',
+              headerStyle: {
+                backgroundColor: '#47A7AB',
+                height: 0
+              },
+            })}
+          />
+          <Stack.Screen name="user_Chat" component={user_Chats}
+            options={({ navigation, route }) => ({
+              title: route.params.name,
+              headerStyle: {
+                backgroundColor: '#FFFFFF',
 
-          })}
-        />
-        <Stack.Screen name="LoginScreen" component={LoginScreen}
-          options={({ navigation, route }) => ({
-            title: 'Login',
-            headerStyle: {
-              backgroundColor: 'white',
-              height: 100
-            },
-          })}
-        />
-        <Stack.Screen name="VendorLogin" component={VendorLogin}
-          options={({ navigation, route }) => ({
-            title: 'Vendor',
-            headerStyle: {
-              backgroundColor: 'white',
-              height: 100
-            },
-          })}
-        />
-        <Stack.Screen name="SignupScreen" component={SignupScreen}
-          options={({ navigation, route }) => ({
-            title: 'SignUp',
-            headerStyle: {
-              backgroundColor: 'white',
-              height: 100
-            },
-          })}
-        />
-        <Stack.Screen name="VendorSignup" component={VendorSignup}
-          options={({ navigation, route }) => ({
-            title: 'Business Information',
-            headerStyle: {
-              backgroundColor: 'white',
-              height: 100
-            },
-          })}
-        />
-        <Stack.Screen name="SignupLocation" component={SignupLocation}
-          options={({ navigation, route }) => ({
-            title: 'Set your location',
-            headerStyle: {
-              backgroundColor: 'white',
-              height: 100
-            },
-          })}
-        />
-        <Stack.Screen name="WorkingHours" component={WorkingHours}
-          options={({ navigation, route }) => ({
-            title: 'Set your timings',
-            headerStyle: {
-              backgroundColor: 'white',
-              height: 100
-            },
-          })}
-        />
-        <Stack.Screen name="Dashboard" component={Dashboard}
-          options={({ navigation, route }) => ({
-            title: '',
-            headerStyle: {
-              backgroundColor: '#47A7AB',
-              height: 0
-            },
-            headerLeft: null
-          })}
-        />
+              },
 
-    
-        <Stack.Screen name="AddStaff" component={AddStaff}
-          options={({ navigation, route }) => ({
-            title: 'New Staff',
-            headerTitleStyle: {
-              color: 'black',
-              textAlign: 'center',
-              left: 70,
-            },
-          })}
-        />
- 
-        <Stack.Screen name="AddProduct" component={NewInventory}
-          options={({ navigation, route }) => ({
-            title: 'New Product',
-            headerTitleStyle: {
-              color: 'black',
-              textAlign: 'center',
-              left: 70,
-            },
-          })}
-        />
- 
-        <Stack.Screen name="AddService" component={NewService}
-          options={({ navigation, route }) => ({
-            title: 'New Service',
-            headerTitleStyle: {
-              color: 'black',
-              textAlign: 'center',
-              left: 70,
-            },
-          })}
-        />
-        <Stack.Screen name="ContactScreen" component={ContactScreen}
-          options={({ navigation, route }) => ({
-            title: 'Contact Center',
-            headerTitleStyle: {
-              color: 'black',
-              textAlign: 'center',
-              left: 50,
-            },
-          })}
-        />
-        <Stack.Screen name="user_ContactScreen" component={user_Contact}
-          options={({ navigation, route }) => ({
-            title: 'Contact Center',
-            headerTitleStyle: {
-              color: 'black',
-              textAlign: 'center',
-              left: 50,
-            },
-          })}
-        />
-
-        <Stack.Screen name="SettingScreen" component={SettingScreen}
-          options={({ navigation, route }) => ({
-            title: '',
-            headerStyle: {
-              height: 0,
-
-            },
-          })}
-
-        />
-        <Stack.Screen name="user_SettingScreen" component={user_Setting}
-          options={({ navigation, route }) => ({
-            title: '',
-            headerStyle: {
-              height: 0,
-
-            },
-          })}
-
-        />
-        <Stack.Screen name="CalendarScreen" component={CalendarScreen}
-          options={({ navigation, route }) => ({
-            title: 'Change Calendar',
-            headerStyle: {
-              height: 100,
-            },
-            headerTitleStyle: {
-
-              color: 'black',
-              textAlign: 'center',
-              left: 30,
-            },
-          })}
-
-        />
-
-        <Stack.Screen name="Location" component={Location}
-          options={({ navigation, route }) => ({
-            title: 'Change Location',
-            headerStyle: {
-              height: 100,
-            },
-            headerTitleStyle: {
-
-              color: 'black',
-              textAlign: 'center',
-              left: 30,
-            },
-          })}
-
-        />
-
-        <Stack.Screen name="Password" component={Password}
-          options={({ navigation, route }) => ({
-            title: 'Change Password',
-            headerStyle: {
-              height: 100,
-            },
-            headerTitleStyle: {
-
-              color: 'black',
-              textAlign: 'center',
-              left: 30,
-            },
-          })}
-
-        />
-        <Stack.Screen name="user_Password" component={user_Password}
-          options={({ navigation, route }) => ({
-            title: 'Change Password',
-            headerStyle: {
-              height: 100,
-            },
-            headerTitleStyle: {
-
-              color: 'black',
-              textAlign: 'center',
-              left: 30,
-            },
-          })}
-
-        />
-
-        <Stack.Screen name="favourites" component={Favourites}
-          options={() => ({
-            title: 'Favourites',
-            headerStyle: {
-              height: 100,
-            },
-            headerTitleStyle: {
-              color: 'black',
-              textAlign: 'center',
-              left: 30,
-            },
-          })}
-
-        />
-        <Stack.Screen name="bookingscreen" component={BookingScreen}
-          options={() => ({
-            title: '',
-            headerStyle: {
-              height: 0,
-
-            },
-          })}
-
-        />
-        <Stack.Screen
-          name="Details"
-          component={Details}
-          options={({ navigation, route }) => ({
-            title: '',
-            headerStyle: {
-              height: 100,
-            },
+            })}
+          />
+            <Stack.Screen name="SignInScreen" component={SignInScreen}
+            options={({ navigation, route }) => ({
+              title: '',
+              headerStyle: {
+                backgroundColor: '#47A7AB',
+                height: 0
+              },
+            })}
+          />
+          <Stack.Screen name="LoginScreen" component={LoginScreen}
+            options={({ navigation, route }) => ({
+              title: 'Login',
+              headerStyle: {
+                backgroundColor: 'white',
+                height: 100
+              },
+            })}
+          />
+          <Stack.Screen name="VendorLogin" component={VendorLogin}
+            options={({ navigation, route }) => ({
+              title: 'Vendor',
+              headerStyle: {
+                backgroundColor: 'white',
+                height: 100
+              },
+            })}
+          />
+          <Stack.Screen name="SignupScreen" component={SignupScreen}
+            options={({ navigation, route }) => ({
+              title: 'SignUp',
+              headerStyle: {
+                backgroundColor: 'white',
+                height: 100
+              },
+            })}
+          />
+          <Stack.Screen name="VendorSignup" component={VendorSignup}
+            options={({ navigation, route }) => ({
+              title: 'Business Information',
+              headerStyle: {
+                backgroundColor: 'white',
+                height: 100
+              },
+            })}
+          />
+          <Stack.Screen name="SignupLocation" component={SignupLocation}
+            options={({ navigation, route }) => ({
+              title: 'Set your location',
+              headerStyle: {
+                backgroundColor: 'white',
+                height: 100
+              },
+            })}
+          />
+          <Stack.Screen name="WorkingHours" component={WorkingHours}
+            options={({ navigation, route }) => ({
+              title: 'Set your timings',
+              headerStyle: {
+                backgroundColor: 'white',
+                height: 100
+              },
+            })}
+          />
+          <Stack.Screen name="Dashboard" component={Dashboard}
+            options={({ navigation, route }) => ({
+              title: '',
+              headerStyle: {
+                backgroundColor: '#47A7AB',
+                height: 0
+              },
+              headerLeft: null
+            })}
+          />
 
 
+          <Stack.Screen name="AddStaff" component={AddStaff}
+            options={({ navigation, route }) => ({
+              title: 'New Staff',
+              headerTitleStyle: {
+                color: 'black',
+                textAlign: 'center',
+                left: 70,
+              },
+            })}
+          />
 
-          })}
-          sharedElements={(route) => {
-            
-            return [route.params.details._id]
-          }}
+          <Stack.Screen name="AddProduct" component={NewInventory}
+            options={({ navigation, route }) => ({
+              title: 'New Product',
+              headerTitleStyle: {
+                color: 'black',
+                textAlign: 'center',
+                left: 70,
+              },
+            })}
+          />
 
-        />
+          <Stack.Screen name="AddService" component={NewService}
+            options={({ navigation, route }) => ({
+              title: 'New Service',
+              headerTitleStyle: {
+                color: 'black',
+                textAlign: 'center',
+                left: 70,
+              },
+            })}
+          />
+          <Stack.Screen name="ContactScreen" component={ContactScreen}
+            options={({ navigation, route }) => ({
+              title: 'Contact Center',
+              headerTitleStyle: {
+                color: 'black',
+                textAlign: 'center',
+                left: 50,
+              },
+            })}
+          />
+          <Stack.Screen name="user_ContactScreen" component={user_Contact}
+            options={({ navigation, route }) => ({
+              title: 'Contact Center',
+              headerTitleStyle: {
+                color: 'black',
+                textAlign: 'center',
+                left: 50,
+              },
+            })}
+          />
 
-        <Stack.Screen name="bookingdetails" component={BookingDetails}
-          options={({ navigation, route }) => ({
-            title: '',
-            headerStyle: {
-              height: 0,
+          <Stack.Screen name="SettingScreen" component={SettingScreen}
+            options={({ navigation, route }) => ({
+              title: '',
+              headerStyle: {
+                height: 0,
 
-            },
-          })}
+              },
+            })}
 
-        />
-        <Stack.Screen name="search-screen" component={SearchedCategory}
-          options={({ navigation, route }) => ({
-            title: 'Search Products',
-            headerStyle: {
-              height: 100,
-            },
-            headerTitleStyle: {
-              color: 'black',
-              textAlign: 'center',
-              left: 40,
-              fontWeight:'bold'
-            },
-          })}
+          />
+          <Stack.Screen name="user_SettingScreen" component={user_Setting}
+            options={({ navigation, route }) => ({
+              title: '',
+              headerStyle: {
+                height: 0,
 
-        />
+              },
+            })}
 
-        <Stack.Screen name="search-services" component={SearchServices}
-          options={({ navigation, route }) => ({
-            title: '',
-            headerStyle: {
-              height: 0,
-            },
-            headerLeft: null,
-          })}
-        />
+          />
+          <Stack.Screen name="CalendarScreen" component={CalendarScreen}
+            options={({ navigation, route }) => ({
+              title: 'Change Calendar',
+              headerStyle: {
+                height: 100,
+              },
+              headerTitleStyle: {
 
-      </Stack.Navigator>
-    </NavigationContainer>
+                color: 'black',
+                textAlign: 'center',
+                left: 30,
+              },
+            })}
+
+          />
+
+          <Stack.Screen name="Location" component={Location}
+            options={({ navigation, route }) => ({
+              title: 'Change Location',
+              headerStyle: {
+                height: 100,
+              },
+              headerTitleStyle: {
+
+                color: 'black',
+                textAlign: 'center',
+                left: 30,
+              },
+            })}
+
+          />
+
+          <Stack.Screen name="Password" component={Password}
+            options={({ navigation, route }) => ({
+              title: 'Change Password',
+              headerStyle: {
+                height: 100,
+              },
+              headerTitleStyle: {
+
+                color: 'black',
+                textAlign: 'center',
+                left: 30,
+              },
+            })}
+
+          />
+          <Stack.Screen name="user_Password" component={user_Password}
+            options={({ navigation, route }) => ({
+              title: 'Change Password',
+              headerStyle: {
+                height: 100,
+              },
+              headerTitleStyle: {
+
+                color: 'black',
+                textAlign: 'center',
+                left: 30,
+              },
+            })}
+
+          />
+
+          <Stack.Screen name="favourites" component={Favourites}
+            options={() => ({
+              title: 'Favourites',
+              headerStyle: {
+                height: 100,
+              },
+              headerTitleStyle: {
+                color: 'black',
+                textAlign: 'center',
+                left: 30,
+              },
+            })}
+
+          />
+          <Stack.Screen name="bookingscreen" component={BookingScreen}
+            options={() => ({
+              title: '',
+              headerStyle: {
+                height: 0,
+
+              },
+            })}
+
+          />
+          <Stack.Screen
+            name="Details"
+            component={Details}
+            options={({ navigation, route }) => ({
+              title: '',
+              headerStyle: {
+                height: 100,
+              },
+
+
+
+            })}
+
+          />
+
+          <Stack.Screen name="bookingdetails" component={BookingDetails}
+            options={({ navigation, route }) => ({
+              title: '',
+              headerStyle: {
+                height: 0,
+
+              },
+            })}
+
+          />
+          <Stack.Screen name="search-screen" component={SearchedCategory}
+            options={({ navigation, route }) => ({
+              title: 'Search Products',
+              headerStyle: {
+                height: 100,
+              },
+              headerTitleStyle: {
+                color: 'black',
+                textAlign: 'center',
+                left: 40,
+                fontWeight: 'bold'
+              },
+            })}
+
+          />
+
+          <Stack.Screen name="search-services" component={SearchServices}
+            options={({ navigation, route }) => ({
+              title: '',
+              headerStyle: {
+                height: 0,
+              },
+              headerLeft: null,
+            })}
+          />
+
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
 }
 

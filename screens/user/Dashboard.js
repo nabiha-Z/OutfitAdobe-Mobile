@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { Animated, Dimensions, View, Text, StyleSheet, TextInput, ActivityIndicator, TouchableOpacity, Button, Image, ListItem, ScrollView } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,7 +9,10 @@ import Home from './TabScreens/Home/Home';
 import Chats from './TabScreens/Chats/Chats';
 import Store from './TabScreens/Store/Store';
 import Profile from './TabScreens/Profile/Profile';
+import SigninScreen from './SigninScreen';
 import Notification from './TabScreens/Notifications/Notification';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 import { LogBox } from 'react-native';
 import _ from 'lodash';
@@ -31,6 +33,12 @@ export default function Dashboard({ route, navigation }) {
 
     const tabOffsetValue = useRef(new Animated.Value(0)).current;
     const Tab = createBottomTabNavigator();
+    var userToken=null;
+    console.log("userToken: ", userToken);
+
+    useEffect(() => {
+        userToken =  AsyncStorage.getItem('userToken');
+   }, [])
     return (
         <>
             <Tab.Navigator screenOptions={{
@@ -139,8 +147,8 @@ export default function Dashboard({ route, navigation }) {
 
 
 
-                <Tab.Screen name={"Profile"} component={Profile} options={({ navigation, route }) => ({
-                    title: "Personal Profile",
+                <Tab.Screen name={"Profile"} component={userToken!=null?Profile:SigninScreen} options={({ navigation, route }) => ({
+                    title: userToken!=null?"Personal Profile":"Signin In",
                     headerStyle: {
                         height: 110
                     },

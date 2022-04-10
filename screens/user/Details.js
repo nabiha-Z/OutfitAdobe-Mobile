@@ -142,7 +142,7 @@ export default function Details({ route, navigation }) {
 
     return (
         <View>
-            <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1.1, backgroundColor: 'white' }}>
+            <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1, backgroundColor: 'white' }}>
                 <ImagedCarouselCard
                     text=""
                     width={Math.round(SCREEN_WIDTH * 0.8)}
