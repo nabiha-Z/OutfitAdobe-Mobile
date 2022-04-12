@@ -4,10 +4,10 @@ import { Ionicons, Feather, AntDesign, MaterialIcons, MaterialCommunityIcons } f
 import { SliderBox } from "react-native-image-slider-box";
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
 import { color } from 'react-native-elements/dist/helpers';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Details({ route, navigation }) {
     const { details } = route.params;
-
     const [isSelected, setSelected] = useState(false);
     const [check1, setcheck1] = useState(true);
     const [staff, setstaff] = useState([])
@@ -22,7 +22,7 @@ export default function Details({ route, navigation }) {
     var available = ['S', 'M', 'L', 'XL'];
 
     const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-
+    // const API_URL = 'http://192.168.100.2:8000';
 
     useEffect(() => {
         navigation.setOptions({
@@ -120,29 +120,70 @@ export default function Details({ route, navigation }) {
 
         })
         setSizes(updatedSizes);
+        details.size = item.size;
+        console.log("de: ", details.size)
         setcheck(check ? false : true)
+
     }
 
-    const Addtocart = () => {
+    const Addtocart = async () => {
         setLoadingData(true);
-        setTimeout(() => {
-            
-            setLoadingIcon('checkmark-sharp');
-            setLoadingData(false);
-            setLoadingText('Added ')
-        }, 2000);
+        console.log("details.size: ", details.size)
 
-        setTimeout(() => {
-            setLoadingIcon('cart');
-            setLoadingText('Add to Cart')
-        }, 4000);
+        const uid = await AsyncStorage.getItem('user');
+        console.log("UID: ", uid)
+        await fetch(`${API_URL}/user/addCart`, {
+
+            method: "POST",
+            body: JSON.stringify({
+                uid,
+                product: details
+            }),
+
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+
+            .then(async res => {
+                try {
+
+                    const jsonRes = await res.json();
+
+                    if (jsonRes.message === true) {
+
+                        console.log("Added");
+                        setLoadingIcon('checkmark-sharp');
+                        setLoadingData(false);
+                        setLoadingText('Added ');
+                        setTimeout(() => {
+                            setLoadingIcon('cart');
+                            setLoadingText('Add to Cart')
+                        }, 3000);
+
+
+                    } else {
+                        console.log("error found ", jsonRes.error)
+                    }
+
+                } catch (err) {
+                    console.log(err);
+                };
+            })
+            .catch(err => {
+                console.log("error: ", err.message);
+            });
+            
+
+
+       
 
     }
 
 
     return (
         <View>
-            <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1, backgroundColor: 'white' }}>
+            <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1.1, backgroundColor: 'white' }}>
                 <ImagedCarouselCard
                     text=""
                     width={Math.round(SCREEN_WIDTH * 0.8)}

@@ -107,10 +107,6 @@ export default function Notifications() {
                 <Tab.Screen name="Activity" component={Activity} />
                 <Tab.Screen name="News" component={News} />
                 <Tab.Screen name="News2" component={News2} />
-                <Tab.Screen name="News3" component={News3} />
-                <Tab.Screen name="News4" component={News4} />
-                <Tab.Screen name="News5" component={News5} />
-                <Tab.Screen name="News6" component={News6} />
                 
             </Tab.Navigator>
      

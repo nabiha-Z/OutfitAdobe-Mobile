@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Animated, Dimensions, View, Text, StyleSheet, TextInput, ActivityIndicator, TouchableOpacity, Button, Image, ListItem, ScrollView } from 'react-native';
+import { Animated, Dimensions, View, RefreshControl, TouchableOpacity, Button, Image, ListItem, ScrollView } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons, Entypo, FontAwesome5,FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Entypo, FontAwesome5, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 
@@ -29,18 +29,51 @@ function getWidth() {
 LogBox.ignoreLogs(['Warning:...']); // ignore specific logs
 LogBox.ignoreAllLogs(); // ignore all logs
 
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 export default function Dashboard({ route, navigation }) {
+
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        wait(900).then(() => setRefreshing(false));
+    }, []);
 
     const tabOffsetValue = useRef(new Animated.Value(0)).current;
     const Tab = createBottomTabNavigator();
-    var userToken=null;
-    console.log("userToken: ", userToken);
+    const [token, setToken] = useState(null);
+    const [check, setCheck] = useState(false);
+    const [prev, setprev] = useState(null)
 
+    async function fetchData() {
+        var userToken = await AsyncStorage.getItem('userToken');
+        console.log("userToken: ", userToken);
+        setToken(userToken);
+        console.log("prev: ", prev);
+        // if (prev !== token) {
+        //     setprev(token);
+        //     onRefresh();
+        //     console.log("nulllll ")
+
+          
+        //     //setCheck(check?false:true);         
+        // }else{
+            
+        // }
+    
+        console.log("Tokenn in storage:", userToken);
+    }
     useEffect(() => {
-        userToken =  AsyncStorage.getItem('userToken');
-   }, [])
+        fetchData();
+    }, [])
+
     return (
         <>
+
             <Tab.Navigator screenOptions={{
                 showLabel: false,
                 "tabBarShowLabel": false,
@@ -70,7 +103,8 @@ export default function Dashboard({ route, navigation }) {
                     },
                     null
                 ],
-            }}>
+            }}
+            >
 
                 {
                     // Tab Screens....
@@ -147,44 +181,51 @@ export default function Dashboard({ route, navigation }) {
 
 
 
-                <Tab.Screen name={"Profile"} component={userToken!=null?Profile:SigninScreen} options={({ navigation, route }) => ({
-                    title: userToken!=null?"Personal Profile":"Signin In",
-                    headerStyle: {
-                        height: 110
-                    },
-                    headerTitleStyle: {
-                        color: 'black',
-                        textAlign: 'center',
-                        left: 90,
-                        top: 25
-                    },
-                    tabBarIcon: ({ focused }) => (
-                        <View style={{
-                            // centring Tab Button...
-                            width: 55,
-                            height: 55,
-                            backgroundColor: '#E7AA9E',
-                            borderRadius: 30,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginBottom: Platform.OS == "android" ? 50 : 30
-                        }}>
-                            <FontAwesome5
-                                name="user-alt"
-                                size={20}
-                                color='white'
-                            ></FontAwesome5>
-                        </View>
-                    )
-                })} listeners={({ navigation, route }) => ({
-                    // Onpress Update....
-                    tabPress: e => {
-                        Animated.spring(tabOffsetValue, {
-                            toValue: getWidth() * 2,
-                            useNativeDriver: true
-                        }).start();
-                    }
-                })}></Tab.Screen>
+                <Tab.Screen name={"Profile"} children={() => token === null ? <SigninScreen check={check} setCheck={setCheck}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                        />
+                    } /> : <Profile check={check} setCheck={setCheck} />} options={({ navigation, route }) => ({
+                        title: token != null ? "Personal Profile" : "",
+                        headerStyle: {
+                            height: token === null ? 0 : 110
+                        },
+                        headerTitleStyle: {
+                            color: 'black',
+                            textAlign: 'center',
+                            left: 110,
+                            top: token === null ? 0 : 25,
+
+                        },
+                        tabBarIcon: ({ focused }) => (
+                            <View style={{
+                                // centring Tab Button...
+                                width: 55,
+                                height: 55,
+                                backgroundColor: '#E7AA9E',
+                                borderRadius: 30,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginBottom: Platform.OS == "android" ? 50 : 30
+                            }}>
+                                <FontAwesome5
+                                    name="user-alt"
+                                    size={20}
+                                    color='white'
+                                ></FontAwesome5>
+                            </View>
+                        )
+                    })} listeners={({ navigation, route }) => ({
+                        // Onpress Update....
+                        tabPress: e => {
+                            Animated.spring(tabOffsetValue, {
+                                toValue: getWidth() * 2,
+                                useNativeDriver: true
+                            }).start();
+                        }
+                    })}></Tab.Screen>
 
                 <Tab.Screen name={"Notifications"} component={Notification} options={{
                     title: "Notifications",

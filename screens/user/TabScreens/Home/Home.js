@@ -193,7 +193,7 @@ export default function Home({ route, navigation }) {
                     overlayBackgroundColor="rgba(0,0,0,0.4)"
                     key={key}
                   />
-                  <View style={[styles.caption, { width: SCREEN_WIDTH * 0.74 }]}>
+                  <View style={[styles.caption, { width: SCREEN_WIDTH * 0.74 }]} >
                     <View style={styles.description}>
                       <Text style={styles.subheading}>{item.title}</Text>
                       <TouchableOpacity onPress={() => favourite(item)} style={{ justifyContent: 'center' }}>

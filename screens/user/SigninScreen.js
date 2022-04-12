@@ -12,14 +12,16 @@ import {
 import * as Animatable from 'react-native-animatable';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-
+import Profile from './TabScreens/Profile/Profile';
 import { useTheme } from 'react-native-paper';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../../components/context';
-const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+// const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+const API_URL = 'http://192.168.100.2:8000';
 
-const SignInScreen = ({ navigation }) => {
+const SignInScreen = ({ navigation }, props) => {
 
+    
     const [data, setData] = React.useState({
         email: '',
         password: '',
@@ -34,7 +36,7 @@ const SignInScreen = ({ navigation }) => {
     const { signIn } = React.useContext(AuthContext);
 
     const textInputChange = (val) => {
-        if (val.trim().length >= 4) {
+        if (val.trim().length >= 10) {
             setData({
                 ...data,
                 email: val,
@@ -90,8 +92,6 @@ const SignInScreen = ({ navigation }) => {
 
     const loginHandle = async (email, password) => {
 
-        
-
         if (data.email.length == 0 || data.password.length == 0) {
             Alert.alert('Wrong Input!', 'email or password field cannot be empty.', [
                 { text: 'Okay' }
@@ -120,12 +120,15 @@ const SignInScreen = ({ navigation }) => {
     
                         if (jsonRes.message === true) {
     
-                            console.log("logged in", jsonRes.token, "\n", jsonRes);
-                            const currentUser = jsonRes.user._id;
-                            const token = jsonRes.existingUser;
+                            console.log("logged in");
+                            var currentUser = jsonRes.user._id;
+                            currentUser = JSON.stringify(currentUser)
+                            const token = jsonRes.token;
                             signIn(currentUser, token);
+
     
-    
+                        }else{
+                            console.log("error found ", jsonRes.error)
                         }
     
                     } catch (err) {
@@ -141,7 +144,7 @@ const SignInScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <StatusBar backgroundColor='#009387' barStyle="light-content" />
+            
             <View style={styles.header}>
                 <Text style={styles.text_header}>Welcome!</Text>
             </View>
@@ -153,7 +156,7 @@ const SignInScreen = ({ navigation }) => {
             >
                 <Text style={[styles.text_footer, {
                     color: colors.text
-                }]}>email</Text>
+                }]}>Email</Text>
                 <View style={styles.action}>
                     <FontAwesome
                         name="user-o"
@@ -242,26 +245,24 @@ const SignInScreen = ({ navigation }) => {
                         style={styles.signIn}
                         onPress={() => { loginHandle(data.email, data.password) }}
                     >
-                        <View
-                            
-                            style={styles.signIn}
-                        >
+                       
                             <Text style={[styles.textSign, {
                                 color: '#fff'
                             }]}>Sign In</Text>
-                        </View>
+                        
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         onPress={() => navigation.navigate('SignUpScreen')}
                         style={[styles.signIn, {
-                            borderColor: '#009387',
+                            backgroundColor:'transparent',
+                            borderColor: '#E7AA9E',
                             borderWidth: 1,
                             marginTop: 15
                         }]}
                     >
                         <Text style={[styles.textSign, {
-                            color: '#009387'
+                            color: '#E7AA9E'
                         }]}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
@@ -275,7 +276,7 @@ export default SignInScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#009387'
+        backgroundColor: '#E7AA9E'
     },
     header: {
         flex: 1,
@@ -333,7 +334,8 @@ const styles = StyleSheet.create({
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10
+        borderRadius: 10,
+        backgroundColor:'#E7AA9E'
     },
     textSign: {
         fontSize: 18,

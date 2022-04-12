@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useContext, useReducer } from 'react';
-import { StyleSheet, TouchableOpacity, Button, Text } from 'react-native';
+import { StyleSheet, RefreshControl } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -40,7 +40,18 @@ import { AuthContext } from './components/context';
 const Stack = createStackNavigator();
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 function App() {
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(900).then(() => setRefreshing(false));
+  }, []);
 
   const initialLoginState = {
     isLoading: true,
@@ -49,28 +60,28 @@ function App() {
   };
 
   const loginReducer = (prevState, action) => {
-    switch( action.type ) {
-      case 'RETRIEVE_TOKEN': 
+    switch (action.type) {
+      case 'LOGGED_IN':
         return {
           ...prevState,
           userToken: action.token,
           isLoading: false,
         };
-      case 'LOGIN': 
+      case 'LOGIN':
         return {
           ...prevState,
           userID: action.id,
           userToken: action.token,
           isLoading: false,
         };
-      case 'LOGOUT': 
+      case 'LOGOUT':
         return {
           ...prevState,
           userID: null,
           userToken: null,
           isLoading: false,
         };
-      case 'REGISTER': 
+      case 'REGISTER':
         return {
           ...prevState,
           userID: action.id,
@@ -86,11 +97,11 @@ function App() {
     loggedIN: async (token) => {
       // setUserToken('fgkj');
       // setIsLoading(false);
-      const userToken = String(token);
+      const userToken = token;
 
       try {
         await AsyncStorage.getItem('userToken', userToken);
-        
+
       } catch (e) {
         console.log(e);
       }
@@ -100,25 +111,28 @@ function App() {
     signIn: async (currentUser, token) => {
       // setUserToken('fgkj');
       // setIsLoading(false);
-      const userToken = String(token);
-      const userID = currentUser;
-    
-      
-
+      const userToken = token;
+     
+      const userID = String(currentUser);
       try {
-        await AsyncStorage.setItem('userToken', userToken);
-        //console.log(AsyncStorage.getItem('userToken', userToken))
+        await AsyncStorage.setItem('userToken ', userToken);
+        await AsyncStorage.setItem('user', userID);
+        const y = await AsyncStorage.getItem('user')
         console.log("token set")
       } catch (e) {
         console.log(e);
       }
       // console.log('user token: ', userToken);
       dispatch({ type: 'LOGIN', id: userID, token: userToken });
+      onRefresh()
     },
     signOut: async () => {
       // setUserToken(null);
       // setIsLoading(false);
       try {
+
+        const u = await AsyncStorage.getItem('userToken');
+        console.log("logged out: ")
         await AsyncStorage.removeItem('userToken');
       } catch (e) {
         console.log(e);
@@ -136,16 +150,15 @@ function App() {
       // setIsLoading(false);
       let userToken;
       userToken = null;
-      
+
       try {
         userToken = await AsyncStorage.getItem('userToken');
-        console.log("Tokenn:", userToken)
-        
       } catch (e) {
         console.log(e);
       }
       // console.log('user token: ', userToken);
-      
+      dispatch({ type: 'LOGGED_IN', token: userToken });
+
     }, 1000);
   }, []);
 
@@ -172,7 +185,7 @@ function App() {
             },
           })}
         /> */}
-        
+
 
           <Stack.Screen name="Dashboard_user" component={Dashboard_user}
             options={({ navigation, route }) => ({
@@ -203,7 +216,7 @@ function App() {
 
             })}
           />
-            <Stack.Screen name="SignInScreen" component={SignInScreen}
+          <Stack.Screen name="SignInScreen" component={SignInScreen}
             options={({ navigation, route }) => ({
               title: '',
               headerStyle: {

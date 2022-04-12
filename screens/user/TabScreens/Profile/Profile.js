@@ -9,10 +9,13 @@ import inventory from '../../../../images/inventory.png';
 import service from '../../../../images/service.png';
 import setting from '../../../../images/settings.png';
 import contact from '../../../../images/contact.png';
-import logoutI from '../../../../images/logout.png';
+import logout from '../../../../images/logout.png';
+import { AuthContext } from '../../../../components/context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Profile({ route, navigation }) {
 
+    const { signOut } = React.useContext(AuthContext);
     const colors = ["#C2E4EE", "#B2DBD6", "#D2B1B1", "#D0D4FA"];
 
   
@@ -34,9 +37,9 @@ export default function Profile({ route, navigation }) {
 
                 <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('user_ContactScreen')}>
                 <Image source={contact} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
-                    <View style={styles.textContainer}>
+                    <TouchableOpacity style={styles.textContainer}>
                         <Text style={styles.mainText}>Measurements</Text>
-                    </View>
+                    </TouchableOpacity>
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
 
@@ -51,19 +54,20 @@ export default function Profile({ route, navigation }) {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('user_SettingScreen')}>
                 <Image source={setting} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
-                    <View style={styles.textContainer}>
+                    <TouchableOpacity style={styles.textContainer}>
                         <Text style={styles.mainText}>Settings</Text>
 
-                    </View>
+                    </TouchableOpacity>
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.tabContainer}>
-                <Image source={logoutI} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
-                    <View style={styles.textContainer}>
+                <Image source={logout} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
+                    <TouchableOpacity style={styles.textContainer} onPress={async()=>{
+                        await AsyncStorage.setItem('state','0');
+                        signOut()}}>
                         <Text style={styles.mainText}>Logout</Text>
-
-                    </View>
+                    </TouchableOpacity>
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
                 </TouchableOpacity>
                 <View style={{ height: 150 }}>
