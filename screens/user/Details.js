@@ -40,16 +40,12 @@ export default function Details({ route, navigation }) {
 
         var tempSizes = [];
         sizes.map((item) => {
-            if (!available.includes(item.size)) {
-                console.log("item: ", item);
+            if (!details.sizes.includes(item.size)) {
                 setSizes(sizes.filter(element => element.size !== item.size))
-
             }
         })
 
     }, [check])
-
-
 
 
     const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -101,8 +97,6 @@ export default function Details({ route, navigation }) {
     };
 
     const selectSize = (item) => {
-        console.log("size: ", item.size);
-
         const updatedSizes = sizes.map((element) => {
             if (item.size === element.size) {
 
@@ -119,19 +113,18 @@ export default function Details({ route, navigation }) {
             }
 
         })
+
         setSizes(updatedSizes);
         details.size = item.size;
-        console.log("de: ", details.size)
-        setcheck(check ? false : true)
+        //setcheck(check ? false : true)
 
     }
 
     const Addtocart = async () => {
         setLoadingData(true);
-        console.log("details.size: ", details.size)
 
         const uid = await AsyncStorage.getItem('user');
-        console.log("UID: ", uid)
+        console.log("UID: ", uid);
         await fetch(`${API_URL}/user/addCart`, {
 
             method: "POST",
@@ -151,8 +144,6 @@ export default function Details({ route, navigation }) {
                     const jsonRes = await res.json();
 
                     if (jsonRes.message === true) {
-
-                        console.log("Added");
                         setLoadingIcon('checkmark-sharp');
                         setLoadingData(false);
                         setLoadingText('Added ');

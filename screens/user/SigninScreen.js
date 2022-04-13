@@ -14,14 +14,15 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import Profile from './TabScreens/Profile/Profile';
 import { useTheme } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../../components/context';
 // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
 const API_URL = 'http://192.168.100.2:8000';
 
-const SignInScreen = ({ navigation }, props) => {
+const SignInScreen = ({  route }) => {
 
-    
+    const navigation = useNavigation();
     const [data, setData] = React.useState({
         email: '',
         password: '',
@@ -253,7 +254,7 @@ const SignInScreen = ({ navigation }, props) => {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('SignUpScreen')}
+                        onPress={() => navigation.navigate('VendorSignup')}
                         style={[styles.signIn, {
                             backgroundColor:'transparent',
                             borderColor: '#E7AA9E',

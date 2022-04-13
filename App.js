@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import HomeScreen from './screens/HomeScreen';
-import SignupScreen from './screens/SignupScreen';
 import VendorLogin from './screens/VendorLogin';
 import LoginScreen from './screens/LoginScreen';
 import VendorSignup from './screens/VendorSignup';
@@ -35,7 +34,9 @@ import BookingDetails from './screens/user/BookingDetails';
 import SearchedCategory from './screens/user/SearchCategory';
 import SearchServices from './screens/user/SearchedServices';
 import SignInScreen from './screens/user/SigninScreen';
+import SignupScreen from './screens/SignupScreen';
 import { AuthContext } from './components/context';
+
 
 const Stack = createStackNavigator();
 import AsyncStorage from '@react-native-async-storage/async-storage';

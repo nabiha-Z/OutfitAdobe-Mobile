@@ -36,7 +36,7 @@ export default function Shop({ route, navigation }) {
 
                     if (jsonRes.message === true) {
                         setFetching(false);
-                        console.log("fetched")
+                        console.log("fetched", jsonRes.products[0].sizes)
                         setItems(jsonRes.products);
                         setProducts(jsonRes.products);
                     }
@@ -157,7 +157,6 @@ export default function Shop({ route, navigation }) {
                         {products.map((item, key) =>
                         (
                             <>
-
                                 <TouchableOpacity
                                     key={key}
                                     style={{ margin: 5 }}
