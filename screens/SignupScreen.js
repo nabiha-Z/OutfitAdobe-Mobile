@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import firebase from 'firebase/app';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import firebaseConfig from '../Firebase/FirebaseConfig';
 import Icon from '@expo/vector-icons/AntDesign';
-import { sha256 } from 'react-native-sha256';
 
 
 function SignupScreen({ route, navigation }) {
@@ -19,14 +17,6 @@ function SignupScreen({ route, navigation }) {
   const [users, setUsers] = useState([]);
   const [hashedPassword,, setHashed] = useState();
   var count = 0;
-
-
-  let app;
-  if(!firebase.apps.length){
-     firebase.initializeApp(firebaseConfig);
-    } 
-  const auth = firebase.auth();
-  const db =firebase.firestore();
 
 
   
@@ -50,45 +40,7 @@ function SignupScreen({ route, navigation }) {
             console.log("Count= ", count);
           }
         });
-        if (count === 0) {
-
-     
-    
-          await auth.createUserWithEmailAndPassword( getEmail, getPassword)
-            .then((user) => {
-
-              db.collection("users").doc(firebase.auth().currentUser.uid)
-                    .set({
-                      email: firebase.auth().currentUser.email,
-                      username:getUsername,
-                      contact:getContact
-                    }).then(
-                      
-                        ()=>{
-                          console.log(getUsername)
-                           user.user.updateProfile({
-                                displayName: getUsername
-                              })
-                        }
-                    
-                    )
-              navigation.navigate('Dashboard_user')
-            })
-            .catch(error => {
-              console.log("Error= ", typeof(error.message))
-              const err =error.message;
-              if(err[0] === "P"){
-                alert(error.message)
-              }else{
-                alert("User already existed with this email")
-              }
-              
-            })
-
-           
-        } else {
-          alert("This account already exists")
-        }
+       
 
 
       } else {

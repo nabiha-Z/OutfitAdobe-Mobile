@@ -36,13 +36,9 @@ export default function Shop({ route, navigation }) {
 
                     if (jsonRes.message === true) {
                         setFetching(false);
-                        console.log("fetched", jsonRes.products[0].sizes)
                         setItems(jsonRes.products);
                         setProducts(jsonRes.products);
                     }
-                    // if (res.message === true) {
-                    //  console.log("Data:", data)
-                    // }
                 } catch (err) {
                     console.log(err);
                 };

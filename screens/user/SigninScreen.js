@@ -12,16 +12,15 @@ import {
 import * as Animatable from 'react-native-animatable';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-import Profile from './TabScreens/Profile/Profile';
-import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LinearGradient } from 'expo-linear-gradient';
 import { AuthContext } from '../../components/context';
-// const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-const API_URL = 'http://192.168.100.2:8000';
+const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+// const API_URL = 'http://192.168.100.2:8000';
 
-const SignInScreen = ({  route }) => {
+const SignInScreen = ({ check, setCheck }) => {
 
+    console.log("params check: ", check)
     const navigation = useNavigation();
     const [data, setData] = React.useState({
         email: '',
@@ -32,7 +31,6 @@ const SignInScreen = ({  route }) => {
         isValidPassword: true,
     });
 
-    const { colors } = useTheme();
 
     const { signIn } = React.useContext(AuthContext);
 
@@ -91,7 +89,7 @@ const SignInScreen = ({  route }) => {
         }
     }
 
-    const loginHandle = async (email, password) => {
+    const loginHandle = async () => {
 
         if (data.email.length == 0 || data.password.length == 0) {
             Alert.alert('Wrong Input!', 'email or password field cannot be empty.', [
@@ -100,7 +98,7 @@ const SignInScreen = ({  route }) => {
             return;
         }
 
-        else{
+        else {
             await fetch(`${API_URL}/user/login`, {
 
                 method: "POST",
@@ -108,30 +106,29 @@ const SignInScreen = ({  route }) => {
                     email: data.email,
                     password: data.password
                 }),
-    
+
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
                 }
             })
-    
+
                 .then(async res => {
                     try {
-    
+
                         const jsonRes = await res.json();
-    
+
                         if (jsonRes.message === true) {
-    
+
                             console.log("logged in");
                             var currentUser = jsonRes.user._id;
                             currentUser = JSON.stringify(currentUser)
                             const token = jsonRes.token;
                             signIn(currentUser, token);
-
-    
-                        }else{
+                            setCheck(check ? false : true)
+                        } else {
                             console.log("error found ", jsonRes.error)
                         }
-    
+
                     } catch (err) {
                         console.log(err);
                     };
@@ -139,37 +136,32 @@ const SignInScreen = ({  route }) => {
                 .catch(err => {
                     console.log("error: ", err.message);
                 });
-    
+
         }
     }
 
     return (
         <View style={styles.container}>
-            
-            <View style={styles.header}>
-                <Text style={styles.text_header}>Welcome!</Text>
-            </View>
+
+            <LinearGradient
+                colors={['rgba(0,0,0,0.8)', 'transparent']} style={styles.header}>
+                <Text style={styles.text_header}>LogIn</Text>
+            </LinearGradient>
             <Animatable.View
                 animation="fadeInUpBig"
-                style={[styles.footer, {
-                    backgroundColor: colors.background
-                }]}
+                style={[styles.footer]}
             >
-                <Text style={[styles.text_footer, {
-                    color: colors.text
-                }]}>Email</Text>
+                <Text style={[styles.text_footer]}>Email</Text>
                 <View style={styles.action}>
                     <FontAwesome
                         name="user-o"
-                        color={colors.text}
+                        color="#4B4E4F"
                         size={20}
                     />
                     <TextInput
                         placeholder="Your email"
                         placeholderTextColor="#666666"
-                        style={[styles.textInput, {
-                            color: colors.text
-                        }]}
+                        style={[styles.textInput]}
                         autoCapitalize="none"
                         onChangeText={(val) => textInputChange(val)}
                         onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
@@ -194,22 +186,19 @@ const SignInScreen = ({  route }) => {
 
 
                 <Text style={[styles.text_footer, {
-                    color: colors.text,
                     marginTop: 35
                 }]}>Password</Text>
                 <View style={styles.action}>
                     <Feather
                         name="lock"
-                        color={colors.text}
+                        color="#4B4E4F"
                         size={20}
                     />
                     <TextInput
                         placeholder="Your Password"
                         placeholderTextColor="#666666"
                         secureTextEntry={data.secureTextEntry ? true : false}
-                        style={[styles.textInput, {
-                            color: colors.text
-                        }]}
+                        style={[styles.textInput]}
                         autoCapitalize="none"
                         onChangeText={(val) => handlePasswordChange(val)}
                     />
@@ -244,26 +233,26 @@ const SignInScreen = ({  route }) => {
                 <View style={styles.button}>
                     <TouchableOpacity
                         style={styles.signIn}
-                        onPress={() => { loginHandle(data.email, data.password) }}
+                        onPress={() => { loginHandle() }}
                     >
-                       
-                            <Text style={[styles.textSign, {
-                                color: '#fff'
-                            }]}>Sign In</Text>
-                        
+
+                        <Text style={[styles.textSign, {
+                            color: '#fff'
+                        }]}>Sign In</Text>
+
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('VendorSignup')}
+                        onPress={() => navigation.navigate('SignupScreen')}
                         style={[styles.signIn, {
-                            backgroundColor:'transparent',
-                            borderColor: '#E7AA9E',
+                            backgroundColor: 'transparent',
+                            borderColor: '#D89E92',
                             borderWidth: 1,
                             marginTop: 15
                         }]}
                     >
                         <Text style={[styles.textSign, {
-                            color: '#E7AA9E'
+                            color: '#D89E92'
                         }]}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
@@ -336,7 +325,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        backgroundColor:'#E7AA9E'
+        backgroundColor: '#D89E92'
     },
     textSign: {
         fontSize: 18,

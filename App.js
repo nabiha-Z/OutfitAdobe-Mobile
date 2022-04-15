@@ -6,12 +6,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import HomeScreen from './screens/HomeScreen';
 import VendorLogin from './screens/VendorLogin';
 import LoginScreen from './screens/LoginScreen';
-import VendorSignup from './screens/VendorSignup';
-import SignupLocation from './screens/SignupLocation';
-import WorkingHours from './screens/Workinghours';
-import Dashboard from './screens/Vendor/Dashboard';
-import StaffDetails from './screens/Vendor/TabScreens/Profile/Staffs';
-import AddStaff from './screens/Vendor/TabScreens/Profile/NewStaff';
+
 import ContactScreen from './screens/Vendor/TabScreens/Profile/Contact';
 import SettingScreen from './screens/Vendor/TabScreens/Profile/Settings';
 import CalendarScreen from './screens/Vendor/TabScreens/Profile/Calendar';
@@ -34,7 +29,8 @@ import BookingDetails from './screens/user/BookingDetails';
 import SearchedCategory from './screens/user/SearchCategory';
 import SearchServices from './screens/user/SearchedServices';
 import SignInScreen from './screens/user/SigninScreen';
-import SignupScreen from './screens/SignupScreen';
+import SignupScreen from './screens/user/SignupScreen';
+import Prof from './screens/user/TabScreens/Profile/Profile';
 import { AuthContext } from './components/context';
 
 
@@ -48,7 +44,6 @@ const wait = (timeout) => {
 function App() {
 
   const [refreshing, setRefreshing] = React.useState(false);
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     wait(900).then(() => setRefreshing(false));
@@ -112,20 +107,19 @@ function App() {
     signIn: async (currentUser, token) => {
       // setUserToken('fgkj');
       // setIsLoading(false);
+      console.log("currentUser: ", currentUser)
       const userToken = token;
-     
       const userID = String(currentUser);
       try {
         await AsyncStorage.setItem('userToken ', userToken);
         await AsyncStorage.setItem('user', userID);
-        const y = await AsyncStorage.getItem('user')
-        console.log("token set")
+        const y = await AsyncStorage.getItem('user');
+        console.log("token set", y)
       } catch (e) {
         console.log(e);
       }
       // console.log('user token: ', userToken);
       dispatch({ type: 'LOGIN', id: userID, token: userToken });
-      onRefresh()
     },
     signOut: async () => {
       // setUserToken(null);
@@ -133,14 +127,16 @@ function App() {
       try {
 
         const u = await AsyncStorage.getItem('userToken');
+        
         console.log("logged out: ")
         await AsyncStorage.removeItem('userToken');
+        await AsyncStorage.removeItem('user');
       } catch (e) {
         console.log(e);
       }
       dispatch({ type: 'LOGOUT' });
     },
-    signUp: () => {
+    signUp: async () => {
       // setUserToken('fgkj');
       // setIsLoading(false);
     },
@@ -198,6 +194,15 @@ function App() {
               headerLeft: null
             })}
           />
+          <Stack.Screen name="HomeScreen" component={HomeScreen}
+            options={({ navigation, route }) => ({
+              title: '',
+              headerStyle: {
+                backgroundColor: '#47A7AB',
+                height: 0
+              },
+            })}
+          />
           <Stack.Screen name="Chat" component={Chats}
             options={({ navigation, route }) => ({
               title: '',
@@ -234,6 +239,7 @@ function App() {
                 height: 100
               },
             })}
+          
           />
           <Stack.Screen name="VendorLogin" component={VendorLogin}
             options={({ navigation, route }) => ({
@@ -253,70 +259,10 @@ function App() {
               },
             })}
           />
-          <Stack.Screen name="VendorSignup" component={VendorSignup}
-            options={({ navigation, route }) => ({
-              title: 'Business Information',
-              headerStyle: {
-                backgroundColor: 'white',
-                height: 100
-              },
-            })}
-          />
-          <Stack.Screen name="SignupLocation" component={SignupLocation}
-            options={({ navigation, route }) => ({
-              title: 'Set your location',
-              headerStyle: {
-                backgroundColor: 'white',
-                height: 100
-              },
-            })}
-          />
-          <Stack.Screen name="WorkingHours" component={WorkingHours}
-            options={({ navigation, route }) => ({
-              title: 'Set your timings',
-              headerStyle: {
-                backgroundColor: 'white',
-                height: 100
-              },
-            })}
-          />
-          <Stack.Screen name="Dashboard" component={Dashboard}
-            options={({ navigation, route }) => ({
-              title: '',
-              headerStyle: {
-                backgroundColor: '#47A7AB',
-                height: 0
-              },
-              headerLeft: null
-            })}
-          />
-
-
-          <Stack.Screen name="AddStaff" component={AddStaff}
-            options={({ navigation, route }) => ({
-              title: 'New Staff',
-              headerTitleStyle: {
-                color: 'black',
-                textAlign: 'center',
-                left: 70,
-              },
-            })}
-          />
 
           <Stack.Screen name="AddProduct" component={NewInventory}
             options={({ navigation, route }) => ({
               title: 'New Product',
-              headerTitleStyle: {
-                color: 'black',
-                textAlign: 'center',
-                left: 70,
-              },
-            })}
-          />
-
-          <Stack.Screen name="AddService" component={NewService}
-            options={({ navigation, route }) => ({
-              title: 'New Service',
               headerTitleStyle: {
                 color: 'black',
                 textAlign: 'center',

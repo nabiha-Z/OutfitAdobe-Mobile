@@ -5,6 +5,7 @@ import { SliderBox } from "react-native-image-slider-box";
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
 import { color } from 'react-native-elements/dist/helpers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Animatable from 'react-native-animatable';
 
 export default function Details({ route, navigation }) {
     const { details } = route.params;
@@ -12,10 +13,12 @@ export default function Details({ route, navigation }) {
     const [check1, setcheck1] = useState(true);
     const [staff, setstaff] = useState([])
     const [check, setcheck] = useState(false);
-    const [error, setError] = useState("");
     const [loadingData, setLoadingData] = useState(false);
     const [loadingText, setLoadingText] = useState('Add to Cart')
     const [loadingIcon, setLoadingIcon] = useState('cart');
+    const [animation, setAnimation] = useState('fadeInUp');
+    const [duration, setDuration] = useState(1000);
+    const [btnBackground, setBtnbackground] = useState('#114D53')
     const [products, setProducts] = useState([]);
     const [colors, setColors] = useState(['#741823', '#B4535D', '#D87373', '#E9A0A0']);
     const [sizes, setSizes] = useState([{ size: 'S', selected: true }, { size: 'M', selected: false }, { size: 'L', selected: false }, { size: 'XL', selected: false }]);
@@ -38,7 +41,6 @@ export default function Details({ route, navigation }) {
             )
         })
 
-        var tempSizes = [];
         sizes.map((item) => {
             if (!details.sizes.includes(item.size)) {
                 setSizes(sizes.filter(element => element.size !== item.size))
@@ -116,15 +118,18 @@ export default function Details({ route, navigation }) {
 
         setSizes(updatedSizes);
         details.size = item.size;
-        //setcheck(check ? false : true)
-
     }
 
     const Addtocart = async () => {
         setLoadingData(true);
 
         const uid = await AsyncStorage.getItem('user');
+        if(uid === null){
+            alert("Login first!")
+            navigation.navigate('Dashboard_user')
+        }
         console.log("UID: ", uid);
+
         await fetch(`${API_URL}/user/addCart`, {
 
             method: "POST",
@@ -144,12 +149,21 @@ export default function Details({ route, navigation }) {
                     const jsonRes = await res.json();
 
                     if (jsonRes.message === true) {
+                        setLoadingData(false)
                         setLoadingIcon('checkmark-sharp');
-                        setLoadingData(false);
-                        setLoadingText('Added ');
+                        setLoadingText('Added')
+                        setDuration(700)
+                        setAnimation('slideInDown')
+                        setBtnbackground('#319E92')
+
                         setTimeout(() => {
+                            setLoadingData(false);
                             setLoadingIcon('cart');
                             setLoadingText('Add to Cart')
+                            setAnimation('slideInLeft')
+                            setBtnbackground('#114D53');
+                            setDuration(1500)
+
                         }, 3000);
 
 
@@ -164,10 +178,10 @@ export default function Details({ route, navigation }) {
             .catch(err => {
                 console.log("error: ", err.message);
             });
-            
 
 
-       
+
+
 
     }
 
@@ -244,21 +258,23 @@ export default function Details({ route, navigation }) {
                         <Text style={[styles.btnTxt, { color: 'black' }]}>Try On</Text>
                         <Ionicons name="camera" size={20} style={{ margin: 5 }} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btn} onPress={() => Addtocart()}>
+                    <TouchableOpacity style={[styles.btn, { backgroundColor: btnBackground }]} onPress={() => Addtocart()}>
                         {loadingData ? <LoadingData /> : (
                             <>
 
-                                <Text style={styles.btnTxt}>{loadingText}</Text>
-                                <Ionicons name={loadingIcon} size={20} style={{ margin: 5, color: 'white' }} />
-
+                                <Animatable.View
+                                    animation={animation} style={styles.animatedText} duration={duration}>
+                                    <Text style={styles.btnTxt}>{loadingText}</Text>
+                                    <Ionicons name={loadingIcon} size={20} style={{ margin: 5, color: 'white' }} />
+                                </Animatable.View>
                             </>)}
 
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
+            </ScrollView >
 
 
-        </View>
+        </View >
     )
 }
 
@@ -349,12 +365,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#114D53',
         margin: 5,
-        marginHorizontal: 5
+
     },
     btnTxt: {
         textAlign: 'center',
         fontSize: 15,
         color: 'white'
+    },
+    animatedText: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginHorizontal: 5
     },
     ratingView: {
         width: 60,

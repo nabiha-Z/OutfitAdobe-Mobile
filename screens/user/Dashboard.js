@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, Entypo, FontAwesome5, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
-
 import Home from './TabScreens/Home/Home';
 import Chats from './TabScreens/Chats/Chats';
 import Store from './TabScreens/Store/Store';
@@ -16,12 +15,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { LogBox } from 'react-native';
 import _ from 'lodash';
+
 function getWidth() {
     let width = Dimensions.get("window").width
-
     // Horizontal Padding = 20...
     width = width - 50
-
     // Total five Tabs...
     return width / 5
 }
@@ -46,35 +44,23 @@ export default function Dashboard({ route, navigation }) {
     const tabOffsetValue = useRef(new Animated.Value(0)).current;
     const Tab = createBottomTabNavigator();
     const [token, setToken] = useState(null);
-    const [check, setCheck] = useState(false);
+    const [check, setCheck] = useState(true);
     const [prev, setprev] = useState(null)
 
     async function fetchData() {
-        var userToken = await AsyncStorage.getItem('userToken');
-        console.log("userToken: ", userToken);
+        var userToken = await AsyncStorage.getItem('user');
         setToken(userToken);
-        console.log("prev: ", prev);
-        // if (prev !== token) {
-        //     setprev(token);
-        //     onRefresh();
-        //     console.log("nulllll ")
-
-          
-        //     //setCheck(check?false:true);         
-        // }else{
-            
-        // }
-    
         console.log("Tokenn in storage:", userToken);
     }
     useEffect(() => {
         fetchData();
-    }, [])
+        console.log("check: ", check)
+    }, [check])
 
     return (
         <>
 
-            <Tab.Navigator screenOptions={{
+            <Tab.Navigator initialRouteName='Home' screenOptions={{
                 showLabel: false,
                 "tabBarShowLabel": false,
                 "tabBarStyle": [
@@ -103,7 +89,7 @@ export default function Dashboard({ route, navigation }) {
                     },
                     null
                 ],
-            }}
+            }}     
             >
 
                 {
@@ -181,22 +167,18 @@ export default function Dashboard({ route, navigation }) {
 
 
 
-                <Tab.Screen name={"Profile"} children={() => token === null ? <SigninScreen check={check} setCheck={setCheck}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={refreshing}
-                            onRefresh={onRefresh}
-                        />
-                    } /> : <Profile check={check} setCheck={setCheck} />} options={({ navigation, route }) => ({
+                <Tab.Screen name={"Profile"} children={() => token === null ? <SigninScreen check={check} setCheck={setCheck}/> 
+                :
+                 <Profile check={check} setCheck={setCheck} />} options={({ navigation, route }) => ({
                         title: token != null ? "Personal Profile" : "",
                         headerStyle: {
-                            height: token === null ? 0 : 110
+                            height: token === null ? 0 : 100
                         },
                         headerTitleStyle: {
                             color: 'black',
                             textAlign: 'center',
-                            left: 110,
-                            top: token === null ? 0 : 25,
+                            left: 30,
+                            top: token === null ? 0 : 20,
 
                         },
                         tabBarIcon: ({ focused }) => (

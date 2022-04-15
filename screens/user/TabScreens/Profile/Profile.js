@@ -1,22 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
-import { AntDesign, EvilIcons } from '@expo/vector-icons';
-import { StackActions } from '@react-navigation/native';
-
-
-import staff from '../../../../images/staff.png';
-import inventory from '../../../../images/inventory.png';
-import service from '../../../../images/service.png';
+import { AntDesign, EvilIcons, MaterialIcons } from '@expo/vector-icons';
 import setting from '../../../../images/settings.png';
 import contact from '../../../../images/contact.png';
 import logout from '../../../../images/logout.png';
 import { AuthContext } from '../../../../components/context';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Profile({ route, navigation }) {
+export default function Profile({ check, setCheck }) {
 
+    const navigation = useNavigation();
     const { signOut } = React.useContext(AuthContext);
     const colors = ["#C2E4EE", "#B2DBD6", "#D2B1B1", "#D0D4FA"];
+
+    // useEffect(() => {
+
+    //     navigation.setOptions({
+    //         headerLeft: () => (
+    //             <TouchableOpacity onPress={() => navigation.navigate('Dashboard_user')} style={{ margin: 15, marginTop:60 }}>
+    //                 <MaterialIcons name="keyboard-arrow-left" size={35} color="#646262" style={{ zIndex: 1 }}></MaterialIcons>
+    //             </TouchableOpacity>
+    //         ),      
+    //     })
+
+
+    // }, [check])
 
   
     return (
@@ -63,9 +72,10 @@ export default function Profile({ route, navigation }) {
 
                 <TouchableOpacity style={styles.tabContainer}>
                 <Image source={logout} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
-                    <TouchableOpacity style={styles.textContainer} onPress={async()=>{
-                        await AsyncStorage.setItem('state','0');
-                        signOut()}}>
+                    <TouchableOpacity style={styles.textContainer} onPress={async()=>{                   
+                        signOut()
+                        setCheck(check?false:true)
+                        navigation.navigate('Dashboard_user')}}>
                         <Text style={styles.mainText}>Logout</Text>
                     </TouchableOpacity>
                     <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
