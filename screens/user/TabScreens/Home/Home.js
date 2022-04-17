@@ -4,16 +4,15 @@ import { StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, Activ
 import { Entypo, Ionicons, AntDesign, MaterialCommunityIcons, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
-import education from "../../../../images/education.jpg";
 import search from "../../../../images/searchIcon.png";
 import beauty from "../../../../images/beauty.jpeg";
-import legal from "../../../../images/legal1.jpg";
 import jeans from "../../../../images/jeans2.png";
 import shirt from "../../../../images/shirt.png";
 import suit from "../../../../images/suit2.jpg";
 import handwave from "../../../../images/waving-hand.png";
 import headerImg from '../../../../images/headerImg1.png';
 import headerImg2 from '../../../../images/headerImg4.png';
+import * as Animatable from 'react-native-animatable';
 
 export default function Home({ route, navigation }) {
 
@@ -44,7 +43,7 @@ export default function Home({ route, navigation }) {
 
           if (jsonRes.message === true) {
             setFetching(false);
-            console.log("fetched")
+            // console.log("fetched")
             setItems(jsonRes.products);
           }
           // if (res.message === true) {
@@ -62,6 +61,7 @@ export default function Home({ route, navigation }) {
 
 
   }, [])
+  
   const SCREEN_WIDTH = Dimensions.get('window').width;
   const SCREEN_HEIGHT = Dimensions.get('window').height;
 
@@ -126,13 +126,24 @@ export default function Home({ route, navigation }) {
         {/* <Text style={[styles.heading, { fontSize: 40, marginTop: -20 }]}>Look</Text> */}
 
         <View style={styles.banner}>
-          <Text style={[styles.heading, { fontSize: 25, color: 'white', marginTop: -9, left: -14, textAlign: 'left' }]}>Try the New Look</Text>
-          <View style={{ width: '60%' }}>
-            <Text style={[styles.lightTxt, { color: '#F7E7E4', textAlign: 'justify', }]}>The forecast says that dress season has officially arrived! Spring forward with our swing, springy, dress shop.</Text>
-          </View>
+          <Animatable.View
+            animation="fadeInLeft"
+            duration={1000}
+            delay={300}
+          >
+            <Text style={[styles.heading, { fontSize: 23, color: 'white', marginTop: -9, left: -14, textAlign: 'left' }]}>Try the New Look</Text>
+            <View style={{ width: '60%' }}>
+              <Text style={[styles.lightTxt, { color: '#F7E7E4', textAlign: 'justify', }]}>The forecast says that dress season has officially arrived! Spring forward with our swing, springy, dress shop.</Text>
+            </View>
+          </Animatable.View>
         </View>
-
-        <Image source={headerImg2} style={[styles.bannerImg, { marginLeft: SCREEN_WIDTH * 0.56 }]} />
+        <Animatable.View
+          animation="fadeInDown"
+          duration={1500}
+          delay={500}
+          style={[styles.bannerImgContainer, { marginLeft: SCREEN_WIDTH * 0.56 }]}>
+          <Image source={headerImg2} style={[styles.bannerImg]} />
+        </Animatable.View>
 
         <Text style={styles.heading}>Categories</Text>
         <View style={styles.divider}></View>
@@ -201,12 +212,12 @@ export default function Home({ route, navigation }) {
                       </TouchableOpacity>
                     </View>
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
-                      <Ionicons name="alert-circle-sharp" size={20} color={item.color} />
+                      <Ionicons name="alert-circle-sharp" size={15} color={item.color} />
                       <Text style={[styles.txt]}>{item.color}</Text>
                     </View>
 
                     {/* <Text style={[styles.subheading, { fontSize: 18, color: '#666668', marginBottom: 10 }]}>{item.price}/-</Text> */}
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin:10 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 10 }}>
                       <Text style={[styles.subheading, { fontSize: 18, color: '#666668', marginBottom: 10 }]}>{item.price}/-</Text>
                       <MaterialIcons name="keyboard-arrow-right" size={19} color="#4B4949" style={styles.icon} />
                     </View>
@@ -283,13 +294,16 @@ const styles = StyleSheet.create({
     padding: 20,
     height: 155
   },
-  bannerImg: {
+  bannerImgContainer: {
     position: 'absolute',
-    width: '50%',
-    height: 200,
+    width: '100%',
     zIndex: 2,
     marginTop: 26,
-
+  },
+  bannerImg: {
+    width: '50%',
+    height: 200,
+    marginLeft: 2
   },
   searchContainer: {
     backgroundColor: 'white',
@@ -416,8 +430,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
 
   },
-  icon:{
-      marginTop:5,  
+  icon: {
+    marginTop: 5,
   }
 
 });

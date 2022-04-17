@@ -5,14 +5,12 @@ import { MaterialCommunityIcons, Entypo, FontAwesome5, FontAwesome, MaterialIcon
 import { Ionicons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import Home from './TabScreens/Home/Home';
-import Chats from './TabScreens/Chats/Chats';
+import Cart from './TabScreens/Cart/Cart';
 import Store from './TabScreens/Store/Store';
 import Profile from './TabScreens/Profile/Profile';
 import SigninScreen from './SigninScreen';
 import Notification from './TabScreens/Notifications/Notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
 import { LogBox } from 'react-native';
 import _ from 'lodash';
 
@@ -209,15 +207,17 @@ export default function Dashboard({ route, navigation }) {
                         }
                     })}></Tab.Screen>
 
-                <Tab.Screen name={"Notifications"} component={Notification} options={{
-                    title: "Notifications",
+                <Tab.Screen name={"Cart"} component={Cart} options={{
+                    title: "Your Cart",
                     headerStyle: {
                         height: 110
                     },
                     headerTitleStyle: {
                         color: 'black',
                         textAlign: 'center',
-                        left: 105,
+                        fontWeight:'bold',
+                        letterSpacing:1,
+                        left: 115,
                         top: 25
                     },
                     tabBarIcon: ({ focused }) => (
@@ -243,15 +243,17 @@ export default function Dashboard({ route, navigation }) {
                     }
                 })}></Tab.Screen>
 
-                <Tab.Screen name={"Chats"} component={Chats} options={{
-                    title: "Chats",
+                <Tab.Screen name={"Notfication"} component={Notification} options={{
+                    title: "Notification",
                     headerStyle: {
                         height: 110
                     },
                     headerTitleStyle: {
-                        color: 'black',
+                        color: '#3D3F3F',
                         textAlign: 'center',
-                        left: 140,
+                        fontWeight:'bold',
+                        letterSpacing:1,
+                        left: 115,
                         top: 25
                     },
                     tabBarIcon: ({ focused }) => (

@@ -21,11 +21,13 @@ export default function Details({ route, navigation }) {
     const [btnBackground, setBtnbackground] = useState('#114D53')
     const [products, setProducts] = useState([]);
     const [colors, setColors] = useState(['#741823', '#B4535D', '#D87373', '#E9A0A0']);
+    const [currentSize, setCurrentSize] = useState("");
+    const [currentColor, setCurrentColor] = useState("");
     const [sizes, setSizes] = useState([{ size: 'S', selected: true }, { size: 'M', selected: false }, { size: 'L', selected: false }, { size: 'XL', selected: false }]);
     var available = ['S', 'M', 'L', 'XL'];
 
-    const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    // const API_URL = 'http://192.168.100.2:8000';
+    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+    const API_URL = 'http://192.168.100.2:8000';
 
     useEffect(() => {
         navigation.setOptions({
@@ -116,8 +118,9 @@ export default function Details({ route, navigation }) {
 
         })
 
-        setSizes(updatedSizes);
+        setSizes(updatedSizes);       
         details.size = item.size;
+        
     }
 
     const Addtocart = async () => {
@@ -135,7 +138,9 @@ export default function Details({ route, navigation }) {
             method: "POST",
             body: JSON.stringify({
                 uid,
-                product: details
+                product: details,
+                size:details.size,
+                color:'#20698E'
             }),
 
             headers: {

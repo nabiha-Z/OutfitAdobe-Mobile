@@ -37,9 +37,13 @@ function Activity() {
 export default function Notifications() {
     return (
         <>
-       
+       <View>
+         <Text>
+           Cart
+         </Text>
+       </View>
     
-            <Tab.Navigator
+            {/* <Tab.Navigator
                 screenOptions={{
                     labelStyle: { fontSize: 14 },
                     tabStyle: { flex: 1, justifyContent: 'center',  },
@@ -52,7 +56,7 @@ export default function Notifications() {
                 <Tab.Screen name="Sign In" component={SignInScreen} />
                 <Tab.Screen name="News" component={News} />
                 
-            </Tab.Navigator>
+            </Tab.Navigator> */}
      
         </>
     )
