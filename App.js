@@ -26,6 +26,8 @@ import SearchServices from './screens/user/SearchedServices';
 import SignInScreen from './screens/user/UserAuthentication/SigninScreen';
 import SignupScreen from './screens/user/UserAuthentication/SignupScreen';
 import ForgotPassword from './screens/user/UserAuthentication/ForgotPassword';
+import CodeVerification from './screens/user/UserAuthentication/CodeVerfication';
+import ResetPassword from './screens/user/UserAuthentication/ResetPassword';
 import Prof from './screens/user/TabScreens/Profile/Profile';
 import { AuthContext } from './components/context';
 
@@ -206,9 +208,19 @@ function App() {
                 backgroundColor: 'white',
                 height: 100
               },
-            })}
+            })}        
+          />  
           
-          />
+          <Stack.Screen name="CodeVerification" component={CodeVerification}
+          options={({ route, navigation }) => ({
+            title: 'OTP Code',
+            headerStyle: {
+              backgroundColor: 'white',
+              height: 100
+            },
+          })}
+        />
+
           <Stack.Screen name="VendorLogin" component={VendorLogin}
             options={({ navigation, route }) => ({
               title: 'Vendor',
@@ -218,19 +230,15 @@ function App() {
               },
             })}
           />
+       
+
           <Stack.Screen name="SignupScreen" component={SignupScreen}
             options={({ navigation, route }) => ({
-              title: 'SignUp',
+              title: 'Signup',
               headerStyle: {
                 backgroundColor: 'white',
                 height: 100
               },
-            })}
-          />
-
-          <Stack.Screen name="AddProduct" component={NewInventory}
-            options={({ navigation, route }) => ({
-              title: 'New Product',
               headerTitleStyle: {
                 color: 'black',
                 textAlign: 'center',
@@ -279,9 +287,9 @@ function App() {
             })}
 
           />
-          <Stack.Screen name="CalendarScreen" component={CalendarScreen}
+          <Stack.Screen name="ResetScreen" component={ResetPassword}
             options={({ navigation, route }) => ({
-              title: 'Change Calendar',
+              title: 'Reset Password',
               headerStyle: {
                 height: 100,
               },

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, ActivityIndicator } from 'react-native';
 import { AntDesign, FontAwesome, Feather } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 
@@ -7,14 +7,23 @@ export default function ForgotPassword({ route, navigation }) {
     const [Email, setEmail] = useState(null);
     const [newPass, setNewPass] = useState(null);
     const [errors, setErrors] = useState("");
-    const [confirmPass, setConfirmPass] = useState(null);
-    const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    
+    const [isLoading, setIsLoading] = useState(false);
+    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+    const API_URL = 'http://192.168.100.2:8000';
+
     const [data, setData] = React.useState({
         email: '',
         check_textInputChange: false,
         isValidUser: true,
     });
+
+    const LoadingData = () => {
+        return (
+            <>
+                <ActivityIndicator size="small" color="white" />
+            </>
+        );
+    };
 
     const textInputChange = (val) => {
         if (val.trim().length >= 10) {
@@ -48,8 +57,9 @@ export default function ForgotPassword({ route, navigation }) {
         }
     }
 
-    const sendLink = async () => {
-
+    const sendCode = async () => {
+        
+        setIsLoading(true);
         if (data.email.length == 0) {
             Alert.alert('Wrong Input!', 'email or password field cannot be empty.', [
                 { text: 'Okay' }
@@ -77,9 +87,10 @@ export default function ForgotPassword({ route, navigation }) {
 
                         if (jsonRes.message === true) {
 
-                            console.log("logged in");
-                            alert("Check your email")
-                            navigation.pop();
+                            setIsLoading(false);
+                            console.log("sent ", data.email);
+                            alert("Check your email");
+                            navigation.navigate('CodeVerification', { email: data.email, code: jsonRes.resetCode });
                         } else {
                             console.log("error found ", jsonRes.error)
                         }
@@ -111,13 +122,7 @@ export default function ForgotPassword({ route, navigation }) {
                 A Reset Link will be sent to your registered email
             </Text>
 
-            {/* <Text
-                style={{ fontSize: 12, marginTop: 10, marginHorizontal: 10 }}>
-                Email
-            </Text>
-            <TextInput style={styles.businessField} value={Email} onChangeText={(text) => setEmail(text)} /> */}
-
-            <Text style={[styles.txt,{fontSize:15, marginTop:40, opacity:1, marginBottom:10}]}>Email</Text>
+            <Text style={[styles.txt, { fontSize: 15, marginTop: 40, opacity: 1, marginBottom: 10 }]}>Email</Text>
             <View style={styles.action}>
 
                 <TextInput
@@ -131,7 +136,7 @@ export default function ForgotPassword({ route, navigation }) {
                 {data.check_textInputChange ?
                     <Animatable.View
                         animation="bounceIn"
-                        style={{marginTop:-5,}}
+                        style={{ marginTop: -5, }}
                     >
                         <Feather
                             name="check-circle"
@@ -151,9 +156,11 @@ export default function ForgotPassword({ route, navigation }) {
             <View style={styles.footerTab}>
                 <TouchableOpacity
                     style={styles.footerBtn}
-                    onPress={() => sendLink()}
+                    onPress={() => sendCode()}
                 >
-                    <Text style={{ color: 'white', alignSelf: 'center' }}>Send Link</Text>
+                    {isLoading ? <LoadingData /> : (
+                        <Text style={{ color: 'white', alignSelf: 'center' }}>Send Link</Text>
+                    )}
                 </TouchableOpacity>
             </View>
         </View>

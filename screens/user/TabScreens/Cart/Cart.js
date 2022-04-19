@@ -38,10 +38,12 @@ export default function Cart({ route, navigation }) {
 
                         if (jsonRes.message === true) {
                             setFetching(false);
-                            //console.log("fetched", jsonRes.cart[0].items)
+                            console.log("fetched", jsonRes.cart)
                             setCartId(jsonRes.cart[0]._id)
                             setItems(jsonRes.cart[0].items);
                         }
+
+                        console.log("item len: ", Items.length)
 
                     } catch (err) {
                         console.log(err);
@@ -127,11 +129,13 @@ export default function Cart({ route, navigation }) {
         <View style={styles.container}>
             {token !== null ? Items.map((item, key) =>
             (
+              
                 <View style={styles.productContainer} key={key}>
+
                     <Image source={{ uri: item.pid.picture }} style={styles.productImg} />
                     <View style={styles.productContentBox}>
                         <View style={styles.contentContainer}>
-                            <Text style={styles.mainText}>{item.pid.title}</Text>
+                            <Text style={[styles.mainText,{width:'60%'}]}>{item.pid.title}</Text>
                             <EvilIcons name="close" size={20} style={styles.deleteIcon} onPress={()=>deleteFunc()}/>
                         </View>
 
