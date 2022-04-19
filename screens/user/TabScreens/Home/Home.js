@@ -125,22 +125,25 @@ export default function Home({ route, navigation }) {
 
         {/* <Text style={[styles.heading, { fontSize: 40, marginTop: -20 }]}>Look</Text> */}
 
-        <View style={styles.banner}>
+        <Animatable.View
+            animation="fadeIn"
+            duration={1000}
+            delay={300}style={styles.banner}>
           <Animatable.View
             animation="fadeInLeft"
-            duration={1000}
-            delay={300}
+            duration={1500}
+            delay={900}
           >
-            <Text style={[styles.heading, { fontSize: 23, color: 'white', marginTop: -9, left: -14, textAlign: 'left' }]}>Try the New Look</Text>
-            <View style={{ width: '60%' }}>
-              <Text style={[styles.lightTxt, { color: '#F7E7E4', textAlign: 'justify', }]}>The forecast says that dress season has officially arrived! Spring forward with our swing, springy, dress shop.</Text>
+            <Text style={[styles.heading, { fontSize: 24, color: 'white', marginTop: -9, left: -14, textAlign: 'left' }]}>Try the New Look</Text>
+            <View style={{ width: '65%' }}>
+              <Text style={[styles.lightTxt, { color: '#F3EAEA', textAlign: 'justify', }]}>The forecast says that dress season has officially arrived! Spring forward with our swing, springy, dress shop.</Text>
             </View>
           </Animatable.View>
-        </View>
+        </Animatable.View>
         <Animatable.View
           animation="fadeInDown"
-          duration={1500}
-          delay={500}
+          duration={2000}
+          delay={1000}
           style={[styles.bannerImgContainer, { marginLeft: SCREEN_WIDTH * 0.56 }]}>
           <Image source={headerImg2} style={[styles.bannerImg]} />
         </Animatable.View>
@@ -290,7 +293,7 @@ const styles = StyleSheet.create({
     margin: 10,
     marginTop: 20,
     borderRadius: 10,
-    backgroundColor: '#E7AA9E',
+    backgroundColor: '#C5ABAB',
     padding: 20,
     height: 155
   },
@@ -423,7 +426,7 @@ const styles = StyleSheet.create({
   divider: {
     width: '35%',
     height: 2,
-    backgroundColor: '#FAC4BA',
+    backgroundColor: '#C5ABAB',
     margin: 10,
     marginHorizontal: 10,
     marginTop: 0,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
-import { AuthContext } from '../../components/context';
+import { AuthContext } from '../../../components/context';
 import * as Animatable from 'react-native-animatable';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -204,7 +204,7 @@ function SignupScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../images/draw5.png')}
+        source={require('../../../images/draw5.png')}
         style={{ width: '80%', height: '40%', marginTop: -50 }}
       />
       <Text

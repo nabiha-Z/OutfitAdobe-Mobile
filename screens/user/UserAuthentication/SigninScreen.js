@@ -14,7 +14,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { AuthContext } from '../../components/context';
+import { AuthContext } from '../../../components/context';
 const API_URL = 'https://outfit-adobe-server.herokuapp.com';
 // const API_URL = 'http://192.168.100.2:8000';
 
@@ -180,7 +180,7 @@ const SignInScreen = ({ check, setCheck }) => {
                 </View>
                 {data.isValidUser ? null :
                     <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>email must be 4 characters long.</Text>
+                        <Text style={styles.errorMsg}>Enter valid email</Text>
                     </Animatable.View>
                 }
 
@@ -227,7 +227,7 @@ const SignInScreen = ({ check, setCheck }) => {
                 }
 
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>navigation.navigate('ForgotPassword')}>
                     <Text style={{ color: '#009387', marginTop: 15 }}>Forgot password?</Text>
                 </TouchableOpacity>
                 <View style={styles.button}>
@@ -246,13 +246,13 @@ const SignInScreen = ({ check, setCheck }) => {
                         onPress={() => navigation.navigate('SignupScreen')}
                         style={[styles.signIn, {
                             backgroundColor: 'transparent',
-                            borderColor: '#D89E92',
+                            borderColor: '#C69494',
                             borderWidth: 1,
                             marginTop: 15
                         }]}
                     >
                         <Text style={[styles.textSign, {
-                            color: '#D89E92'
+                            color: '#C69494'
                         }]}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
@@ -266,7 +266,7 @@ export default SignInScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E7AA9E'
+        backgroundColor: '#C69494'
     },
     header: {
         flex: 1,
@@ -298,13 +298,6 @@ const styles = StyleSheet.create({
         borderBottomColor: '#f2f2f2',
         paddingBottom: 5
     },
-    actionError: {
-        flexDirection: 'row',
-        marginTop: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#FF0000',
-        paddingBottom: 5
-    },
     textInput: {
         flex: 1,
         marginTop: Platform.OS === 'ios' ? 0 : -12,
@@ -325,7 +318,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        backgroundColor: '#D89E92'
+        backgroundColor: '#C69494'
     },
     textSign: {
         fontSize: 18,

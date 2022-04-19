@@ -6,9 +6,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import Home from './TabScreens/Home/Home';
 import Cart from './TabScreens/Cart/Cart';
+import EmptyCart from './TabScreens/Cart/EmptyCart';
 import Store from './TabScreens/Store/Store';
 import Profile from './TabScreens/Profile/Profile';
-import SigninScreen from './SigninScreen';
+import SigninScreen from './UserAuthentication/SigninScreen';
 import Notification from './TabScreens/Notifications/Notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LogBox } from 'react-native';
@@ -87,7 +88,7 @@ export default function Dashboard({ route, navigation }) {
                     },
                     null
                 ],
-            }}     
+            }}
             >
 
                 {
@@ -116,7 +117,7 @@ export default function Dashboard({ route, navigation }) {
                             <FontAwesome5
                                 name="home"
                                 size={20}
-                                color={focused ? '#E7AA9E' : '#BCBCBF'}
+                                color={focused ? '#9C626B' : '#BCBCBF'}
                             ></FontAwesome5>
                         </View>
                     )
@@ -148,7 +149,7 @@ export default function Dashboard({ route, navigation }) {
                             position: 'absolute',
                             top: 20
                         }}>
-                            <Entypo name="shop" size={22} color={focused ? '#E7AA9E' : '#BCBCBF'} />
+                            <Entypo name="shop" size={22} color={focused ? '#9C626B' : '#BCBCBF'} />
 
 
                         </View>
@@ -165,9 +166,10 @@ export default function Dashboard({ route, navigation }) {
 
 
 
-                <Tab.Screen name={"Profile"} children={() => token === null ? <SigninScreen check={check} setCheck={setCheck}/> 
-                :
-                 <Profile check={check} setCheck={setCheck} />} options={({ navigation, route }) => ({
+                <Tab.Screen name={"Profile"} children={() => token === null ? <SigninScreen check={check} setCheck={setCheck} />
+                    :
+                    <Profile check={check} setCheck={setCheck} />}
+                    options={({ navigation, route }) => ({
                         title: token != null ? "Personal Profile" : "",
                         headerStyle: {
                             height: token === null ? 0 : 100
@@ -184,7 +186,7 @@ export default function Dashboard({ route, navigation }) {
                                 // centring Tab Button...
                                 width: 55,
                                 height: 55,
-                                backgroundColor: '#E7AA9E',
+                                backgroundColor: '#9C626B',
                                 borderRadius: 30,
                                 justifyContent: 'center',
                                 alignItems: 'center',
@@ -207,7 +209,8 @@ export default function Dashboard({ route, navigation }) {
                         }
                     })}></Tab.Screen>
 
-                <Tab.Screen name={"Cart"} component={Cart} options={{
+                <Tab.Screen name={"Cart"} component={token === null ? EmptyCart:Cart}
+                 options={{
                     title: "Your Cart",
                     headerStyle: {
                         height: 110
@@ -215,8 +218,8 @@ export default function Dashboard({ route, navigation }) {
                     headerTitleStyle: {
                         color: 'black',
                         textAlign: 'center',
-                        fontWeight:'bold',
-                        letterSpacing:1,
+                        fontWeight: 'bold',
+                        letterSpacing: 1,
                         left: 115,
                         top: 25
                     },
@@ -229,7 +232,7 @@ export default function Dashboard({ route, navigation }) {
                             <FontAwesome
                                 name="opencart"
                                 size={20}
-                                color={focused ? '#E7AA9E' : '#BCBCBF'}
+                                color={focused ? '#9C626B' : '#BCBCBF'}
                             ></FontAwesome>
                         </View>
                     )
@@ -251,8 +254,8 @@ export default function Dashboard({ route, navigation }) {
                     headerTitleStyle: {
                         color: '#3D3F3F',
                         textAlign: 'center',
-                        fontWeight:'bold',
-                        letterSpacing:1,
+                        fontWeight: 'bold',
+                        letterSpacing: 1,
                         left: 115,
                         top: 25
                     },
@@ -266,11 +269,11 @@ export default function Dashboard({ route, navigation }) {
                             <Ionicons
                                 name="chatbox"
                                 size={20}
-                                color={focused ? '#E7AA9E' : '#BCBCBF'} />
+                                color={focused ? '#9C626B' : '#BCBCBF'} />
                             {/* <FontAwesome5
                                 name="comment"
                                 size={20}
-                                color={focused ? '#E7AA9E' : '#BCBCBF'}
+                                color={focused ? '#9C626B' : '#BCBCBF'}
                             ></FontAwesome5> */}
                         </View>
                     )
@@ -289,7 +292,7 @@ export default function Dashboard({ route, navigation }) {
             <Animated.View style={{
                 width: getWidth() - 20,
                 height: 2,
-                backgroundColor: '#E7AA9E',
+                backgroundColor: '#9C626B',
                 position: 'absolute',
                 bottom: 80,
                 // Horizontal Padding = 20...

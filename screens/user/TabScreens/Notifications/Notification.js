@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'rea
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 const Tab = createMaterialTopTabNavigator();
-import SignInScreen from "../../SigninScreen";
+import SignInScreen from "../../UserAuthentication/SigninScreen";
 
 
 function Activity() {

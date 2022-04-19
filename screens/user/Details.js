@@ -9,6 +9,7 @@ import * as Animatable from 'react-native-animatable';
 
 export default function Details({ route, navigation }) {
     const { details } = route.params;
+    details.size='S';
     const [isSelected, setSelected] = useState(false);
     const [check1, setcheck1] = useState(true);
     const [staff, setstaff] = useState([])

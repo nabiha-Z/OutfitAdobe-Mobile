@@ -23,8 +23,9 @@ import NewInventory from './screens/Vendor/TabScreens/Profile/NewInventory';
 import BookingDetails from './screens/user/BookingDetails';
 import SearchedCategory from './screens/user/SearchCategory';
 import SearchServices from './screens/user/SearchedServices';
-import SignInScreen from './screens/user/SigninScreen';
-import SignupScreen from './screens/user/SignupScreen';
+import SignInScreen from './screens/user/UserAuthentication/SigninScreen';
+import SignupScreen from './screens/user/UserAuthentication/SignupScreen';
+import ForgotPassword from './screens/user/UserAuthentication/ForgotPassword';
 import Prof from './screens/user/TabScreens/Profile/Profile';
 import { AuthContext } from './components/context';
 
@@ -168,17 +169,6 @@ function App() {
       <NavigationContainer>
 
         <Stack.Navigator>
-          {/* <Stack.Screen name="Home" component={HomeScreen}
-          options={({ navigation, route }) => ({
-            title: '',
-            headerStyle: {
-              backgroundColor: '#47A7AB',
-              height: 0
-            },
-          })}
-        /> */}
-
-
           <Stack.Screen name="Dashboard_user" component={Dashboard_user}
             options={({ navigation, route }) => ({
               title: '',
@@ -207,10 +197,11 @@ function App() {
                 height: 0
               },
             })}
-          />
-          <Stack.Screen name="LoginScreen" component={LoginScreen}
+          /> 
+          
+          <Stack.Screen name="ForgotPassword" component={ForgotPassword}
             options={({ navigation, route }) => ({
-              title: 'Login',
+              title: '',
               headerStyle: {
                 backgroundColor: 'white',
                 height: 100
