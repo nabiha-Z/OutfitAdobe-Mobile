@@ -170,14 +170,15 @@ export default function Dashboard({ route, navigation }) {
                     :
                     <Profile check={check} setCheck={setCheck} />}
                     options={({ navigation, route }) => ({
-                        title: token != null ? "Personal Profile" : "",
+                        title: token != null ? " Profile Info " : "",
                         headerStyle: {
                             height: token === null ? 0 : 100
                         },
                         headerTitleStyle: {
                             color: 'black',
                             textAlign: 'center',
-                            left: 30,
+                            left: 110,
+                            fontWeight:'bold',
                             top: token === null ? 0 : 20,
 
                         },

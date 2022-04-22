@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Animated, Dimensions, View, Text, StyleSheet, TextInput, ActivityIndicator, TouchableOpacity, Button, Image, ListItem, ScrollView } from 'react-native';
+import { Animated, Dimensions, View, Text, StyleSheet,  ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons, Feather, AntDesign, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { SliderBox } from "react-native-image-slider-box";
 import ImagedCarouselCard from "react-native-imaged-carousel-card";

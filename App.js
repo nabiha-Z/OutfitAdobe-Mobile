@@ -6,15 +6,13 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import HomeScreen from './screens/HomeScreen';
 import VendorLogin from './screens/VendorLogin';
 import LoginScreen from './screens/LoginScreen';
-
 import ContactScreen from './screens/Vendor/TabScreens/Profile/Contact';
-import SettingScreen from './screens/Vendor/TabScreens/Profile/Settings';
 import CalendarScreen from './screens/Vendor/TabScreens/Profile/Calendar';
 import Location from './screens/Vendor/TabScreens/Profile/Location';
 import Password from './screens/Vendor/TabScreens/Profile/Password';
 import user_Password from './screens/user/TabScreens/Profile/Password';
 import user_Contact from './screens/user/TabScreens/Profile/Contact';
-import user_Setting from './screens/user/TabScreens/Profile/Settings';
+import SettingScreen from './screens/user/TabScreens/Profile/Settings';
 import Favourites from './screens/user/TabScreens/Profile/Favourites';
 import Dashboard_user from './screens/user/Dashboard';
 import Details from './screens/user/Details';
@@ -268,16 +266,6 @@ function App() {
           />
 
           <Stack.Screen name="SettingScreen" component={SettingScreen}
-            options={({ navigation, route }) => ({
-              title: '',
-              headerStyle: {
-                height: 0,
-
-              },
-            })}
-
-          />
-          <Stack.Screen name="user_SettingScreen" component={user_Setting}
             options={({ navigation, route }) => ({
               title: '',
               headerStyle: {

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useEffect, useState, useCallback } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Dimensions, RefreshControl } from 'react-native';
 import { AntDesign, Ionicons, FontAwesome, EvilIcons, Feather } from '@expo/vector-icons';
 import jeans from "../../../../images/jeans2.png";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,6 +13,10 @@ export default function Cart({ route, navigation }) {
     const [cartId, setCartId] = useState();
     const [token, setToken] = useState(null);
     const [check, setCheck] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const SCREEN_WIDTH = Dimensions.get('window').width;
+    const SCREEN_HEIGHT = Dimensions.get('window').height;
     //const API_URL = 'https://outfit-adobe-server.herokuapp.com';
     const API_URL = 'http://192.168.100.2:8000';
 
@@ -38,7 +42,7 @@ export default function Cart({ route, navigation }) {
 
                         if (jsonRes.message === true) {
                             setFetching(false);
-                            console.log("fetched", jsonRes.cart)
+                            console.log("fetched")
                             setCartId(jsonRes.cart[0]._id)
                             setItems(jsonRes.cart[0].items);
                         }
@@ -59,6 +63,7 @@ export default function Cart({ route, navigation }) {
     useEffect(() => {
         fetchData();
     }, [check])
+    
 
     const updatequantity = async (pid, quant, val) => {
         var quantity = quant + (val);
@@ -94,10 +99,10 @@ export default function Cart({ route, navigation }) {
                     console.log("error: ", err);
                 });
         }
-
     }
 
     const deleteFunc = async (pid) => {
+        console.log("pid: ", pid)
         await fetch(`${API_URL}/user/deleteCartItem`, {
             method: 'POST',
             body: JSON.stringify({
@@ -108,72 +113,76 @@ export default function Cart({ route, navigation }) {
                 'Content-Type': 'application/json',
             },
         })
-        .then(async res => {
-            try {
-                const jsonRes = await res.json();
-                if (jsonRes.message === true) {
-                    console.log("deleted")
-                    setCheck(!check)
-                }
+            .then(async res => {
+                try {
+                    const jsonRes = await res.json();
+                    console.log("jsonRes: ", jsonRes)
+                    if (jsonRes.message === true) {
+                        console.log("deleted")
+                        //setItems(jsonRes.cart.items);
+                        setCheck(!check)
+                    }
 
-            } catch (err) {
-                console.log(err);
-            };
-        })
-        .catch(err => {
-            console.log("error: ", err.message);
-        });
+                } catch (err) {
+                    console.log(err);
+                };
+            })
+            .catch(err => {
+                console.log("error: ", err.message);
+            });
     }
 
     return (
         <View style={styles.container}>
-            {token !== null ? Items.map((item, key) =>
-            (
-              
-                <View style={styles.productContainer} key={key}>
+            <ScrollView
+                contentContainerStyle={{ height: SCREEN_HEIGHT * 1, width: SCREEN_WIDTH * 1 }}
+                // refreshControl={
+                //     <RefreshControl
+                //         refreshing={refreshing}
+                //         onRefresh={onRefresh}
+                //     />
+                // }
+            >
+                {token !== null && Items.map((item, key) =>
+                (
 
-                    <Image source={{ uri: item.pid.picture }} style={styles.productImg} />
-                    <View style={styles.productContentBox}>
-                        <View style={styles.contentContainer}>
-                            <Text style={[styles.mainText,{width:'60%'}]}>{item.pid.title}</Text>
-                            <EvilIcons name="close" size={20} style={styles.deleteIcon} onPress={()=>deleteFunc()}/>
-                        </View>
-
-                        <View style={[styles.contentContainer, { marginTop: -10 }]}>
-                            <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                <Text style={[styles.lightTxt]}>{item.size} / </Text>
-                                <Ionicons name="alert-circle-sharp" size={15} color={item.color} />
-
+                    <View style={styles.productContainer} key={key}>
+                        <Image source={{ uri: item.pid.picture }} style={styles.productImg} />
+                        <View style={styles.productContentBox}>
+                            <View style={styles.contentContainer}>
+                                <Text style={[styles.mainText, { width: '60%' }]}>{item.pid.title}</Text>
+                                <EvilIcons name="close" size={20} style={styles.deleteIcon} onPress={() => deleteFunc(item.pid._id)} />
                             </View>
 
-                        </View>
-                        <View style={styles.contentContainer}>
-                            <Text style={[styles.mainText, { color: '#084867', marginTop: 7, fontSize: 16 }]}>{item.pid.price * item.quantity} /-</Text>
-                            <View style={styles.quantityContainer}>
-                                <TouchableOpacity
-                                    style={styles.quantityBtn}
-                                    onPress={() => updatequantity(item.pid._id, item.quantity, -1)}>
-                                    <Feather name="minus" />
-                                </TouchableOpacity>
-                                <Text>{item.quantity}</Text>
-                                <TouchableOpacity
-                                    style={[styles.quantityBtn, { marginLeft: 15, backgroundColor: '#084E71', borderColor: '#084E71' }]}
-                                    onPress={() => updatequantity(item.pid._id, item.quantity, 1)}>
-                                    <Feather name="plus" color="white" />
-                                </TouchableOpacity>
-                            </View>
+                            <View style={[styles.contentContainer, { marginTop: -10 }]}>
+                                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <Text style={[styles.lightTxt]}>{item.size} / </Text>
+                                    <Ionicons name="alert-circle-sharp" size={15} color={item.color} />
 
+                                </View>
+
+                            </View>
+                            <View style={styles.contentContainer}>
+                                <Text style={[styles.mainText, { color: '#084867', marginTop: 7, fontSize: 16 }]}>{item.pid.price * item.quantity} /-</Text>
+                                <View style={styles.quantityContainer}>
+                                    <TouchableOpacity
+                                        style={styles.quantityBtn}
+                                        onPress={() => updatequantity(item.pid._id, item.quantity, -1)}>
+                                        <Feather name="minus" />
+                                    </TouchableOpacity>
+                                    <Text>{item.quantity}</Text>
+                                    <TouchableOpacity
+                                        style={[styles.quantityBtn, { marginLeft: 15, backgroundColor: '#084E71', borderColor: '#084E71' }]}
+                                        onPress={() => updatequantity(item.pid._id, item.quantity, 1)}>
+                                        <Feather name="plus" color="white" />
+                                    </TouchableOpacity>
+                                </View>
+
+                            </View>
                         </View>
                     </View>
-                </View>
-            )) : (<>
-                <View style={{ alignItems: 'center', marginHorizontal: 10, justifyContent: 'center', alignContent: 'center' }}>
-                    <Text style={styles.subText}> Please Login into your account first.</Text>
-                    <Text style={{ color: '#799CAD' }}> Click on the Profile Icon below on the tab bar.</Text>
-                </View>
-            </>)
-            }
-
+                ))}
+            </ScrollView>
         </View>
     )
 }
@@ -187,13 +196,15 @@ const styles = StyleSheet.create({
     },
     productContainer: {
         flexDirection: 'row',
-        marginHorizontal: 50,
+        marginHorizontal: 20,
         paddingBottom: 5,
         borderBottomWidth: 1,
-        borderColor: '#E9EBEC'
+        borderColor: '#E9EBEC',
+        marginLeft: -5
+
     },
     productImg: {
-        width: '33%',
+        width: '29%',
         height: 100,
         margin: 10,
         justifyContent: 'center',
@@ -213,7 +224,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        marginRight: -17
+        marginRight: 33
 
     },
     quantityBtn: {
@@ -243,7 +254,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
     },
     deleteIcon: {
-        marginLeft: 50,
+        marginRight: 50,
         marginTop: 7
 
     },

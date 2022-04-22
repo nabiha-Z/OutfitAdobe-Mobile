@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, AntDesign, MaterialIcons } from '@expo/vector-icons';
 import SwitchToggle from "react-native-switch-toggle";
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -25,10 +24,7 @@ export default function Settings({ route, navigation }) {
                 />
                 <Text style={styles.text}>Settings</Text>
                 <View style={{ flexDirection: 'row' }}>
-                    <Image
-                        source={require('../../../../images/user.png')}
-                        style={{ width: '7%', height: '100%' }}
-                    />
+                   <AntDesign name="user" size={20} style={[styles.icon,{color:'white', marginRight:-5}]}/>
                     <Text style={{ fontSize: 16, color: 'white', letterSpacing: 2, marginLeft: 10 }} >Biya</Text>
                 </View>
             </View>
@@ -38,11 +34,11 @@ export default function Settings({ route, navigation }) {
                 <ScrollView style={{ height: 20, padding: 10}}>
                     <TouchableOpacity style={styles.tabContainer} >
 
-                        <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
+                    <AntDesign name="user" size={20} style={[styles.icon]}/>
                         <View style={styles.textContainer}>
                             <Text style={styles.mainText}>Personal Details</Text>
                         </View>
-                        <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 50, top: 5 }} />
+                        <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('user_Password')}>
@@ -50,7 +46,7 @@ export default function Settings({ route, navigation }) {
                         <View style={styles.textContainer}>
                             <Text style={styles.mainText}>Change Passwords</Text>
                         </View>
-                        <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 50, top: 5 }} />
+                        <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
                     </TouchableOpacity>
 
                     
@@ -170,4 +166,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#1D4168',
         borderRadius:5
     },
+    icon:{
+        marginRight:10,
+        alignSelf:'center',
+        color:'#7E8183',
+        width:'9%',
+    }
 })

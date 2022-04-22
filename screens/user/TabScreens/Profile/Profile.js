@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
-import { AntDesign, EvilIcons, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, EvilIcons, MaterialIcons, Ionicons } from '@expo/vector-icons';
 import setting from '../../../../images/settings.png';
 import contact from '../../../../images/contact.png';
 import logout from '../../../../images/logout.png';
@@ -42,43 +42,43 @@ export default function Profile({ check, setCheck }) {
             </View>
 
 
-            <ScrollView style={{ height: 20, marginHorizontal: -7, padding: 10 }}>
+            <ScrollView style={{ height: 20, marginHorizontal: 7, padding: 10 }}>
 
                 <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('user_ContactScreen')}>
-                <Image source={contact} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
+                {/* <Image source={contact} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} /> */}
+                    <Ionicons name="body-outline" size={30} style={styles.icon}/>
                     <TouchableOpacity style={styles.textContainer}>
                         <Text style={styles.mainText}>Measurements</Text>
                     </TouchableOpacity>
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
+                    <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('favourites')}>
-                    <EvilIcons name="heart" size={29} color="#233A98" style={{alignSelf: 'center', marginRight:10 }}/>
+                    <AntDesign name="hearto" size={26} style={styles.icon}/>
                 {/* <Image source={setting} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} /> */}
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Favourites</Text>
 
                     </View>
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
+                    <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('user_SettingScreen')}>
-                <Image source={setting} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
+                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('SettingScreen')}>
+                <AntDesign name='setting' size={28} style={styles.icon}/>
                     <TouchableOpacity style={styles.textContainer}>
                         <Text style={styles.mainText}>Settings</Text>
-
                     </TouchableOpacity>
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
+                    <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.tabContainer}>
-                <Image source={logout} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} />
+                <AntDesign name='logout' size={24} style={styles.icon}/>
                     <TouchableOpacity style={styles.textContainer} onPress={async()=>{                   
                         signOut()
                         setCheck(check?false:true)
                         navigation.navigate('Dashboard_user')}}>
                         <Text style={styles.mainText}>Logout</Text>
                     </TouchableOpacity>
-                    <AntDesign name="arrowright" size={16} color="#909193" style={{ left: 55, top: 20 }} />
+                    <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
                 </TouchableOpacity>
                 <View style={{ height: 150 }}>
                     <Text></Text>
@@ -109,9 +109,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     mainText: {
+        width:'90%',
         marginBottom: 8,
-        color: '#3C4C7E',
-        fontWeight:'bold'
+        color: '#707173',
+        fontWeight:'bold',
     },
     subText: {
         fontSize: 11,
@@ -138,5 +139,11 @@ const styles = StyleSheet.create({
     lightHeading:{
         fontSize: 15,
         color: '#3F3E40',
+    },
+    icon:{
+        marginRight:10,
+        alignSelf:'center',
+        color:'#7E8183',
+        width:'9%',
     }
 })

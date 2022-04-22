@@ -108,10 +108,7 @@ export default function Shop({ route, navigation }) {
 
             const data = [];
             Items.map((element) => {
-                console.log("element.category.toLowerCase(): ", element.category.toLowerCase())
                 if (item.title.toLowerCase() === element.category.toLowerCase() || item.title.toLowerCase() === element.main_category.toLowerCase()) {
-
-                    console.log("element: ", element.category, element.main_category);
                     data.push(element);
                 }
             })
