@@ -19,7 +19,7 @@ export default function Settings({ route, navigation }) {
 
                 <LinearGradient
                     // Background Linear Gradient
-                    colors={['rgba(26, 62, 103,0.8)', 'transparent']}
+                    colors={['rgba(26, 62, 103,0.6)', 'transparent']}
                     style={styles.background}
                 />
                 <Text style={styles.text}>Settings</Text>
@@ -45,6 +45,14 @@ export default function Settings({ route, navigation }) {
                         <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
                         <View style={styles.textContainer}>
                             <Text style={styles.mainText}>Change Passwords</Text>
+                        </View>
+                        <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('change_picture')}>
+                        <FontAwesome name="dollar" size={16} color="black" style={{ marginRight: 10, top: 4 }} />
+                        <View style={styles.textContainer}>
+                            <Text style={styles.mainText}>Change Picture</Text>
                         </View>
                         <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
                     </TouchableOpacity>
@@ -124,7 +132,7 @@ const styles = StyleSheet.create({
     upperContainer: {
         justifyContent: 'center',
         padding: 30,
-        backgroundColor: '#7DABDE',
+        backgroundColor: '#D1A2A2',
         width: '100%',
         height: '40%',
     },
@@ -163,7 +171,7 @@ const styles = StyleSheet.create({
     footerBtn: {
         width: '100%',
         padding: 10,
-        backgroundColor: '#1D4168',
+        backgroundColor: '#D1A2A2',
         borderRadius:5
     },
     icon:{

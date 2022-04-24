@@ -266,7 +266,7 @@ export default SignInScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#C69494'
+        backgroundColor: '#9C626B'
     },
     header: {
         flex: 1,
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        backgroundColor: '#C69494'
+        backgroundColor: '#9C626B'
     },
     textSign: {
         fontSize: 18,

@@ -4,15 +4,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import HomeScreen from './screens/HomeScreen';
-import VendorLogin from './screens/VendorLogin';
-import LoginScreen from './screens/LoginScreen';
-import ContactScreen from './screens/Vendor/TabScreens/Profile/Contact';
 import CalendarScreen from './screens/Vendor/TabScreens/Profile/Calendar';
 import Location from './screens/Vendor/TabScreens/Profile/Location';
 import Password from './screens/Vendor/TabScreens/Profile/Password';
 import user_Password from './screens/user/TabScreens/Profile/Password';
 import user_Contact from './screens/user/TabScreens/Profile/Contact';
 import SettingScreen from './screens/user/TabScreens/Profile/Settings';
+import ChangePicture from './screens/user/TabScreens/Profile/ChangePicture';
 import Favourites from './screens/user/TabScreens/Profile/Favourites';
 import Dashboard_user from './screens/user/Dashboard';
 import Details from './screens/user/Details';
@@ -26,7 +24,6 @@ import SignupScreen from './screens/user/UserAuthentication/SignupScreen';
 import ForgotPassword from './screens/user/UserAuthentication/ForgotPassword';
 import CodeVerification from './screens/user/UserAuthentication/CodeVerfication';
 import ResetPassword from './screens/user/UserAuthentication/ResetPassword';
-import Prof from './screens/user/TabScreens/Profile/Profile';
 import { AuthContext } from './components/context';
 
 
@@ -123,7 +120,7 @@ function App() {
       try {
 
         const u = await AsyncStorage.getItem('userToken');
-        
+
         console.log("logged out: ")
         await AsyncStorage.removeItem('userToken');
         await AsyncStorage.removeItem('user');
@@ -197,8 +194,8 @@ function App() {
                 height: 0
               },
             })}
-          /> 
-          
+          />
+
           <Stack.Screen name="ForgotPassword" component={ForgotPassword}
             options={({ navigation, route }) => ({
               title: '',
@@ -206,29 +203,19 @@ function App() {
                 backgroundColor: 'white',
                 height: 100
               },
-            })}        
-          />  
-          
-          <Stack.Screen name="CodeVerification" component={CodeVerification}
-          options={({ route, navigation }) => ({
-            title: 'OTP Code',
-            headerStyle: {
-              backgroundColor: 'white',
-              height: 100
-            },
-          })}
-        />
+            })}
+          />
 
-          <Stack.Screen name="VendorLogin" component={VendorLogin}
-            options={({ navigation, route }) => ({
-              title: 'Vendor',
+          <Stack.Screen name="CodeVerification" component={CodeVerification}
+            options={({ route, navigation }) => ({
+              title: 'OTP Code',
               headerStyle: {
                 backgroundColor: 'white',
                 height: 100
               },
             })}
           />
-       
+
 
           <Stack.Screen name="SignupScreen" component={SignupScreen}
             options={({ navigation, route }) => ({
@@ -241,16 +228,6 @@ function App() {
                 color: 'black',
                 textAlign: 'center',
                 left: 70,
-              },
-            })}
-          />
-          <Stack.Screen name="ContactScreen" component={ContactScreen}
-            options={({ navigation, route }) => ({
-              title: 'Contact Center',
-              headerTitleStyle: {
-                color: 'black',
-                textAlign: 'center',
-                left: 50,
               },
             })}
           />
@@ -272,9 +249,21 @@ function App() {
                 height: 0,
 
               },
+              headerLeft: null
             })}
-
           />
+
+          <Stack.Screen name="change_picture" component={ChangePicture}
+            options={({ navigation, route }) => ({
+              title: 'Profile Image',
+              headerTitleStyle: {
+                color: 'black',
+                textAlign: 'center',
+                left: 60,
+              },
+            })}
+          />
+
           <Stack.Screen name="ResetScreen" component={ResetPassword}
             options={({ navigation, route }) => ({
               title: 'Reset Password',

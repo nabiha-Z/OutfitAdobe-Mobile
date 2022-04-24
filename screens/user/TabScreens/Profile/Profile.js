@@ -12,30 +12,62 @@ export default function Profile({ check, setCheck }) {
 
     const navigation = useNavigation();
     const { signOut } = React.useContext(AuthContext);
+    const [user, setUser] = useState([]);
+    const [image, setImage] = useState(null);
     const colors = ["#C2E4EE", "#B2DBD6", "#D2B1B1", "#D0D4FA"];
+    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+    const API_URL = 'http://192.168.100.2:8000';
 
-    // useEffect(() => {
+    const currentUser = async () => {
 
-    //     navigation.setOptions({
-    //         headerLeft: () => (
-    //             <TouchableOpacity onPress={() => navigation.navigate('Dashboard_user')} style={{ margin: 15, marginTop:60 }}>
-    //                 <MaterialIcons name="keyboard-arrow-left" size={35} color="#646262" style={{ zIndex: 1 }}></MaterialIcons>
-    //             </TouchableOpacity>
-    //         ),      
-    //     })
+        var user = await AsyncStorage.getItem('user');
+        await fetch(`${API_URL}/user/loginuser`, {
+
+            method: "POST",
+            body: JSON.stringify({
+                user,
+            }),
+
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+
+            .then(async res => {
+                try {
+
+                    const jsonRes = await res.json();
+
+                    if (jsonRes.message === true) {
+                        setUser(jsonRes.user)
+                        setImage(jsonRes.user.picture)
+
+                    } else {
+                        console.log("error found ", jsonRes.error)
+                    }
+
+                } catch (err) {
+                    console.log(err);
+                };
+            })
+            .catch(err => {
+                console.log("error: ", err.message);
+            });
+
+    }
+    useEffect(() => {
+        currentUser()
+    }, [])
 
 
-    // }, [check])
-
-  
     return (
-        <View style={styles.container}>
-
-
-
+        <View style={styles.container}>           
             <View style={{ alignItems: 'center' }}>
                 <View style={[styles.imgContainer, { backgroundColor: colors[Math.floor(Math.random() * 5) + 0] }]}>
-                    <Text style={styles.imgLabel}>B</Text>
+                 
+                    {user.picture!==null
+                    ? <Image source={{uri: image}} style={styles.picture}/>
+                    :  <Text style={styles.imgLabel}>B</Text>}
                 </View>
                 <Text style={styles.lightHeading}>nabihazubair100@gmil.com</Text>
                 <Text style={{ color: '#6791DA', marginBottom: 40 }}>My Profile</Text>
@@ -44,38 +76,39 @@ export default function Profile({ check, setCheck }) {
 
             <ScrollView style={{ height: 20, marginHorizontal: 7, padding: 10 }}>
 
-                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('user_ContactScreen')}>
-                {/* <Image source={contact} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} /> */}
-                    <Ionicons name="body-outline" size={30} style={styles.icon}/>
-                    <TouchableOpacity style={styles.textContainer}>
+                <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate('user_ContactScreen')}>
+                    {/* <Image source={contact} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} /> */}
+                    <Ionicons name="body-outline" size={30} style={styles.icon} />
+                    <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Measurements</Text>
-                    </TouchableOpacity>
+                    </View>
                     <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('favourites')}>
-                    <AntDesign name="hearto" size={26} style={styles.icon}/>
-                {/* <Image source={setting} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} /> */}
+                <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate('favourites')}>
+                    <AntDesign name="hearto" size={26} style={styles.icon} />
+                    {/* <Image source={setting} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} /> */}
                     <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Favourites</Text>
 
                     </View>
                     <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.tabContainer} onPress={()=>navigation.navigate('SettingScreen')}>
-                <AntDesign name='setting' size={28} style={styles.icon}/>
-                    <TouchableOpacity style={styles.textContainer}>
+                <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate('SettingScreen')}>
+                    <AntDesign name='setting' size={28} style={styles.icon} />
+                    <View style={styles.textContainer}>
                         <Text style={styles.mainText}>Settings</Text>
-                    </TouchableOpacity>
+                    </View>
                     <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.tabContainer}>
-                <AntDesign name='logout' size={24} style={styles.icon}/>
-                    <TouchableOpacity style={styles.textContainer} onPress={async()=>{                   
+                    <AntDesign name='logout' size={24} style={styles.icon} />
+                    <TouchableOpacity style={styles.textContainer} onPress={async () => {
                         signOut()
-                        setCheck(check?false:true)
-                        navigation.navigate('Dashboard_user')}}>
+                        setCheck(check ? false : true)
+                        navigation.navigate('Dashboard_user')
+                    }}>
                         <Text style={styles.mainText}>Logout</Text>
                     </TouchableOpacity>
                     <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
@@ -109,10 +142,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     mainText: {
-        width:'90%',
+        width: '90%',
         marginBottom: 8,
         color: '#707173',
-        fontWeight:'bold',
+        fontWeight: 'bold',
     },
     subText: {
         fontSize: 11,
@@ -128,6 +161,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
+        margin:40
 
     },
     imgLabel: {
@@ -136,14 +170,19 @@ const styles = StyleSheet.create({
         color: '#3F3E40',
 
     },
-    lightHeading:{
+    lightHeading: {
         fontSize: 15,
         color: '#3F3E40',
     },
-    icon:{
-        marginRight:10,
-        alignSelf:'center',
-        color:'#7E8183',
-        width:'9%',
-    }
+    icon: {
+        marginRight: 10,
+        alignSelf: 'center',
+        color: '#7E8183',
+        width: '9%',
+    },
+    picture:{
+        width:150,
+        height:150,
+        borderRadius:80,
+    },
 })

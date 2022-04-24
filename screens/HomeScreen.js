@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
-
 import { LinearGradient } from 'expo-linear-gradient';
-import { firebaseConfig } from '../Firebase/FirebaseConfig';
-import firebase from "firebase/app";
 
 function HomeScreen({ route, navigation }) {
 
