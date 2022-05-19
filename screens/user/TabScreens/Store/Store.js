@@ -6,7 +6,6 @@ import { AntDesign, MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
 
-
 export default function Shop({ route, navigation }) {
 
     const [bookings, setbookings] = useState([]);
@@ -18,8 +17,8 @@ export default function Shop({ route, navigation }) {
     const [products, setProducts] = useState([]);
     const [count, setCount] = useState(0);
 
-    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    const API_URL = 'http://192.168.100.2:8000';
+    const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+    // const API_URL = 'http://192.168.100.2:8000';
     useEffect(() => {
 
         setFetching(true);

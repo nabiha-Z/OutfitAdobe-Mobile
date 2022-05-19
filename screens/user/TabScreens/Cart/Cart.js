@@ -17,8 +17,8 @@ export default function Cart({ route, navigation }) {
 
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
-    //const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    const API_URL = 'http://192.168.100.2:8000';
+    const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+    // const API_URL = 'http://172.20.52.233:8000';
 
     async function fetchData() {
         var userToken = await AsyncStorage.getItem('user');

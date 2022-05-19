@@ -28,7 +28,7 @@ export default function Details({ route, navigation }) {
     var available = ['S', 'M', 'L', 'XL'];
 
     // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    const API_URL = 'http://192.168.100.2:8000';
+    const API_URL = '172.20.52.233:8000';
 
     useEffect(() => {
         navigation.setOptions({

@@ -76,7 +76,7 @@ export default function Profile({ check, setCheck }) {
 
             <ScrollView style={{ height: 20, marginHorizontal: 7, padding: 10 }}>
 
-                <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate('user_ContactScreen')}>
+                <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate('MeasurmenetScreen')}>
                     {/* <Image source={contact} style={{ width: '8%', height: '100%', alignSelf: 'center', marginRight:10 }} /> */}
                     <Ionicons name="body-outline" size={30} style={styles.icon} />
                     <View style={styles.textContainer}>

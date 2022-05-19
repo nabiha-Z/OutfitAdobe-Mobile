@@ -13,10 +13,7 @@ export default function Settings({ route, navigation }) {
 
     return (
         <View style={styles.container}>
-
-
             <View style={styles.upperContainer}>
-
                 <LinearGradient
                     // Background Linear Gradient
                     colors={['rgba(26, 62, 103,0.6)', 'transparent']}

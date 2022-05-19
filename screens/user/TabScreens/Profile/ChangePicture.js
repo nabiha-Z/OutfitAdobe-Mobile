@@ -77,9 +77,7 @@ export default function ChangePicture({ route, navigation }) {
             setImage(result.uri);
         }
     };
-
-
-
+    
     const upload = async (picture) => {
         var user = await AsyncStorage.getItem('user');
         console.log("type: ", typeof (user))

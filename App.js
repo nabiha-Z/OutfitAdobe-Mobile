@@ -14,9 +14,6 @@ import ChangePicture from './screens/user/TabScreens/Profile/ChangePicture';
 import Favourites from './screens/user/TabScreens/Profile/Favourites';
 import Dashboard_user from './screens/user/Dashboard';
 import Details from './screens/user/Details';
-import BookingScreen from './screens/user/BookingScreen';
-import NewInventory from './screens/Vendor/TabScreens/Profile/NewInventory';
-import BookingDetails from './screens/user/BookingDetails';
 import SearchedCategory from './screens/user/SearchCategory';
 import SearchServices from './screens/user/SearchedServices';
 import SignInScreen from './screens/user/UserAuthentication/SigninScreen';
@@ -24,6 +21,8 @@ import SignupScreen from './screens/user/UserAuthentication/SignupScreen';
 import ForgotPassword from './screens/user/UserAuthentication/ForgotPassword';
 import CodeVerification from './screens/user/UserAuthentication/CodeVerfication';
 import ResetPassword from './screens/user/UserAuthentication/ResetPassword';
+import MeasurementScreen from './screens/user/MeasuremenetsScreen'
+import CameraScreen from './screens/user/CameraScreen';
 import { AuthContext } from './components/context';
 
 
@@ -231,6 +230,33 @@ function App() {
               },
             })}
           />
+
+
+          <Stack.Screen name="MeasurmenetScreen" component={MeasurementScreen}
+            options={({ navigation, route }) => ({
+              title: 'Measuremenets',
+              headerStyle: {
+                backgroundColor: 'white',
+                height: 100
+              },
+              headerTitleStyle: {
+                color: 'black',
+                textAlign: 'center',
+                left: 45,
+              },
+            })}
+          />
+
+          <Stack.Screen name="CameraScreen" component={CameraScreen}
+            options={({ navigation, route }) => ({
+              title: '',
+              headerStyle: {
+                backgroundColor: 'white',
+                height: 0
+              },
+            })}
+          />
+
           <Stack.Screen name="user_ContactScreen" component={user_Contact}
             options={({ navigation, route }) => ({
               title: 'Contact Center',
@@ -341,7 +367,7 @@ function App() {
             })}
 
           />
-          <Stack.Screen name="bookingscreen" component={BookingScreen}
+          {/* <Stack.Screen name="bookingscreen" component={BookingScreen}
             options={() => ({
               title: '',
               headerStyle: {
@@ -350,7 +376,7 @@ function App() {
               },
             })}
 
-          />
+          /> */}
           <Stack.Screen
             name="Details"
             component={Details}
@@ -366,7 +392,7 @@ function App() {
 
           />
 
-          <Stack.Screen name="bookingdetails" component={BookingDetails}
+          {/* <Stack.Screen name="bookingdetails" component={BookingDetails}
             options={({ navigation, route }) => ({
               title: '',
               headerStyle: {
@@ -375,7 +401,7 @@ function App() {
               },
             })}
 
-          />
+          /> */}
           <Stack.Screen name="search-screen" component={SearchedCategory}
             options={({ navigation, route }) => ({
               title: 'Search Products',
