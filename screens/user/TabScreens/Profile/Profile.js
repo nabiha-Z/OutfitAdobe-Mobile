@@ -16,12 +16,12 @@ export default function Profile({ check, setCheck }) {
     const [image, setImage] = useState(null);
     const colors = ["#C2E4EE", "#B2DBD6", "#D2B1B1", "#D0D4FA"];
     // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    const API_URL = 'http://192.168.100.2:8000';
+    const API_URL = 'http://192.168.100.8:8000';
 
     const currentUser = async () => {
 
         var user = await AsyncStorage.getItem('user');
-        await fetch(`${API_URL}/user/loginuser`, {
+        await fetch(`${API_URL}/user/currentuser`, {
 
             method: "POST",
             body: JSON.stringify({
@@ -41,6 +41,7 @@ export default function Profile({ check, setCheck }) {
                     if (jsonRes.message === true) {
                         setUser(jsonRes.user)
                         setImage(jsonRes.user.picture)
+                        console.log("user puicture: ", user.picture)
 
                     } else {
                         console.log("error found ", jsonRes.error)

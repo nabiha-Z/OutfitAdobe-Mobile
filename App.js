@@ -3,7 +3,6 @@ import { StyleSheet, RefreshControl } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import HomeScreen from './screens/HomeScreen';
 import CalendarScreen from './screens/Vendor/TabScreens/Profile/Calendar';
 import Location from './screens/Vendor/TabScreens/Profile/Location';
 import Password from './screens/Vendor/TabScreens/Profile/Password';
@@ -173,15 +172,6 @@ function App() {
                 height: 0
               },
               headerLeft: null
-            })}
-          />
-          <Stack.Screen name="HomeScreen" component={HomeScreen}
-            options={({ navigation, route }) => ({
-              title: '',
-              headerStyle: {
-                backgroundColor: '#47A7AB',
-                height: 0
-              },
             })}
           />
 

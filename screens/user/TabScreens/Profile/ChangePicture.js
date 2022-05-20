@@ -10,7 +10,7 @@ export default function ChangePicture({ route, navigation }) {
     const [image, setImage] = useState(null);
     const width = Dimensions.get('window').width;
     // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    const API_URL = 'http://192.168.100.2:8000';
+    const API_URL = 'http://192.168.100.8:8000';
 
     const currentUser = async () => {
 

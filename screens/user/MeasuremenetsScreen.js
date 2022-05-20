@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Modal, ActivityIndicator } from 'react-native';
-import { AntDesign, EvilIcons, MaterialIcons, Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Modal, ActivityIndicator, Dimensions } from 'react-native';
+import { AntDesign, SimpleLineIcons, MaterialIcons, Ionicons, EvilIcons } from '@expo/vector-icons';
+import modal from '../../images/modal1.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { screenWidth } from "react-native-calendars/src/expandableCalendar/commons";
 
 export default function Measurements({ navigation }) {
 
@@ -15,14 +16,17 @@ export default function Measurements({ navigation }) {
     const [fullLength, setFullLength] = useState("");
     const [KneeL, setKneeL] = useState("");
     const [armsL, setArmsL] = useState("");
+    const [title, setTitle] = useState("");
+    const [value, setValue] = useState("");
     const [waistL, setWaistL] = useState("");
     const [shirtL, setShirtL] = useState("");
     const [bottomL, setBottomL] = useState("");
     const [check, setCheck] = useState(false);
     const [showModal, setSetModal] = useState(false);
     const [fetchingData, setFetching] = useState(false);
+    const SCREEN_WIDTH = Dimensions.get('window').width;
+    const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-    const colors = ["#C2E4EE", "#B2DBD6", "#D2B1B1", "#D0D4FA"];
     const API_URL = 'https://outfit-adobe-server.herokuapp.com';
     // const API_URL = 'http://192.168.100.2:8000';
     var uid = "";
@@ -50,6 +54,8 @@ export default function Measurements({ navigation }) {
                     if (jsonRes.message === true) {
                         setUserMeasurements(jsonRes.measurement)
                         setFetching(false);
+                        console.log("measue: ", userMeasurements)
+                        console.log("measue: ", userMeasurements.length)
 
                     } else {
                         console.log("error found ", jsonRes.error)
@@ -66,7 +72,40 @@ export default function Measurements({ navigation }) {
     }
     useEffect(() => {
         currentUser()
-    }, [])
+    }, [check])
+
+    const deleteFunc = async () => {
+        console.log("userMeasurements[0]._id: ", userMeasurements[0]._id)
+        try {
+            await fetch(`${API_URL}/user/deleteMeassurements`, {
+
+                method: "POST",
+                body: JSON.stringify({
+                    mid: userMeasurements[0]._id,
+                }),
+
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+                .then(async (response) => {
+                    const jsonRes = await response.json();
+                    console.log("res: ", jsonRes)
+                    if (jsonRes.message === true) {
+                        setCheck(!check)
+                        //window.location.reload()
+
+                    } else {
+                        console.log(jsonRes.error)
+                    }
+                })
+                .catch((err) => {
+                    console.log("err", err.message)
+                })
+        } catch (e) {
+            console.log("error found in try: ", e.message)
+        }
+    }
 
 
     const LoadingData = () => {
@@ -80,13 +119,6 @@ export default function Measurements({ navigation }) {
         );
     };
 
-    const ModalPopup = () => {
-
-        {showModal ? (<Modal>
-            
-            </Modal>):""}
-
-    }
 
 
     return (
@@ -105,11 +137,26 @@ export default function Measurements({ navigation }) {
                         </View>
 
 
-                    ) : (<ScrollView style={{ height: 50, marginHorizontal: 4, padding: 5 }}>
+                    ) : (<ScrollView style={{ height: 50, padding: 5 }}>
 
-                        <Text style={styles.lightHeading}>Your Body Measurements</Text>
+                        <View style={{ flexDirection: 'row', marginLeft: -20 }}>
+                            <Text style={styles.lightHeading}>Your Body Measurements</Text>
+                            <TouchableOpacity onPress={() => alert("dfgkd")} style={styles.editBtn}>
+                                <SimpleLineIcons name="pencil" color="white" size={15} />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => deleteFunc()} style={[styles.editBtn, { backgroundColor: 'rgb(221, 55, 55)' }]}>
+                                <EvilIcons name="trash" color="white" size={20}
+                                />
+                            </TouchableOpacity>
+                        </View>
+
                         <View style={{ margin: 10 }}></View>
-                        <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate('CameraScreen')}>
+                        <TouchableOpacity style={styles.tabContainer} onPress={() => {
+                            setTitle("Shoulders Length")
+                            setValue(userMeasurements[0].shoulders)
+                            setSetModal(true)
+                        }}>
                             <Ionicons name="body-outline" size={30} style={styles.icon} />
                             <View style={styles.textContainer}>
                                 <Text style={styles.mainText}>Shoulders</Text>
@@ -117,40 +164,104 @@ export default function Measurements({ navigation }) {
                             <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate('favourites')}>
-                            <AntDesign name="hearto" size={26} style={styles.icon} />
-
+                        <TouchableOpacity style={styles.tabContainer} onPress={() => {
+                            setTitle("Full Length")
+                            setValue(userMeasurements[0].fullLength)
+                            setSetModal(true)
+                        }}>
+                            <Ionicons name="body-outline" size={30} style={styles.icon} />
                             <View style={styles.textContainer}>
-                                <Text style={styles.mainText}>Favourites</Text>
-
-                            </View>
-                            <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.tabContainer} onPress={() => navigation.navigate('SettingScreen')}>
-                            <AntDesign name='setting' size={28} style={styles.icon} />
-                            <View style={styles.textContainer}>
-                                <Text style={styles.mainText}>Settings</Text>
+                                <Text style={styles.mainText}>Full Length</Text>
                             </View>
                             <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.tabContainer}>
-                            <AntDesign name='logout' size={24} style={styles.icon} />
-                            <TouchableOpacity style={styles.textContainer} onPress={async () => {
-                                signOut()
-                                setCheck(check ? false : true)
-                                navigation.navigate('Dashboard_user')
-                            }}>
-                                <Text style={styles.mainText}>Logout</Text>
-                            </TouchableOpacity>
+                        <TouchableOpacity style={styles.tabContainer} onPress={() => {
+                            setTitle("Arms Length")
+                            setValue(userMeasurements[0].arms)
+                            setSetModal(true)
+                        }}>
+                            <Ionicons name="body-outline" size={30} style={styles.icon} />
+                            <View style={styles.textContainer}>
+                                <Text style={styles.mainText}>Arms Length</Text>
+                            </View>
+                            <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.tabContainer} onPress={() => {
+                            setTitle("Tshirt Length")
+                            setValue(userMeasurements[0].tshirt)
+                            setSetModal(true)
+                        }}>
+                            <Ionicons name="body-outline" size={30} style={styles.icon} />
+                            <View style={styles.textContainer}>
+                                <Text style={styles.mainText}>Tshirt Length</Text>
+                            </View>
+                            <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.tabContainer} onPress={() => {
+                            setTitle("Knee Length")
+                            setValue(userMeasurements[0].knee)
+                            setSetModal(true)
+                        }}>
+                            <Ionicons name="body-outline" size={30} style={styles.icon} />
+                            <View style={styles.textContainer}>
+                                <Text style={styles.mainText}>Knee Length</Text>
+                            </View>
+                            <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.tabContainer} onPress={() => {
+                            setTitle("Waist Length")
+                            setValue(userMeasurements[0].waist)
+                            setSetModal(true)
+                        }}>
+                            <Ionicons name="body-outline" size={30} style={styles.icon} />
+                            <View style={styles.textContainer}>
+                                <Text style={styles.mainText}>Waist Length</Text>
+                            </View>
+                            <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.tabContainer} onPress={() => {
+                            setTitle("Bottom Length")
+                            setValue(userMeasurements[0].bottom)
+                            setSetModal(true)
+                        }}>
+                            <Ionicons name="body-outline" size={30} style={styles.icon} />
+                            <View style={styles.textContainer}>
+                                <Text style={styles.mainText}>Bottom Length</Text>
+                            </View>
                             <MaterialIcons name="keyboard-arrow-right" size={20} style={styles.icon} />
                         </TouchableOpacity>
                         <View style={{ height: 150 }}>
                             <Text></Text>
                         </View>
+
                     </ScrollView>)}
                 </>
             )}
+            {showModal && (<Modal
+                animationType="slide"
+                transparent={true}
+                visible={showModal}
+            >
+                <View>
+                    <View style={[styles.modalView, { marginTop: SCREEN_HEIGHT * 0.2 }]}>
+                        <TouchableOpacity
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setSetModal(!showModal)}
+                        >
+                            <AntDesign name="close" color="#585555" size={20} />
+                        </TouchableOpacity>
+                        <Image source={modal} style={styles.modal} />
+                        <Text style={[styles.txt, { fontSize: 18, color: '#6B6767', fontWeight: '200' }]}>{title}</Text>
+                        <Text style={styles.heading}>{value} inch</Text>
+
+                    </View>
+                </View>
+            </Modal>)}
         </View>
 
     )
@@ -217,6 +328,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center'
     },
+    heading: {
+        fontWeight: 'bold',
+        fontSize: 30,
+        color: '#383636'
+    },
     icon: {
         marginRight: 10,
         alignSelf: 'center',
@@ -240,5 +356,86 @@ const styles = StyleSheet.create({
     txt: {
         color: 'rgb(238, 235, 235)',
         fontWeight: 'bold',
-    }
-})
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 5,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+    },
+    buttonOpen: {
+        backgroundColor: "#F194FF",
+    },
+    buttonClose: {
+        position: 'absolute',
+        top: 8,
+        right: 8,
+        borderRadius: 10,
+        backgroundColor: 'rgb(255, 255, 255)',
+        fontWeight: 'bold',
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+    },
+    modal: {
+        margin: 20,
+        alignSelf: 'center',
+        width: '100%',
+        height: '65%',
+        marginLeft: -140
+    },
+    editForm: {
+        padding: 30,
+        justifyContent: 'center',
+        alignItems: 'center'
+
+    },
+    editContainer: {
+        width: '70%',
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between'
+    },
+    editBtn: {
+        borderRadius: 10,
+        backgroundColor: 'rgb(45, 193, 171)',
+        padding: 10,
+        margin: 10,
+        color: 'rgb(238, 235, 235)',
+        fontWeight: 'bold',
+        flexDirection: 'row',
+        alignSelf: 'center',
+        height: 35,
+        marginRight: -5
+    },
+});

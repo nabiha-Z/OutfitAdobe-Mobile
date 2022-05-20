@@ -5,7 +5,6 @@ import { Entypo, Ionicons, AntDesign, MaterialCommunityIcons, FontAwesome5, Mate
 import { TouchableOpacity } from 'react-native';
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
 import search from "../../../../images/searchIcon.png";
-import beauty from "../../../../images/beauty.jpeg";
 import jeans from "../../../../images/jeans2.png";
 import shirt from "../../../../images/shirt.png";
 import suit from "../../../../images/suit2.jpg";
@@ -20,7 +19,7 @@ export default function Home({ route, navigation }) {
   const [searchVisible, setsearchVisible] = useState(false);
   const [isSelected, setSelected] = useState(false);
   const [check, setcheck] = useState(true);
-  const [categories, setcategories] = useState([{ title: "Jeans", img: jeans }, { title: "TShirt", img: shirt }, { title: "Suit", img: suit }, { title: "Dress", img: beauty }])
+  const [categories, setcategories] = useState([{ title: "Jeans", img: jeans }, { title: "TShirt", img: shirt }, { title: "Suit", img: suit }, { title: "Dress", img: jeans }])
   const [Items, setItems] = useState([]);
   const [fetchingData, setFetching] = useState(false);
   const [favouriteItems, setFavourites] = useState([]);
