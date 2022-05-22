@@ -10,7 +10,7 @@ export default function Shop({ route, navigation }) {
 
     const [bookings, setbookings] = useState([]);
     const [check, setcheck] = useState(true);
-    const [categories, setCategories] = useState([{ title: 'All', active: true }, { title: 'Men', active: false }, { title: 'Women', active: false }, { title: 'Tshirt', active: false }, { title: 'Jeans', active: false }, { title: 'Suit', active: false }, { title: 'Dress', active: false }]);
+    const [categories, setCategories] = useState([{ title: 'All', active: true }, { title: 'Men', active: false }, { title: 'Women', active: false }, { title: 'Shirts', active: false }, { title: 'Jeans', active: false }, { title: 'Suits', active: false }, { title: 'Dress', active: false }]);
     const [Items, setItems] = useState([]);
     const [fetchingData, setFetching] = useState(false);
     const [favouriteItems, setFavourites] = useState([]);
@@ -172,7 +172,7 @@ export default function Shop({ route, navigation }) {
                                             </TouchableOpacity>
                                         </View>
                                         <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                            <Ionicons name="alert-circle-sharp" size={20} color={item.color} />
+                                            <Ionicons name="alert-circle-sharp" size={20} color={item.colorCode} />
                                             <Text style={[styles.txt]}>{item.color}</Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Animated, Dimensions, View, Text, StyleSheet,  ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
+import { Animated, Dimensions, View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons, Feather, AntDesign, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { SliderBox } from "react-native-image-slider-box";
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
@@ -8,8 +8,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Animatable from 'react-native-animatable';
 
 export default function Details({ route, navigation }) {
-    const { details } = route.params;
-    details.size='S';
+    const { details } = route.params;  
+    details.size = 'S';
+    const [fetchingData, setFetching] = useState(false);
     const [isSelected, setSelected] = useState(false);
     const [check1, setcheck1] = useState(true);
     const [staff, setstaff] = useState([])
@@ -21,14 +22,51 @@ export default function Details({ route, navigation }) {
     const [duration, setDuration] = useState(1000);
     const [btnBackground, setBtnbackground] = useState('#114D53')
     const [products, setProducts] = useState([]);
+    const [suggested, setSuggested] = useState([]);
     const [colors, setColors] = useState(['#741823', '#B4535D', '#D87373', '#E9A0A0']);
-    const [currentSize, setCurrentSize] = useState("");
-    const [currentColor, setCurrentColor] = useState("");
+    const [selectedSize, setSelectedSize] = useState("");
+
     const [sizes, setSizes] = useState([{ size: 'S', selected: true }, { size: 'M', selected: false }, { size: 'L', selected: false }, { size: 'XL', selected: false }]);
     var available = ['S', 'M', 'L', 'XL'];
 
     // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    const API_URL = '172.20.52.233:8000';
+    const API_URL = 'http://192.168.100.8:8000';
+
+    const fetchSimilar = async () => {
+        setFetching(true);
+        //console.log("here");
+        await fetch(`${API_URL}/user/smartAdvisor`, {
+            method: 'POST',
+            body: JSON.stringify({
+                category: details.category, main_category:details.main_category, product_color: details.color
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(async (res) => {
+                try {
+
+                    const jsonRes = await res.json();
+
+                    console.log("json: ", jsonRes.products.length)
+                    if (jsonRes.message === true) {
+                        setFetching(false);
+                        
+                        setSuggested(jsonRes.products)
+                    }
+
+                    
+
+                } catch (err) {
+                    console.log(err);
+                };
+            })
+            .catch(function (error) {
+
+            });
+    }
+
 
     useEffect(() => {
         navigation.setOptions({
@@ -49,6 +87,7 @@ export default function Details({ route, navigation }) {
                 setSizes(sizes.filter(element => element.size !== item.size))
             }
         })
+        fetchSimilar()
 
     }, [check])
 
@@ -60,40 +99,8 @@ export default function Details({ route, navigation }) {
 
     }
 
-    const onChange = (item) => {
 
-        const newData = products.map((newItem) => {
-            if (newItem.pid === item.pid) {
-                var color, background;
-                if (item.selected === false) {
-                    color = "#EAF3F2";
-                    background = "#EAF3F2";
-                } else {
-                    color = "#C8C4C4";
-                    background = "white";
-                }
-
-
-                return {
-                    ...newItem,
-                    border: color,
-                    background: background,
-                    selected: !item.selected,
-                };
-
-            }
-            return {
-                ...newItem,
-                selected: newItem.selected,
-            };
-
-
-        });
-        setProducts(newData);
-
-    };
-
-    const LoadingData = () => {
+    const LoadingItems = () => {
         return (
             <>
                 <ActivityIndicator size="small" color="white" />
@@ -102,6 +109,7 @@ export default function Details({ route, navigation }) {
     };
 
     const selectSize = (item) => {
+        console.log("item: ", item)
         const updatedSizes = sizes.map((element) => {
             if (item.size === element.size) {
 
@@ -119,29 +127,31 @@ export default function Details({ route, navigation }) {
 
         })
 
-        setSizes(updatedSizes);       
-        details.size = item.size;
-        
+        setSizes(updatedSizes);
+        setSelectedSize(item.size);
+        console.log("de: ", item.size)
+
     }
 
     const Addtocart = async () => {
         setLoadingData(true);
 
         const uid = await AsyncStorage.getItem('user');
-        if(uid === null){
+        if (uid === null) {
             alert("Login first!")
             navigation.navigate('Dashboard_user')
         }
-        console.log("UID: ", uid);
+       
 
+        console.log("details.size: ",selectedSize)
         await fetch(`${API_URL}/user/addCart`, {
 
             method: "POST",
             body: JSON.stringify({
                 uid,
                 product: details,
-                size:details.size,
-                color:'#20698E'
+                size: selectedSize,
+                color: details.color
             }),
 
             headers: {
@@ -184,17 +194,12 @@ export default function Details({ route, navigation }) {
             .catch(err => {
                 console.log("error: ", err.message);
             });
-
-
-
-
-
     }
 
 
     return (
         <View>
-            <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1.1, backgroundColor: 'white' }}>
+            <ScrollView contentContainerStyle={{ height: SCREEN_HEIGHT * 1.5, backgroundColor: 'white' }}>
                 <ImagedCarouselCard
                     text=""
                     width={Math.round(SCREEN_WIDTH * 0.8)}
@@ -232,19 +237,16 @@ export default function Details({ route, navigation }) {
                     <View style={styles.variationContainer}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={[styles.subheading, { margin: 0, padding: 0 }]}>Color</Text>
-                            <Text style={[styles.subheading, { marginRight: 115, padding: 0 }]}>Size</Text>
+                            <Text style={[styles.subheading, { marginRight: 150, padding: 0 }]}>Size</Text>
                         </View>
                         <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                {colors.map((item, key) => (
-                                    <TouchableOpacity style={[styles.colors, { backgroundColor: item }]} key={key}>
-                                        <Text></Text>
-                                    </TouchableOpacity>
-                                ))}
-                            </View>
 
 
-                            <View style={{ flexDirection: 'row', marginLeft: 15, marginTop: -3 }}>
+                            <TouchableOpacity style={[styles.colors, { backgroundColor: details.colorCode }]}>
+                                <Text></Text>
+                            </TouchableOpacity>
+
+                            <View style={{ flexDirection: 'row', marginLeft: 85, marginTop: -3 }}>
 
 
                                 {sizes.map((item, key) => (
@@ -265,7 +267,7 @@ export default function Details({ route, navigation }) {
                         <Ionicons name="camera" size={20} style={{ margin: 5 }} />
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.btn, { backgroundColor: btnBackground }]} onPress={() => Addtocart()}>
-                        {loadingData ? <LoadingData /> : (
+                        {loadingData ? <LoadingItems /> : (
                             <>
 
                                 <Animatable.View
@@ -276,6 +278,49 @@ export default function Details({ route, navigation }) {
                             </>)}
 
                     </TouchableOpacity>
+                </View>
+
+                <View style={styles.suggestion}>
+                    <Text style={styles.heading}>Suggested For You</Text>
+                    <View style={styles.divider}></View>
+                    <Text style={styles.txt}>Products that matches with your current selection</Text>
+                    <View style={{ flexDirection: 'row' }}>
+
+                        {fetchingData ? <LoadingItems /> : (
+                            <ScrollView
+                                horizontal={true}
+                                showsHorizontalScrollIndicator={false}>
+                                {suggested.map((item, key) =>
+                                (
+                                    <>
+                                        <TouchableOpacity
+                                            key={key}
+                                            onPress={() => { navigation.navigate('search-screen', { category: item.title }) }}
+                                            activeOpacity={0.4}
+                                        >
+
+                                            <ImagedCarouselCard
+                                                key={key}
+                                                text={item.title}
+                                                width={120}
+                                                height={150}
+                                                shadowColor="#02060D"
+                                                source={{ uri: item.picture }}
+                                                style={{ margin: 10 }}
+                                                textStyle={{ fontSize: 12, color: 'white', textAlign: 'center' }}
+                                                overlayHeight={40}
+                                                overlayBackgroundColor="rgba(32, 30, 30,0.5)"
+
+                                            />
+                                        </TouchableOpacity>
+                                    </>
+                                )
+                                )}
+
+                            </ScrollView>
+                        )}
+                    </View>
+
                 </View>
             </ScrollView >
 
@@ -334,7 +379,7 @@ const styles = StyleSheet.create({
 
     description: {
         flex: 1,
-        marginHorizontal: 10,
+        marginHorizontal: 20,
         marginTop: 5,
         flexWrap: 'wrap',
 
@@ -432,7 +477,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         backgroundColor: 'white',
         bottom: 20,
-        marginTop: 30,
+        marginTop: 15,
         justifyContent: 'center',
         alignItems: 'center',
         height: 90,
@@ -454,5 +499,8 @@ const styles = StyleSheet.create({
         fontWeight: '200',
         color: '#2F5492',
     },
+    suggestion: {
+        marginHorizontal: 20,
 
+    }
 });

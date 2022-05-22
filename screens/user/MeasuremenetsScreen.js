@@ -27,8 +27,8 @@ export default function Measurements({ navigation }) {
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-    const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    // const API_URL = 'http://192.168.100.2:8000';
+    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+    const API_URL = 'http://192.168.100.8:8000';
     var uid = "";
 
     const currentUser = async () => {
@@ -38,7 +38,7 @@ export default function Measurements({ navigation }) {
 
             method: "POST",
             body: JSON.stringify({
-                uid,
+                uid, flag:"1"
             }),
 
             headers: {

@@ -3,17 +3,72 @@ import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native'
 import { MaterialCommunityIcons, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Favourites({ route, navigation }) {
 
     const [searchTxt, setSearchField] = useState("");
-    const [check, setcheck] = useState(true);
     const [Items, setItems] = useState([]);
+    const [saved, setSaved] = useState([]);
     const [fetchingData, setFetching] = useState(false);
     const [favouriteItems, setFavourites] = useState([]);
     const [count, setCount] = useState(0);
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
+    const [check, setCheck] = useState(false);
+    const savedLists = [];
+
+    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+    const API_URL = 'http://192.168.100.8:8000';
+
+
+
+    const loadSaved = async () => {
+        setFetching(true);
+        var user = await AsyncStorage.getItem('user');
+        console.log("in funct", user);
+
+        await fetch(`${API_URL}/user/viewFavourites`, {
+
+            method: "POST",
+            body: JSON.stringify({
+                id: user,flag:"1"
+            }),
+
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+
+        .then(async res => {
+            try {
+
+                const jsonRes = await res.json();
+
+                if (jsonRes.message === true) {
+                    setSaved(jsonRes.favourites);
+                    console.log("len: ", jsonRes.favourites.length)
+                    setFetching(false);
+
+                } else {
+                    console.log("error found ", jsonRes.error)
+                }
+
+            } catch (err) {
+                console.log(err);
+            };
+        })
+        .catch(err => {
+            console.log("error: ", err.message);
+        });
+
+    }
+    useEffect(() => {
+
+        loadSaved();
+
+    }, [check]);
+
 
 
 
@@ -33,17 +88,7 @@ export default function Favourites({ route, navigation }) {
 
         var fav = favouriteItems;
 
-        fav = fav.filter(val => val !== item.id)
-        setFavourites(fav);
-
-        db.collection("users").doc(auth.currentUser.uid).update({
-            favourites: fav
-        }).then(
-            (data) => {
-                check ? setcheck(false) : setcheck(true);
-
-            }
-        )
+        
     }
 
 
@@ -51,17 +96,17 @@ export default function Favourites({ route, navigation }) {
         <View style={styles.container}>
 
             {fetchingData ? <LoadingData /> :
-                Items.length !== 0 ? (
+                saved.length !== 0 ? (
                     <>
                         <ScrollView contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
                             <Text style={styles.heading}>
-                                Saved Services
+                                Saved Products
                             </Text>
 
                             <View style={{ justifyContent: 'space-between' }}>
 
 
-                                {Items.map((item, key) =>
+                                {saved.map((item, key) =>
                                 (
                                     <View
                                         style={[styles.picksView, styles.elevation]}>
@@ -70,7 +115,7 @@ export default function Favourites({ route, navigation }) {
                                             width={SCREEN_WIDTH * 0.5}
                                             height={SCREEN_WIDTH * 0.5}
                                             shadowColor="#051934"
-                                            source={{ uri: item.img }}
+                                            source={{ uri: item.picture }}
                                             style={{ margin: 13 }}
                                             overlayHeight={0}
 
@@ -78,7 +123,7 @@ export default function Favourites({ route, navigation }) {
                                         />
                                         <View style={styles.caption}>
                                             <View style={styles.description}>
-                                                <Text style={styles.subheading}>{item.name}</Text>
+                                                <Text style={styles.subheading}>{item.title}</Text>
                                                 <TouchableOpacity
 
                                                     activeOpacity={0.4}
@@ -87,17 +132,9 @@ export default function Favourites({ route, navigation }) {
                                                 </TouchableOpacity>
                                             </View>
 
-                                            <View style={{ flexDirection: 'row', marginTop: 10, marginHorizontal: 5 }}>
-                                                <MaterialCommunityIcons
-                                                    name="clock"
-                                                    size={17}
-                                                    color="#BFC0C3"
-                                                />
-                                                <Text style={[styles.txt]}>{item.time1} - {item.time2}</Text>
-
-                                            </View>
-                                            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
-                                                <Text style={[styles.subheading, { color: '#10B984', fontSize: 19 }]}>$ {item.price}</Text>
+                                           
+                                            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                                                <Text style={[styles.subheading, { color: '#1CAFCA', fontSize: 19 }]}>Rs. {item.price}</Text>
                                             </View>
                                         </View>
                                     </View>

@@ -140,6 +140,8 @@ function App() {
       userToken = null;
 
       try {
+        var counts = "0,0,0,0,0,0";
+        await AsyncStorage.setItem('counts', counts);
         userToken = await AsyncStorage.getItem('userToken');
       } catch (e) {
         console.log(e);
@@ -148,6 +150,7 @@ function App() {
       dispatch({ type: 'LOGGED_IN', token: userToken });
 
     }, 1000);
+   
   }, []);
 
   if (loginState.isLoading) {
@@ -224,7 +227,7 @@ function App() {
 
           <Stack.Screen name="MeasurmenetScreen" component={MeasurementScreen}
             options={({ navigation, route }) => ({
-              title: 'Measuremenets',
+              title: 'Measurements',
               headerStyle: {
                 backgroundColor: 'white',
                 height: 100

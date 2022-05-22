@@ -17,8 +17,8 @@ export default function Cart({ route, navigation }) {
 
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
-    const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    // const API_URL = 'http://172.20.52.233:8000';
+    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+    const API_URL = 'http://192.168.100.8:8000';
 
     async function fetchData() {
         var userToken = await AsyncStorage.getItem('user');
@@ -74,7 +74,7 @@ export default function Cart({ route, navigation }) {
                 method: 'POST',
                 body: JSON.stringify({
                     cid: cartId,
-                    pid: pid,
+                    itemId: pid,
                     quantity: quantity
                 }),
                 headers: {
@@ -107,7 +107,7 @@ export default function Cart({ route, navigation }) {
             method: 'POST',
             body: JSON.stringify({
                 cid: cartId,
-                pid: pid,
+                itemId: pid,
             }),
             headers: {
                 'Content-Type': 'application/json',
@@ -151,7 +151,7 @@ export default function Cart({ route, navigation }) {
                         <View style={styles.productContentBox}>
                             <View style={styles.contentContainer}>
                                 <Text style={[styles.mainText, { width: '60%' }]}>{item.pid.title}</Text>
-                                <EvilIcons name="close" size={20} style={styles.deleteIcon} onPress={() => deleteFunc(item.pid._id)} />
+                                <EvilIcons name="close" size={20} style={styles.deleteIcon} onPress={() => deleteFunc(item._id)} />
                             </View>
 
                             <View style={[styles.contentContainer, { marginTop: -10 }]}>
@@ -167,13 +167,13 @@ export default function Cart({ route, navigation }) {
                                 <View style={styles.quantityContainer}>
                                     <TouchableOpacity
                                         style={styles.quantityBtn}
-                                        onPress={() => updatequantity(item.pid._id, item.quantity, -1)}>
+                                        onPress={() => updatequantity(item._id, item.quantity, -1)}>
                                         <Feather name="minus" />
                                     </TouchableOpacity>
                                     <Text>{item.quantity}</Text>
                                     <TouchableOpacity
                                         style={[styles.quantityBtn, { marginLeft: 15, backgroundColor: '#084E71', borderColor: '#084E71' }]}
-                                        onPress={() => updatequantity(item.pid._id, item.quantity, 1)}>
+                                        onPress={() => updatequantity(item._id, item.quantity, 1)}>
                                         <Feather name="plus" color="white" />
                                     </TouchableOpacity>
                                 </View>
@@ -200,11 +200,11 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
         borderBottomWidth: 1,
         borderColor: '#E9EBEC',
-        marginLeft: -5
+        marginLeft: 10
 
     },
     productImg: {
-        width: '29%',
+        width: '25%',
         height: 100,
         margin: 10,
         justifyContent: 'center',

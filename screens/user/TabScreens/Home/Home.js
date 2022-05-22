@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, ActivityIndicator, } from 'react-native'
+import { StyleSheet, View, Text, TextInput, ScrollView, Image, Dimensions, ActivityIndicator } from 'react-native'
 import { Entypo, Ionicons, AntDesign, MaterialCommunityIcons, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import ImagedCarouselCard from "react-native-imaged-carousel-card";
@@ -12,24 +12,58 @@ import handwave from "../../../../images/waving-hand.png";
 import headerImg from '../../../../images/headerImg1.png';
 import headerImg2 from '../../../../images/headerImg4.png';
 import * as Animatable from 'react-native-animatable';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home({ route, navigation }) {
 
-  const [searchTxt, setSearchField] = useState(" ");
   const [searchVisible, setsearchVisible] = useState(false);
   const [isSelected, setSelected] = useState(false);
   const [check, setcheck] = useState(true);
-  const [categories, setcategories] = useState([{ title: "Jeans", img: jeans }, { title: "TShirt", img: shirt }, { title: "Suit", img: suit }, { title: "Dress", img: jeans }])
+  const [categories, setcategories] = useState([{ title: "Jeans", img: jeans }, { title: "Shirts", img: shirt }, { title: "Suits", img: suit }, { title: "Dress", img: jeans }])
   const [Items, setItems] = useState([]);
+  const [searchField, setSearchField] = useState("");
+  const [products, setProducts] = useState([]);
   const [fetchingData, setFetching] = useState(false);
   const [favouriteItems, setFavourites] = useState([]);
   const [count, setCount] = useState(0);
 
-  const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-  useEffect(() => {
+  // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+  const API_URL = 'http://192.168.100.8:8000';
+  const recommendation = async () => {
 
-    setFetching(true);
-    fetch(`${API_URL}/user/latestProducts`, {
+    var counts = await AsyncStorage.getItem('counts');
+    fetch(`${API_URL}/user/recommendations`, {
+      method: 'POST',
+      body: JSON.stringify({
+        counts
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (res) => {
+        //console.log(response);
+
+        const jsonRes = await res.json();
+
+        if (jsonRes.message === true) {
+          try {
+            setProducts(jsonRes.products)
+            // setCheck(!check)
+          } catch (e) {
+            return null;
+          }
+        } else {
+          message.error(response.data.error)
+        }
+      })
+      .catch(function (error) {
+
+      });
+  }
+
+  const fecthProducts = async () => {
+    await fetch(`${API_URL}/user/latestProducts`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -57,10 +91,16 @@ export default function Home({ route, navigation }) {
       .catch(err => {
         console.log("error: ", err);
       });
+  }
 
 
+  useEffect(() => {
+
+    setFetching(true);
+    fecthProducts();
+    recommendation();
   }, [])
-  
+
   const SCREEN_WIDTH = Dimensions.get('window').width;
   const SCREEN_HEIGHT = Dimensions.get('window').height;
 
@@ -91,6 +131,72 @@ export default function Home({ route, navigation }) {
     setFavourites(fav);
   }
 
+  const categorySearch = async (category) => {
+    await fetch(`${API_URL}/user/category-search`, {
+
+      method: "POST",
+      body: JSON.stringify({
+        category
+      }),
+
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    })
+
+      .then(async res => {
+        try {
+
+          const jsonRes = await res.json();
+
+          if (jsonRes.message === true) {
+            //setItems(jsonRes.products);
+            navigation.navigate('search-screen', { Items: jsonRes.products })
+
+          }
+
+        } catch (err) {
+          console.log(err);
+        };
+      })
+      .catch(err => {
+        console.log("error: ", err);
+      });
+
+  }
+
+  const searchText = async () => {
+    await fetch(`${API_URL}/user/search`, {
+
+      method: "POST",
+      body: JSON.stringify({
+        searchField
+      }),
+
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    })
+      .then(async res => {
+        try {
+
+          const jsonRes = await res.json();
+
+          if (jsonRes.message === true) {
+            //setItems(jsonRes.products);
+            navigation.navigate('search-screen', { Items: jsonRes.products })
+
+          }
+
+        } catch (err) {
+          console.log(err);
+        };
+      })
+      .catch(err => {
+        console.log("error: ", err);
+      });
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
@@ -108,8 +214,8 @@ export default function Home({ route, navigation }) {
 
       </View>
       <View style={styles.searchContainer}>
-        <TextInput style={styles.searchField} placeholder="Search products" />
-        <TouchableOpacity style={styles.searchBtn}>
+        <TextInput style={styles.searchField} placeholder="Search products" value={searchField} onChangeText={(e) => setSearchField(e)} />
+        <TouchableOpacity style={styles.searchBtn} onPress={() => searchText()}>
           <Image source={search} style={styles.searchIcon} />
         </TouchableOpacity>
       </View>
@@ -125,9 +231,9 @@ export default function Home({ route, navigation }) {
         {/* <Text style={[styles.heading, { fontSize: 40, marginTop: -20 }]}>Look</Text> */}
 
         <Animatable.View
-            animation="fadeIn"
-            duration={1000}
-            delay={300}style={styles.banner}>
+          animation="fadeIn"
+          duration={1000}
+          delay={300} style={styles.banner}>
           <Animatable.View
             animation="fadeInLeft"
             duration={1500}
@@ -160,7 +266,7 @@ export default function Home({ route, navigation }) {
               <>
                 <TouchableOpacity
                   key={key}
-                  onPress={() => { navigation.navigate('search-screen', { category: item.title }) }}
+                  onPress={() => categorySearch(item.title)}
                   activeOpacity={0.4}
                 >
 
@@ -175,6 +281,43 @@ export default function Home({ route, navigation }) {
                     textStyle={{ fontSize: 15, color: 'white', textAlign: 'center' }}
                     overlayHeight={50}
                     overlayBackgroundColor="rgba(20, 20, 21,0.4)"
+
+                  />
+                </TouchableOpacity>
+              </>
+            )
+            )}
+
+          </ScrollView>
+        </View>
+        <Text style={styles.heading}>Recommeded For You</Text>
+        <View style={[styles.divider, { width: '60%' }]}></View>
+        <Text style={styles.txt}>Products that you might like</Text>
+        <View style={{ flexDirection: 'row' }}>
+
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}>
+            {products.map((item, key) =>
+            (
+              <>
+                <TouchableOpacity
+                  key={key}
+                  onPress={() => navigation.navigate('Details', { details: item })}
+                  activeOpacity={0.4}
+                >
+
+                  <ImagedCarouselCard
+                    key={key}
+                    text={item.title}
+                    width={120}
+                    height={150}
+                    shadowColor="#02060D"
+                    source={{ uri: item.picture }}
+                    style={{ margin: 10 }}
+                    textStyle={{ fontSize: 12, color: 'white', textAlign: 'center' }}
+                    overlayHeight={35}
+                    overlayBackgroundColor="rgba(197, 171, 171,0.6)"
 
                   />
                 </TouchableOpacity>

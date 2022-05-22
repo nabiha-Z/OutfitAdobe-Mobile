@@ -137,8 +137,6 @@ export default function CameraScreen({navigation}) {
         })
           .then(async res => {
             try {
-              console.log("response: ", res)
-              console.log("dfhdjhfjd");
               setVideo(undefined);
 
             } catch (e) {

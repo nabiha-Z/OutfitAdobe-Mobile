@@ -41,7 +41,6 @@ export default function Profile({ check, setCheck }) {
                     if (jsonRes.message === true) {
                         setUser(jsonRes.user)
                         setImage(jsonRes.user.picture)
-                        console.log("user puicture: ", user.picture)
 
                     } else {
                         console.log("error found ", jsonRes.error)
@@ -70,7 +69,7 @@ export default function Profile({ check, setCheck }) {
                     ? <Image source={{uri: image}} style={styles.picture}/>
                     :  <Text style={styles.imgLabel}>B</Text>}
                 </View>
-                <Text style={styles.lightHeading}>nabihazubair100@gmil.com</Text>
+                <Text style={styles.lightHeading}>{user.email}</Text>
                 <Text style={{ color: '#6791DA', marginBottom: 40 }}>My Profile</Text>
             </View>
 

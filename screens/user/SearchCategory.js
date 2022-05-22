@@ -6,54 +6,21 @@ import ImagedCarouselCard from "react-native-imaged-carousel-card";
 
 export default function SearchedCategory({ route, navigation }) {
 
-  const { category } = route.params;
-  console.log("category: ", category)
+  const { Items } = route.params;
+  console.log("category: ", Items.length)
   const [searchTxt, setSearchField] = useState("");
-  const [isSelected, setSelected] = useState(false);
+  const [products, setProducts] = useState([]);
   const [fetchingData, setFetching] = useState(false);
   const [check, setcheck] = useState(true);
+  const [categories, setCategories] = useState([{ title: 'All', active: true }, { title: 'Men', active: false }, { title: 'Women', active: false }]);
   //const [categories, setcategories] = useState([{ title: "Education", count: 5, img: education }, { title: "Health", count: 5, img: health }, { title: "Legal", count: 5, img: legal }, { title: "Beauty", count: 5, img: beauty }])
-  const [Items, setItems] = useState([]);
   const SCREEN_WIDTH = Dimensions.get('window').width;
   const SCREEN_HEIGHT = Dimensions.get('window').height;
 
   const API_URL = 'https://outfit-adobe-server.herokuapp.com';
 
   useEffect(() => {
-    setFetching(true);
-    fetch(`${API_URL}/user/category-search`, {
-
-      method: "POST",
-      body: JSON.stringify({
-        category: category.toLowerCase()
-      }),
-
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
-      }
-    })
-
-      .then(async res => {
-        try {
-
-          const jsonRes = await res.json();
-
-          if (jsonRes.message === true) {
-
-            console.log("fetched");
-            setItems(jsonRes.products);
-            setFetching(false);
-
-          }
-
-        } catch (err) {
-          console.log(err);
-        };
-      })
-      .catch(err => {
-        console.log("error: ", err);
-      });
-
+    setProducts(Items);
   }, [])
 
   const LoadingData = () => {
@@ -82,18 +49,70 @@ export default function SearchedCategory({ route, navigation }) {
 
     setFavourites(fav);
   }
- {/* <MaterialIcons
-            name="keyboard-arrow-left"
-            size={30}
-            color="#41403F"
-            style={{ marginTop: 5 }} /> */}
+
+  const changeActive = (item) => {
+    console.log("title: ", item.title);
+
+    const newData = categories.map((element) => {
+      if (item.title === element.title) {
+
+        return {
+          ...element,
+          active: true
+        };
+      } else {
+        return {
+          ...element,
+          active: false
+        };
+
+      }
+
+    })
+
+    setCategories(newData);
+
+    if (item.title === 'All') {
+      setProducts(Items);
+    } else {
+
+      const data = [];
+      Items.map((element) => {
+        if (item.title.toLowerCase() === element.category.toLowerCase() || item.title.toLowerCase() === element.main_category.toLowerCase()) {
+          data.push(element);
+        }
+      })
+
+
+      setProducts(data);
+    }
+  }
+
+  const Tabs = ({ item }) => (
+    <>
+      <TouchableOpacity style={[styles.button, styles.elevation, { backgroundColor: item.active ? '#116E78' : 'white' }]} onPress={() => changeActive(item)}>
+        <Text style={[styles.btnTxt, { color: item.active ? 'white' : '#8D8D90' }]}>{item.title}</Text>
+      </TouchableOpacity>
+    </>
+  )
 
   return (
-   
+
     <View style={styles.container}>
       <View style={styles.topBar}>
-       
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}>
+          <View style={styles.categoryBtns}>
+            {categories.map((item, key) => (
+              <>
+                <Tabs item={item} key={key} />
+              </>
+            ))}
+          </View>
+        </ScrollView>
+        {/* <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
         <TouchableOpacity
             activeOpacity={0.5}
             style={styles.searchIcon}
@@ -106,69 +125,69 @@ export default function SearchedCategory({ route, navigation }) {
           </TouchableOpacity>
           <TextInput name="searchfield" value={searchTxt} onChange={(txt) => setSearchField(txt)} style={styles.searchField} placeholder='Type your text' />
          
-        </View>
+        </View> */}
 
       </View>
 
 
-      
-          <ScrollView contentContainerStyle={{ overflow: 'scroll' }}>
 
-            {fetchingData ? <LoadingData /> : Items.length !== 0 ? (
-              <View style={styles.picksView} >
-                {Items.map((item, key) =>
-                (
-                  <>
+      <ScrollView contentContainerStyle={{ overflow: 'scroll' }}>
 
-                    <TouchableOpacity
-                      key={key}
-                      style={{ margin: 5 }}
-                      onPress={() => navigation.navigate('Details', { details: item })} >
-                      <ImagedCarouselCard
-                        text=""
-                        width={Math.round(SCREEN_WIDTH * 0.4)}
-                        height={200}
-                        source={{ uri: item.picture }}
-                        borderRadius={4}
-                        style={{ margin: 0 }}
-                        overlayHeight={0}
-                        overlayBackgroundColor="rgba(0,0,0,0.4)"
-                        key={key}
-                      />
-                      <View style={[styles.caption, { width: SCREEN_WIDTH * 0.4 }]}>
-                        <View style={styles.description}>
-                          <Text style={styles.subheading}>{item.title}</Text>
-                          <TouchableOpacity onPress={() => favourite(item)} style={{ justifyContent: 'center' }}>
-                            <Ionicons name="heart" color={item.fav ? '#F75451' : '#D3D3D3'} size={25}></Ionicons>
-                          </TouchableOpacity>
-                        </View>
-                        <View style={{ display: 'flex', flexDirection: 'row' }}>
-                          <Ionicons name="alert-circle-sharp" size={20} color={item.color} />
-                          <Text style={[styles.txt]}>{item.color}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                          <Text style={[styles.subheading, { fontSize: 18, color: '#666668', marginBottom: 10 }]}>{item.price}/-</Text>
-                          <MaterialIcons name="keyboard-arrow-right" size={17} color="#4B4949" style={styles.icon} />
-                        </View>
+        {fetchingData ? <LoadingData /> : Items.length !== 0 ? (
+          <View style={styles.picksView} >
+            {products.map((item, key) =>
+            (
+              <>
+
+                <TouchableOpacity
+                  key={key}
+                  style={{ margin: 5 }}
+                  onPress={() => navigation.navigate('Details', { details: item })} >
+                  <ImagedCarouselCard
+                    text=""
+                    width={Math.round(SCREEN_WIDTH * 0.4)}
+                    height={200}
+                    source={{ uri: item.picture }}
+                    borderRadius={4}
+                    style={{ margin: 0 }}
+                    overlayHeight={0}
+                    overlayBackgroundColor="rgba(0,0,0,0.4)"
+                    key={key}
+                  />
+                  <View style={[styles.caption, { width: SCREEN_WIDTH * 0.4 }]}>
+                    <View style={styles.description}>
+                      <Text style={styles.subheading}>{item.title}</Text>
+                      <TouchableOpacity onPress={() => favourite(item)} style={{ justifyContent: 'center' }}>
+                        <Ionicons name="heart" color={item.fav ? '#F75451' : '#D3D3D3'} size={25}></Ionicons>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                      <Ionicons name="alert-circle-sharp" size={20} color={item.colorCode} />
+                      <Text style={[styles.txt]}>{item.color}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <Text style={[styles.subheading, { fontSize: 18, color: '#666668', marginBottom: 10 }]}>{item.price}/-</Text>
+                      <MaterialIcons name="keyboard-arrow-right" size={17} color="#4B4949" style={styles.icon} />
+                    </View>
 
 
-                      </View>
-                    </TouchableOpacity>
-                  </>
-                ))}
+                  </View>
+                </TouchableOpacity>
+              </>
+            ))}
 
-              </View>
-            ) : (
-        <View style={styles.container2}>
-          <Text style={styles.heading}>No Matching Results Found</Text>
-          <Image
-            source={require('../../images/draw9.png')}
-            style={{ width: '50%', height: '25%' }}
-          />
-        </View>
-      )
-      }
- </ScrollView>
+          </View>
+        ) : (
+          <View style={styles.container2}>
+            <Text style={styles.heading}>No Matching Results Found</Text>
+            <Image
+              source={require('../../images/draw9.png')}
+              style={{ width: '50%', height: '25%' }}
+            />
+          </View>
+        )
+        }
+      </ScrollView>
 
     </View>
   );
@@ -178,13 +197,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 5,
-    backgroundColor: '#F9F9F9'
+    backgroundColor: 'white'
   },
   container2: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F9F9F9',
+    backgroundColor: 'white',
     alignItems: 'center',
   },
   header: {
@@ -194,7 +213,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   topBar: {
-    backgroundColor: '#F9F9F9',
+    backgroundColor: 'white',
     padding: 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -208,26 +227,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
- 
+
   },
+  categoryBtns: {
+    flex: 1,
+    flexDirection: 'row',
+    margin: 10,
+    marginTop: -5,
+    marginBottom: 5,
+    marginLeft:30
+},
   searchField: {
-    position:'relative',
+    position: 'relative',
     borderWidth: 1,
-    backgroundColor:'white',
+    backgroundColor: 'white',
     borderColor: '#ADAFB5',
     borderRadius: 5,
     width: '80%',
     textAlign: 'center',
     margin: 10,
-    height:35,
-    padding:10
+    height: 35,
+    padding: 10
   },
   searchIcon: {
     marginTop: 10,
     padding: 5,
-    zIndex:2,
-    position:'absolute',
-    marginLeft:-80,
+    zIndex: 2,
+    position: 'absolute',
+
   },
   heading: {
     fontSize: 30,
@@ -318,6 +345,37 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginTop: 13,
-  }
+  },
+  button: {
+    borderRadius: 15,
+    margin: 10,
+    fontSize: 13,
+    backgroundColor: 'white',
+    padding: 10,
+    height: 30,
+    width: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+},
+
+btnTxt: {
+    fontSize: 13,
+    color: '#8D8D90'
+},
+picksView: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 5,
+    margin: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+
+},
+elevation: {
+    elevation: 10,
+    shadowColor: '#52006A',
+},
 });
 
