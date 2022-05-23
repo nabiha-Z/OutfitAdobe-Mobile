@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Modal, ActivityIndicator, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView, Image, Modal, ActivityIndicator, Dimensions } from 'react-native';
 import { AntDesign, SimpleLineIcons, MaterialIcons, Ionicons, EvilIcons } from '@expo/vector-icons';
 import modal from '../../images/modal1.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,22 +23,24 @@ export default function Measurements({ navigation }) {
     const [bottomL, setBottomL] = useState("");
     const [check, setCheck] = useState(false);
     const [showModal, setSetModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
     const [fetchingData, setFetching] = useState(false);
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    const API_URL = 'http://192.168.100.8:8000';
+    const API_URL = 'https://outfitadobe-server.herokuapp.com';
+    // const API_URL = 'http://192.168.100.8:8000';
     var uid = "";
 
     const currentUser = async () => {
         setFetching(true)
         uid = await AsyncStorage.getItem('user');
+        console.log("id: ", uid)
         await fetch(`${API_URL}/user/getMeassurements`, {
 
             method: "POST",
             body: JSON.stringify({
-                uid, flag:"1"
+                uid: uid, flag: "1"
             }),
 
             headers: {
@@ -56,6 +58,13 @@ export default function Measurements({ navigation }) {
                         setFetching(false);
                         console.log("measue: ", userMeasurements)
                         console.log("measue: ", userMeasurements.length)
+                        setShoulders(jsonRes.measurement[0].shoulders)
+                        setArmsL(jsonRes.measurement[0].arms)
+                        setFullLength(jsonRes.measurement[0].fullLength)
+                        setKneeL(jsonRes.measurement[0].knee)
+                        setShirtL(jsonRes.measurement[0].tshirt)
+                        setWaistL(jsonRes.measurement[0].waist)
+                        setBottomL(jsonRes.measurement[0].bottom)
 
                     } else {
                         console.log("error found ", jsonRes.error)
@@ -141,7 +150,7 @@ export default function Measurements({ navigation }) {
 
                         <View style={{ flexDirection: 'row', marginLeft: -20 }}>
                             <Text style={styles.lightHeading}>Your Body Measurements</Text>
-                            <TouchableOpacity onPress={() => alert("dfgkd")} style={styles.editBtn}>
+                            <TouchableOpacity onPress={() => setEditModal(!editModal)} style={styles.editBtn}>
                                 <SimpleLineIcons name="pencil" color="white" size={15} />
                             </TouchableOpacity>
 
@@ -248,7 +257,7 @@ export default function Measurements({ navigation }) {
                 visible={showModal}
             >
                 <View>
-                    <View style={[styles.modalView, { marginTop: SCREEN_HEIGHT * 0.2 }]}>
+                    <View style={[styles.modalView, { marginTop: SCREEN_HEIGHT * 0.1 }]}>
                         <TouchableOpacity
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setSetModal(!showModal)}
@@ -258,6 +267,64 @@ export default function Measurements({ navigation }) {
                         <Image source={modal} style={styles.modal} />
                         <Text style={[styles.txt, { fontSize: 18, color: '#6B6767', fontWeight: '200' }]}>{title}</Text>
                         <Text style={styles.heading}>{value} inch</Text>
+
+                    </View>
+                </View>
+            </Modal>)}
+
+            {editModal && (<Modal
+                animationType="slide"
+                transparent={true}
+                visible={editModal}
+            >
+                <View>
+                    <View style={[styles.modalView, { marginTop: SCREEN_HEIGHT * 0.1, heigth:  SCREEN_HEIGHT*0.6}]}>
+                        <TouchableOpacity
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setEditModal(false)}
+                        >
+                            <AntDesign name="close" color="#585555" size={20} />
+                        </TouchableOpacity>
+
+                        <View style={{ display: 'flex', padding: 10 }}>
+                            <Text style={[styles.heading,{color:'#272525', fontSize:20, marginTop:10}]}>Edit Your Measurements</Text>
+                            <Text style={[styles.txt,{color:'#585454'}]}>Enter your changed measurements using the inches scale.</Text>
+                            {/* <h4 style={{ color: '#C72C2C', fontWeight: 20, fontSize: 20 }}>{error}</h4> */}
+                        </View>
+                        <ScrollView style={styles.editContainer}>
+                            <View >
+                                <Text style={[styles.txt,{color:'#585454'}]}>Shoulders Length</Text>
+                                <TextInput style={styles.inputfield} placeholder="Shoulders in inches" value={shoulders} onChangeText={(e) => setShoulders(e.target.value)} required />
+                            </View>
+                            <View style={styles.inputfield}>
+                                <Text style={[styles.txt,{color:'#585454'}]}>Arms Length</Text>
+                                <TextInput style={styles.inputfield} placeholder="Arms length in inches" value={armsL} onChangeText={(e) => setArmsL(e.target.value)} required />
+                            </View>
+                            <View style={styles.inputfield}>
+                                <Text sstyle={[styles.txt,{color:'#585454'}]}>Full Length</Text>
+                                <TextInput style={styles.inputfield} placeholder="Full length in inches" value={fullLength} onChangeText={(e) => setFullLength(e.target.value)} required />
+                            </View>
+                            <View style={styles.inputfield}>
+                                <Text style={[styles.txt,{color:'#585454'}]}>Knee Length</Text>
+                                <TextInput style={styles.inputfield} placeholder="Knee length in inches" value={KneeL} onChangeText={(e) => setKneeL(e.target.value)} required />
+                            </View>
+                            <View style={styles.inputfield}>
+                                <Text style={[styles.txt,{color:'#585454'}]}>Waist Length</Text>
+                                <TextInput style={styles.inputfield} placeholder="Waist length in inches" value={waistL} onChangeText={(e) => setWaistL(e.target.value)} required />
+                            </View>
+                            <View style={styles.inputfield}>
+                                <Text style={[styles.txt,{color:'#585454'}]}>Knee Length</Text>
+                                <TextInput style={styles.inputfield} placeholder="Tshirt length in inches" value={shirtL} onChangeText={(e) => setShirtL(e.target.value)} required />
+                            </View>
+                            <View style={styles.inputfield}>
+                                <Text style={[styles.txt,{color:'#585454'}]}>Bottom Length</Text>
+                                <TextInput style={styles.inputfield} placeholder="Bottom length in inches" value={bottomL} onChangeText={(e) => setBottomL(e.target.value)} required />
+                            </View>
+
+                        </ScrollView>
+                        <TouchableOpacity style={styles.updateBtn} onPress={() => edit()}><Text>Edit & Save</Text></TouchableOpacity>
+
+
 
                     </View>
                 </View>
@@ -312,7 +379,7 @@ const styles = StyleSheet.create({
         margin: 40
 
     },
-    imgLabel: {
+    imgText: {
         fontWeight: 'bold',
         fontSize: 30,
         color: '#3F3E40',
@@ -420,11 +487,8 @@ const styles = StyleSheet.create({
 
     },
     editContainer: {
-        width: '70%',
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between'
+        width: '100%',
+        
     },
     editBtn: {
         borderRadius: 10,
@@ -438,4 +502,10 @@ const styles = StyleSheet.create({
         height: 35,
         marginRight: -5
     },
+    inputfield: {
+        width: '50%',
+        padding: 15,
+        borderColor: '#858181'
+    }
+    
 });

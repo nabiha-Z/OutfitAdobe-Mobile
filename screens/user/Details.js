@@ -29,8 +29,8 @@ export default function Details({ route, navigation }) {
     const [sizes, setSizes] = useState([{ size: 'S', selected: true }, { size: 'M', selected: false }, { size: 'L', selected: false }, { size: 'XL', selected: false }]);
     var available = ['S', 'M', 'L', 'XL'];
 
-    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    const API_URL = 'http://192.168.100.8:8000';
+    const API_URL = 'https://outfitadobe-server.herokuapp.com';
+    // const API_URL = 'http://192.168.100.8:8000';
 
     const fetchSimilar = async () => {
         setFetching(true);
@@ -262,7 +262,7 @@ export default function Details({ route, navigation }) {
                     </View>
                 </View>
                 <View style={[styles.footerBtns, { width: SCREEN_WIDTH * 1 }]}>
-                    <TouchableOpacity style={[styles.btn, { backgroundColor: 'white', borderWidth: 1 }]}>
+                    <TouchableOpacity style={[styles.btn, { backgroundColor: 'white', borderWidth: 1 }]} onPress={()=>navigation.navigate('TryOnScreen',{dressid:details._id, category:details.category})}>
                         <Text style={[styles.btnTxt, { color: 'black' }]}>Try On</Text>
                         <Ionicons name="camera" size={20} style={{ margin: 5 }} />
                     </TouchableOpacity>
@@ -295,7 +295,7 @@ export default function Details({ route, navigation }) {
                                     <>
                                         <TouchableOpacity
                                             key={key}
-                                            onPress={() => { navigation.navigate('search-screen', { category: item.title }) }}
+                                            onPress={() => navigation.navigate('Details',{details:item})}
                                             activeOpacity={0.4}
                                         >
 

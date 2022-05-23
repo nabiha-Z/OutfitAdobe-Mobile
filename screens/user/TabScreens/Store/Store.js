@@ -17,8 +17,8 @@ export default function Shop({ route, navigation }) {
     const [products, setProducts] = useState([]);
     const [count, setCount] = useState(0);
 
-    const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    // const API_URL = 'http://192.168.100.2:8000';
+    const API_URL = 'https://outfitadobe-server.herokuapp.com';
+    // const API_URL = 'http://192.168.100.8:8000';
     useEffect(() => {
 
         setFetching(true);
@@ -43,7 +43,7 @@ export default function Shop({ route, navigation }) {
                 };
             })
             .catch(err => {
-                console.log("error: ", err);
+                console.log("error: ", err.message);
             });
 
 

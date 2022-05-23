@@ -8,8 +8,8 @@ export default function ForgotPassword({ route, navigation }) {
     const [newPass, setNewPass] = useState(null);
     const [errors, setErrors] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    const API_URL = 'http://192.168.100.2:8000';
+    // const API_URL = 'https://outfitadobe-server.herokuapp.com';
+    const API_URL = 'http://192.168.100.8:8000';
 
     const [data, setData] = React.useState({
         email: '',

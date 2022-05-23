@@ -8,6 +8,7 @@ import search from "../../../../images/searchIcon.png";
 import jeans from "../../../../images/jeans2.png";
 import shirt from "../../../../images/shirt.png";
 import suit from "../../../../images/suit2.jpg";
+import dress from "../../../../images/dress2.jpeg";
 import handwave from "../../../../images/waving-hand.png";
 import headerImg from '../../../../images/headerImg1.png';
 import headerImg2 from '../../../../images/headerImg4.png';
@@ -19,7 +20,7 @@ export default function Home({ route, navigation }) {
   const [searchVisible, setsearchVisible] = useState(false);
   const [isSelected, setSelected] = useState(false);
   const [check, setcheck] = useState(true);
-  const [categories, setcategories] = useState([{ title: "Jeans", img: jeans }, { title: "Shirts", img: shirt }, { title: "Suits", img: suit }, { title: "Dress", img: jeans }])
+  const [categories, setcategories] = useState([{ title: "Jeans", img: jeans }, { title: "Shirts", img: shirt }, { title: "Suits", img: suit }, { title: "Dress", img: dress }])
   const [Items, setItems] = useState([]);
   const [searchField, setSearchField] = useState("");
   const [products, setProducts] = useState([]);
@@ -27,8 +28,8 @@ export default function Home({ route, navigation }) {
   const [favouriteItems, setFavourites] = useState([]);
   const [count, setCount] = useState(0);
 
-  // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-  const API_URL = 'http://192.168.100.8:8000';
+  const API_URL = 'https://outfitadobe-server.herokuapp.com';
+  // const API_URL = 'http://192.168.100.8:8000';
   const recommendation = async () => {
 
     var counts = await AsyncStorage.getItem('counts');
@@ -76,7 +77,7 @@ export default function Home({ route, navigation }) {
 
           if (jsonRes.message === true) {
             setFetching(false);
-            // console.log("fetched")
+            console.log("fetched")
             setItems(jsonRes.products);
           }
           // if (res.message === true) {

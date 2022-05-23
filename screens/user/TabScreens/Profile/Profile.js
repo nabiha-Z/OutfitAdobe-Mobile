@@ -15,8 +15,9 @@ export default function Profile({ check, setCheck }) {
     const [user, setUser] = useState([]);
     const [image, setImage] = useState(null);
     const colors = ["#C2E4EE", "#B2DBD6", "#D2B1B1", "#D0D4FA"];
-    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    const API_URL = 'http://192.168.100.8:8000';
+    
+    const API_URL = 'https://outfitadobe-server.herokuapp.com';
+    // const API_URL = 'http://192.168.100.8:8000';
 
     const currentUser = async () => {
 

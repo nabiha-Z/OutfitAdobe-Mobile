@@ -22,8 +22,8 @@ export default function CodeVerification({route, navigation }) {
     console.log("email: ", email);
     console.log("code: ", code);
     const width = Dimensions.get('window').width;
-    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    const API_URL = 'http://192.168.100.2:8000';
+    const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+    // const API_URL = 'http://192.168.100.2:8000';
 
     // useEffect(() => {
 

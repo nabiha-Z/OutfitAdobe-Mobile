@@ -15,12 +15,11 @@ import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AuthContext } from '../../../components/context';
-const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-// const API_URL = 'http://192.168.100.2:8000';
+const API_URL = 'https://outfitadobe-server.herokuapp.com';
+// const API_URL = 'http://192.168.100.8:8000';
 
 const SignInScreen = ({ check, setCheck }) => {
 
-    console.log("params check: ", check)
     const navigation = useNavigation();
     const [data, setData] = React.useState({
         email: '',

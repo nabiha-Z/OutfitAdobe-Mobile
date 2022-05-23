@@ -6,7 +6,7 @@ import { AuthContext } from '../../../components/context';
 import * as Animatable from 'react-native-animatable';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const API_URL = 'https://outfit-adobe-server.herokuapp.com';
+const API_URL = 'https://outfitadobe-server.herokuapp.com';
 // const API_URL = 'http://192.168.100.2:8000';
 
 function SignupScreen({ route, navigation }) {

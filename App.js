@@ -22,6 +22,7 @@ import CodeVerification from './screens/user/UserAuthentication/CodeVerfication'
 import ResetPassword from './screens/user/UserAuthentication/ResetPassword';
 import MeasurementScreen from './screens/user/MeasuremenetsScreen'
 import CameraScreen from './screens/user/CameraScreen';
+import TryOnScreen from './screens/user/TryOnScreen';
 import { AuthContext } from './components/context';
 
 
@@ -150,7 +151,7 @@ function App() {
       dispatch({ type: 'LOGGED_IN', token: userToken });
 
     }, 1000);
-   
+
   }, []);
 
   if (loginState.isLoading) {
@@ -241,6 +242,16 @@ function App() {
           />
 
           <Stack.Screen name="CameraScreen" component={CameraScreen}
+            options={({ navigation, route }) => ({
+              title: '',
+              headerStyle: {
+                backgroundColor: 'white',
+                height: 0
+              },
+            })}
+          />
+
+          <Stack.Screen name="TryOnScreen" component={TryOnScreen}
             options={({ navigation, route }) => ({
               title: '',
               headerStyle: {

@@ -14,8 +14,8 @@ export default function ResetPassword({ route, navigation }) {
     const [token, setToken] = useState(null);
     const [secureTextEntry, setSecure] = useState(true);
     const [confirmPass, setConfirmPass] = useState("");
-    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    const API_URL = 'http://192.168.100.2:8000';
+    const API_URL = 'https://outfitadobe-server.herokuapp.com';
+    // const API_URL = 'http://192.168.100.2:8000';
 
 
     async function fetchData() {

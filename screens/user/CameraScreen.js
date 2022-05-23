@@ -12,7 +12,7 @@ import * as ImagePicker from 'expo-image-picker'
 import { shareAsync } from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
 import * as VideoThumbnails from 'expo-video-thumbnails';
-import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -120,6 +120,8 @@ export default function CameraScreen({navigation}) {
       await MediaLibrary.saveToLibraryAsync(video.uri)
 
       const uid = await AsyncStorage.getItem('user');
+
+      console.log("uid: ", uid)
       var data = new FormData();
       data.append('video', {
         name: "abc.mp4",
@@ -138,6 +140,7 @@ export default function CameraScreen({navigation}) {
           .then(async res => {
             try {
               setVideo(undefined);
+              navigation.navigate('MeasurmenetScreen')
 
             } catch (e) {
               console.error(e);
@@ -198,7 +201,7 @@ export default function CameraScreen({navigation}) {
 
           {hasMediaLibraryPermission ?
             <TouchableOpacity style={styles.saveBtn} onPress={() => saveVideo()}>
-              <AntDesign name="download" color="white" size={20} />
+             <MaterialCommunityIcons name="file-send-outline" color="white" size={20} />
             </TouchableOpacity>
             : undefined}
           <TouchableOpacity style={styles.saveBtn} onPress={() => setVideo(undefined)}>
@@ -238,20 +241,10 @@ export default function CameraScreen({navigation}) {
                 allowsEditing: true,
                 aspect: [16, 9],
                 quality: 1
-              })
-              if (!result.cancelled) {
-                const { uri } = await VideoThumbnails.getThumbnailAsync(
-                  result.uri,
-                  {
-                    time: 5000,
-                  }
-                );
-                console.log("uri selected: ", result.uri)
-                setVideo(result.uri)
-
-                //let sourceThumb = await generateThumbnail(result.uri)
-                //navigation.navigate('savePost', { source: result.uri, sourceThumb })
-              }
+            })
+            if (!result.cancelled) {           
+                setVideo(result)
+            } 
             }}
             style={styles.galleryButton}>
             {galleryItems[0] == undefined ?

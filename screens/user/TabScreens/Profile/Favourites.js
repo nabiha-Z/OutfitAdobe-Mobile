@@ -18,8 +18,8 @@ export default function Favourites({ route, navigation }) {
     const [check, setCheck] = useState(false);
     const savedLists = [];
 
-    // const API_URL = 'https://outfit-adobe-server.herokuapp.com';
-    const API_URL = 'http://192.168.100.8:8000';
+    const API_URL = 'https://outfitadobe-server.herokuapp.com';
+    // const API_URL = 'http://192.168.100.8:8000';
 
 
 
